@@ -146,7 +146,7 @@ MonoBehaviour:
   FirePosition: {fileID: 4051068080594742104}
   BulletPrefab: {fileID: 8445029030044029742, guid: 63aaea5a4ea00b64bbc42208708a3a50,
     type: 3}
-  FireRate: 0.4
+  FireRate: 0.2
   ShootSound: {fileID: 8300000, guid: 7c235843e958ab042aa3faca9ffa2e84, type: 3}
 --- !u!114 &3964805009611296993
 MonoBehaviour:
