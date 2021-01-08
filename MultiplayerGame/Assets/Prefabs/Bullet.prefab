@@ -11,11 +11,12 @@ GameObject:
   - component: {fileID: 4715580571245260980}
   - component: {fileID: 8734235875952995051}
   - component: {fileID: 1964236254642312891}
+  - component: {fileID: 9213777315153285726}
+  - component: {fileID: 6401078067033034681}
   - component: {fileID: 4391846753123757533}
-  - component: {fileID: 7456009221284043327}
   - component: {fileID: 2866769703581439118}
   m_Layer: 0
-  m_Name: pinkbullet
+  m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,13 +52,14 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8445029030044029742}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -69,6 +71,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -81,6 +84,32 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &9213777315153285726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8445029030044029742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98eac694154ea1446a001575ae303a9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Speed: 40
+--- !u!114 &6401078067033034681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8445029030044029742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1272d50ff8f92240ab0bd8521b5857d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingTime: 0
 --- !u!135 &4391846753123757533
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -94,20 +123,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7456009221284043327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8445029030044029742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aec4cabdd22676940af93944de0c3bc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 40
-  collider: {fileID: 4391846753123757533}
 --- !u!54 &2866769703581439118
 Rigidbody:
   m_ObjectHideFlags: 0

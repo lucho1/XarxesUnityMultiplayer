@@ -31,9 +31,6 @@ public class PlayerController : MonoBehaviour
         // If player has a Rigid Body, let's move!
         if (m_RigidBody)
         {
-            if (Input.GetButtonDown("Shoot") || Input.GetAxis("Shoot") > 0) // This "GetAxis" will spawn a LOT of bullets, it's always entering on trigger press
-                Debug.Log("PlayerShoot!");
-
             // Compute speed and apply acceleration
             Vector3 desired_speed = PlayerSpeed * new Vector3(-Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
             m_CurrentSpeed += PlayerAcceleration * (desired_speed - m_CurrentSpeed);
