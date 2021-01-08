@@ -18620,7 +18620,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &422503782
 Transform:
   m_ObjectHideFlags: 0
@@ -51923,6 +51923,7 @@ Transform:
   - {fileID: 1413677760}
   - {fileID: 289710773}
   - {fileID: 658458820}
+  - {fileID: 1517048878}
   - {fileID: 105945831}
   - {fileID: 1650032230}
   - {fileID: 2143129442}
@@ -52231,7 +52232,6 @@ Transform:
   - {fileID: 226120662}
   - {fileID: 1347590311}
   - {fileID: 1895210221}
-  - {fileID: 1517048878}
   - {fileID: 84461237}
   - {fileID: 470976525}
   - {fileID: 1016263444}
@@ -53655,7 +53655,7 @@ MeshCollider:
   m_GameObject: {fileID: 1171688278}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
@@ -62462,6 +62462,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7579692418445297225, guid: 5ee1a6b0b3957ab4c953a65bbf9034bb,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 163198063200412290, guid: 5ee1a6b0b3957ab4c953a65bbf9034bb,
         type: 3}
       propertyPath: m_Layer
@@ -62606,6 +62611,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2029165941108852849, guid: 5ee1a6b0b3957ab4c953a65bbf9034bb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2029165941688575639, guid: 5ee1a6b0b3957ab4c953a65bbf9034bb,
         type: 3}
@@ -65518,7 +65528,7 @@ Transform:
   m_LocalScale: {x: 18.271563, y: 18.271563, z: 18.271563}
   m_Children: []
   m_Father: {fileID: 1097264874}
-  m_RootOrder: 354
+  m_RootOrder: 46
   m_LocalEulerAnglesHint: {x: 90.00001, y: 0, z: 0}
 --- !u!1 &1517072153
 GameObject:

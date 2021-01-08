@@ -11,7 +11,7 @@ public class XButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire2")) // B Gamepad Button to close panel
+        if (Input.GetButtonDown("Cancel")) // B Gamepad Button to close panel
             button.onClick.Invoke();
     }
 }
