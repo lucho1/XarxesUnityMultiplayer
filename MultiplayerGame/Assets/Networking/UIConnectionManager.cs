@@ -11,6 +11,8 @@ public class UIConnectionManager : MonoBehaviour
     public GameObject ConnectionUI;
     public GameObject RoomUI;
 
+    public Text Username;
+
     [SerializeField]
     private Text ErrorText;
     private Timer m_ErrorTextTime;
@@ -104,6 +106,12 @@ public class UIConnectionManager : MonoBehaviour
     {
         if (ConnectionUI.activeInHierarchy)
         {
+            if(string.IsNullOrEmpty(Username.text) || string.IsNullOrWhiteSpace(Username.text))
+            {
+                ShowErrorOnUI("A Valid Username is Required!", 0);
+                return;
+            }
+
             RoomListController rooms = ConnectionUI.GetComponentInChildren<RoomListController>();
             if (rooms)
             {
@@ -123,6 +131,12 @@ public class UIConnectionManager : MonoBehaviour
     {
         if (ConnectionUI.activeInHierarchy)
         {
+            if (string.IsNullOrEmpty(Username.text) || string.IsNullOrWhiteSpace(Username.text))
+            {
+                ShowErrorOnUI("A Valid Username is Required!", 0);
+                return;
+            }
+
             if (ConnectionManager.JoinRandomRoom())
             {
                 m_ChangeScreen = true;
@@ -135,6 +149,12 @@ public class UIConnectionManager : MonoBehaviour
     {
         if (ConnectionUI.activeInHierarchy)
         {
+            if (string.IsNullOrEmpty(Username.text) || string.IsNullOrWhiteSpace(Username.text))
+            {
+                ShowErrorOnUI("A Valid Username is Required!", 0);
+                return;
+            }
+
             if (ConnectionManager.CreateRoom(new_room_name.text))
             {
                 m_ChangeScreen = true;
