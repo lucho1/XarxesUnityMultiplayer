@@ -11,9 +11,15 @@ public class RoomListController : MonoBehaviourPunCallbacks
     private Transform ListContent;
 
     [SerializeField]
-    private GameObject RoomListElement;
-
+    private GameObject ListElement;
     private List<GameObject> m_ExistingRoomsList = new List<GameObject>();
+
+    public string CurrentSelectedRoom = "";
+
+    public void SetSelectedRoom(Text RoomName)
+    {
+        CurrentSelectedRoom = RoomName.text;
+    }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
@@ -33,7 +39,7 @@ public class RoomListController : MonoBehaviourPunCallbacks
             }
             else
             {
-                GameObject list_element = Instantiate(RoomListElement, ListContent);
+                GameObject list_element = Instantiate(ListElement, ListContent);
                 if (list_element)
                 {
                     list_element.GetComponentInChildren<Text>().text = room.Name;

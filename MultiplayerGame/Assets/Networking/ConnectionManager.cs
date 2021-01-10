@@ -9,45 +9,30 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 {
     public int MaxPlayers = 10;   
     public string GameVersion = "1.0";
-    public Text Username;
-    
-    [SerializeField]
-    private Text RoomName;
-
-    [SerializeField]
-    private Text ErrorText;
-
-    private Timer m_ErrorTextTime;
+    public string Username = "Lucho";
 
     private void Awake()
     {
         // This will allow us to use PhotonNetwork.LoadLevel() on the master and all clients in room will sync their level automatically
         PhotonNetwork.AutomaticallySyncScene = true;
-
-        m_ErrorTextTime = GetComponent<Timer>();
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         print("Connecting to Server");
 
-        PhotonNetwork.NickName = Username.text;
+        SetUsername(Username);
         PhotonNetwork.GameVersion = GameVersion;
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    private void Update()
+    public void SetUsername(string name)
     {
-        if (ErrorText.IsActive() && m_ErrorTextTime.ReadTime() > 2.0f)
-        {
-            m_ErrorTextTime.Restart();
-            m_ErrorTextTime.Stop();
-
-            ErrorText.text = "Error Text";
-            ErrorText.gameObject.SetActive(false);
-        }
+        Username = name;
+        PhotonNetwork.NickName = Username;
     }
+
 
     // --- Connection Override Callbacks ---
     public override void OnConnectedToMaster()
@@ -67,60 +52,86 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     }
 
 
+
     // ---------- ROOMS ----------
-    public void JoinOrCreateRoom()
+    public bool JoinRandomRoom()
+    {
+        if (PhotonNetwork.JoinRandomRoom())
+            return true;
+        
+        return false;
+    }
+
+    public bool JoinRoom(string room_name)
+    {
+        if (PhotonNetwork.JoinRoom(room_name))
+            return true;
+
+        return false;
+    }
+
+    public bool CreateRoom(string room_name)
     {
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = (byte)MaxPlayers;
-        PhotonNetwork.JoinOrCreateRoom(RoomName.text, options, TypedLobby.Default);
+
+        if (PhotonNetwork.CreateRoom(room_name, options, TypedLobby.Default))
+            return true;
+
+        return false;
     }
 
-    public void JoinRandomRoom()
+    public bool JoinOrCreateRoom(string room_name)
     {
-        PhotonNetwork.JoinRandomRoom();
+        RoomOptions options = new RoomOptions();
+        options.MaxPlayers = (byte)MaxPlayers;
+
+        if (PhotonNetwork.JoinOrCreateRoom(room_name, options, TypedLobby.Default))
+            return true;
+
+        return false;
     }
+
 
     // --- Informative Override Callbacks ---
     public override void OnCreatedRoom()
     {
         Debug.Log("Created Room Successfully", this);
     }
-
-    public override void OnCreateRoomFailed(short returnCode, string message)
-    {
-        string error_message = "Error on Room Creation: " + message + " (#" + returnCode + ")";
-
-        ErrorText.text = error_message;
-        ErrorText.gameObject.SetActive(true);
-        m_ErrorTextTime.Start();
-
-        Debug.Log(error_message, this);
-    }
-
     public override void OnJoinedRoom()
     {
         Debug.Log("Joined Room Successfully", this);
     }
 
+    private void ShowError(string message_log, short error_num)
+    {
+        GameObject UIObj = GameObject.Find("NetworksUI");
+        if (UIObj)
+        {
+            UIConnectionManager UI = UIObj.GetComponent<UIConnectionManager>();
+
+            if (UI)
+                UI.ShowErrorOnUI(message_log, error_num);
+        }
+    }
+
+    public override void OnErrorInfo(ErrorInfo errorInfo)
+    {
+        ShowError(errorInfo.Info, -1);
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        ShowError("Error on Room Creation: " + message, returnCode);
+    }
+
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        string error_message = "Error on Room Creation: " + message + " (#" + returnCode + ")";
-
-        ErrorText.text = error_message;
-        ErrorText.gameObject.SetActive(true);
-        m_ErrorTextTime.Start();
-
-        Debug.Log(error_message, this);
+        ShowError("Error on Room Join: " + message, returnCode);
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        string error_message = "Error on Room Creation: " + message + " (#" + returnCode + ")";
-
-        ErrorText.text = error_message;
-        ErrorText.gameObject.SetActive(true);
-        m_ErrorTextTime.Start();
-
-        Debug.Log(error_message, this);
+        ShowError("Error on Room Join: " + message, returnCode);
     }
 }
