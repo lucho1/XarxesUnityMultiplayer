@@ -40,11 +40,12 @@ public class UIConnectionManager : MonoBehaviour
             m_ChangeScreen = false;
             m_ChangeScreenTime.Restart();
             m_ChangeScreenTime.Stop();
-            
+
+            ConnectionManager.SetRoomName();
             SetRoomScreen();
         }
 
-        if (ErrorText.IsActive() && m_ErrorTextTime.ReadTime() > 2.0f)
+        if (ErrorText.IsActive() && m_ErrorTextTime.ReadTime() > 3.0f)
         {
             m_ErrorTextTime.Restart();
             m_ErrorTextTime.Stop();

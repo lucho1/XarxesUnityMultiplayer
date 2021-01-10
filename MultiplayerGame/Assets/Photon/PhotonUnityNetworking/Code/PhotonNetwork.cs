@@ -1549,7 +1549,13 @@ namespace Photon.Pun
         /// </remarks>
         public static bool JoinRandomRoom()
         {
-            return JoinRandomRoom(null, 0, MatchmakingMode.FillRoom, null, null);
+            string null_str = "";
+            return JoinRandomRoom(ref null_str);
+        }
+
+        public static bool JoinRandomRoom(ref string error_log)
+        {
+            return JoinRandomRoom(ref error_log, null, 0, MatchmakingMode.FillRoom, null, null);
         }
 
         /// <summary>
@@ -1572,9 +1578,9 @@ namespace Photon.Pun
         /// <param name="expectedCustomRoomProperties">Filters for rooms that match these custom properties (string keys and values). To ignore, pass null.</param>
         /// <param name="expectedMaxPlayers">Filters for a particular maxplayer setting. Use 0 to accept any maxPlayer value.</param>
         /// <returns>If the operation got queued and will be sent.</returns>
-        public static bool JoinRandomRoom(Hashtable expectedCustomRoomProperties, byte expectedMaxPlayers)
+        public static bool JoinRandomRoom(Hashtable expectedCustomRoomProperties, byte expectedMaxPlayers, ref string error_log)
         {
-            return JoinRandomRoom(expectedCustomRoomProperties, expectedMaxPlayers, MatchmakingMode.FillRoom, null, null);
+            return JoinRandomRoom(ref error_log, expectedCustomRoomProperties, expectedMaxPlayers, MatchmakingMode.FillRoom, null, null);
         }
 
         /// <summary>
@@ -1601,21 +1607,27 @@ namespace Photon.Pun
         /// <param name="sqlLobbyFilter">A filter-string for SQL-typed lobbies.</param>
         /// <param name="expectedUsers">Optional list of users (by UserId) who are expected to join this game and who you want to block a slot for.</param>
         /// <returns>If the operation got queued and will be sent.</returns>
-        public static bool JoinRandomRoom(Hashtable expectedCustomRoomProperties, byte expectedMaxPlayers, MatchmakingMode matchingType, TypedLobby typedLobby, string sqlLobbyFilter, string[] expectedUsers = null)
+        public static bool JoinRandomRoom(ref string error_log, Hashtable expectedCustomRoomProperties, byte expectedMaxPlayers, MatchmakingMode matchingType, TypedLobby typedLobby, string sqlLobbyFilter, string[] expectedUsers = null)
         {
             if (OfflineMode)
             {
                 if (offlineModeRoom != null)
                 {
-                    Debug.LogError("JoinRandomRoom failed. In offline mode you still have to leave a room to enter another.");
+                    error_log = "JoinRandomRoom failed. In offline mode you still have to leave a room to enter another.";
+                    Debug.LogError(error_log);
                     return false;
                 }
+
                 EnterOfflineRoom("offline room", null, true);
                 return true;
             }
             if (NetworkingClient.Server != ServerConnection.MasterServer || !IsConnectedAndReady)
             {
-                Debug.LogError("JoinRandomRoom failed. Client is on "+ NetworkingClient.Server+ " (must be Master Server for matchmaking)" + (IsConnectedAndReady ? " and ready" : " but not ready for operations (State: "+ NetworkingClient.State + ")") + ". Wait for callback: OnJoinedLobby or OnConnectedToMaster.");
+                error_log = "JoinRandomRoom failed. Client is on " + NetworkingClient.Server + " (must be Master Server for matchmaking)"
+                                + (IsConnectedAndReady ? " and ready" : " but not ready for operations (State: "
+                                                                            + NetworkingClient.State + ")") + ". Wait for callback: OnJoinedLobby or OnConnectedToMaster.";
+
+                Debug.LogError(error_log);
                 return false;
             }
 
@@ -1629,7 +1641,13 @@ namespace Photon.Pun
             opParams.SqlLobbyFilter = sqlLobbyFilter;
             opParams.ExpectedUsers = expectedUsers;
 
-            return NetworkingClient.OpJoinRandomRoom(opParams);
+            if (!NetworkingClient.OpJoinRandomRoom(opParams))
+            {
+                error_log = "Error On JoinRandomRoom Operation";
+                return false;
+            }
+            else
+                return true;
         }
 
 
@@ -1660,19 +1678,36 @@ namespace Photon.Pun
         /// <returns>If the operation got queued and will be sent.</returns>
         public static bool CreateRoom(string roomName, RoomOptions roomOptions = null, TypedLobby typedLobby = null, string[] expectedUsers = null)
         {
+            string null_str = "";
+            return CreateRoom(roomName, ref null_str, roomOptions, typedLobby, expectedUsers);
+        }
+
+        public static bool CreateRoom(string roomName, ref string error_log, RoomOptions roomOptions = null, TypedLobby typedLobby = null, string[] expectedUsers = null)
+        {
             if (OfflineMode)
             {
                 if (offlineModeRoom != null)
                 {
-                    Debug.LogError("CreateRoom failed. In offline mode you still have to leave a room to enter another.");
+                    error_log = "CreateRoom failed. In offline mode you still have to leave a room to enter another.";
+                    Debug.LogError(error_log);
                     return false;
                 }
+
                 EnterOfflineRoom(roomName, roomOptions, true);
                 return true;
             }
             if (NetworkingClient.Server != ServerConnection.MasterServer || !IsConnectedAndReady)
             {
-                Debug.LogError("CreateRoom failed. Client is on " + NetworkingClient.Server + " (must be Master Server for matchmaking)" + (IsConnectedAndReady ? " and ready" : "but not ready for operations (State: " + NetworkingClient.State + ")") + ". Wait for callback: OnJoinedLobby or OnConnectedToMaster.");
+                error_log = "CreateRoom failed. Client is on " + NetworkingClient.Server + " (must be Master Server for matchmaking)"
+                                                                            + (IsConnectedAndReady ? " and ready" : "but not ready for operations (State: "
+                                                                                                    + NetworkingClient.State + ")") + ". Wait for callback: OnJoinedLobby or OnConnectedToMaster.";
+                Debug.LogError(error_log);
+                return false;
+            }
+            if (string.IsNullOrEmpty(roomName))
+            {
+                error_log = "CreateRoom failed. A roomname is required. If you don't know one, how will you create or join it?";
+                Debug.LogError(error_log);
                 return false;
             }
 
@@ -1684,7 +1719,15 @@ namespace Photon.Pun
             opParams.Lobby = typedLobby;
             opParams.ExpectedUsers = expectedUsers;
 
-            return NetworkingClient.OpCreateRoom(opParams);
+            if (!NetworkingClient.OpCreateRoom(opParams))
+            {
+                if(error_log == "")
+                    error_log = "Error on CreateRoom Operation";
+
+                return false;
+            }
+            else
+                return true;
         }
 
 
@@ -1726,26 +1769,32 @@ namespace Photon.Pun
         /// <param name="typedLobby">Lobby you want a new room to be listed in. Ignored if the room was existing and got joined.</param>
         /// <param name="expectedUsers">Optional list of users (by UserId) who are expected to join this game and who you want to block a slot for.</param>
         /// <returns>If the operation got queued and will be sent.</returns>
-        public static bool JoinOrCreateRoom(string roomName, RoomOptions roomOptions, TypedLobby typedLobby, string[] expectedUsers = null)
+        public static bool JoinOrCreateRoom(string roomName, RoomOptions roomOptions, TypedLobby typedLobby, ref string error_log, string[] expectedUsers = null)
         {
             if (OfflineMode)
             {
                 if (offlineModeRoom != null)
                 {
-                    Debug.LogError("JoinOrCreateRoom failed. In offline mode you still have to leave a room to enter another.");
+                    error_log = "JoinOrCreateRoom failed. In offline mode you still have to leave a room to enter another.";
+                    Debug.LogError(error_log);
                     return false;
                 }
+
                 EnterOfflineRoom(roomName, roomOptions, true);  // in offline mode, JoinOrCreateRoom assumes you create the room
                 return true;
             }
             if (NetworkingClient.Server != ServerConnection.MasterServer || !IsConnectedAndReady)
             {
-                Debug.LogError("JoinOrCreateRoom failed. Client is on " + NetworkingClient.Server + " (must be Master Server for matchmaking)" + (IsConnectedAndReady ? " and ready" : "but not ready for operations (State: " + NetworkingClient.State + ")") + ". Wait for callback: OnJoinedLobby or OnConnectedToMaster.");
+                error_log = "JoinOrCreateRoom failed. Client is on " + NetworkingClient.Server + " (must be Master Server for matchmaking)"
+                                                                                                + (IsConnectedAndReady ? " and ready" : "but not ready for operations (State: "
+                                                                                                        + NetworkingClient.State + ")") + ". Wait for callback: OnJoinedLobby or OnConnectedToMaster.";
+                Debug.LogError(error_log);
                 return false;
             }
             if (string.IsNullOrEmpty(roomName))
             {
-                Debug.LogError("JoinOrCreateRoom failed. A roomname is required. If you don't know one, how will you join?");
+                error_log = "JoinOrCreateRoom failed. A roomname is required. If you don't know one, how will you join?";
+                Debug.LogError(error_log);
                 return false;
             }
 
@@ -1758,7 +1807,15 @@ namespace Photon.Pun
             opParams.PlayerProperties = LocalPlayer.CustomProperties;
             opParams.ExpectedUsers = expectedUsers;
 
-            return NetworkingClient.OpJoinOrCreateRoom(opParams);
+            if (!NetworkingClient.OpJoinOrCreateRoom(opParams))
+            {
+                if(error_log == "")
+                    error_log = "Error on JoinOrCreateRoom Operation";
+
+                return false;
+            }
+            else
+                return true;
         }
 
 
@@ -1793,24 +1850,37 @@ namespace Photon.Pun
         /// <returns>If the operation got queued and will be sent.</returns>
         public static bool JoinRoom(string roomName, string[] expectedUsers = null)
         {
+            string null_str = "";
+            return JoinRoom(roomName, ref null_str, expectedUsers);
+        }
+
+        public static bool JoinRoom(string roomName, ref string error_log, string[] expectedUsers = null)
+        {
             if (OfflineMode)
             {
                 if (offlineModeRoom != null)
                 {
-                    Debug.LogError("JoinRoom failed. In offline mode you still have to leave a room to enter another.");
+                    error_log = "JoinRoom failed. In offline mode you still have to leave a room to enter another.";
+                    Debug.LogError(error_log);
                     return false;
                 }
+
                 EnterOfflineRoom(roomName, null, true);
                 return true;
             }
             if (NetworkingClient.Server != ServerConnection.MasterServer || !IsConnectedAndReady)
             {
-                Debug.LogError("JoinRoom failed. Client is on " + NetworkingClient.Server + " (must be Master Server for matchmaking)" + (IsConnectedAndReady ? " and ready" : "but not ready for operations (State: " + NetworkingClient.State + ")") + ". Wait for callback: OnJoinedLobby or OnConnectedToMaster.");
+                error_log = "JoinRoom failed. Client is on " + NetworkingClient.Server + " (must be Master Server for matchmaking)"
+                                                                + (IsConnectedAndReady ? " and ready" : "but not ready for operations (State: "
+                                                                                                        + NetworkingClient.State + ")") + ". Wait for callback: OnJoinedLobby or OnConnectedToMaster.";
+
+                Debug.LogError(error_log);
                 return false;
             }
             if (string.IsNullOrEmpty(roomName))
             {
-                Debug.LogError("JoinRoom failed. A roomname is required. If you don't know one, how will you join?");
+                error_log = "JoinRoom failed. A roomname is required. If you don't know one, how will you join?";
+                Debug.LogError(error_log);
                 return false;
             }
 
@@ -1819,7 +1889,15 @@ namespace Photon.Pun
             opParams.RoomName = roomName;
             opParams.ExpectedUsers = expectedUsers;
 
-            return NetworkingClient.OpJoinRoom(opParams);
+            if (!NetworkingClient.OpJoinRoom(opParams))
+            {
+                if(error_log == "")
+                    error_log = "Error on JoinRoom Operation";
+
+                return false;
+            }
+            else
+                return true;
         }
 
 

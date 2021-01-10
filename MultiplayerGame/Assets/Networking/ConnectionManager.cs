@@ -36,6 +36,12 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         PhotonNetwork.NickName = Username;
     }
 
+    public void SetRoomName()
+    {
+        if(PhotonNetwork.InRoom)
+            CurrentRoomName = PhotonNetwork.CurrentRoom.Name;
+    }
+
 
     // --- Connection Override Callbacks ---
     public override void OnConnectedToMaster()
@@ -59,51 +65,61 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     // ---------- ROOMS ----------
     public bool JoinRandomRoom()
     {
-        if (PhotonNetwork.JoinRandomRoom())
+        string error_msg = "";
+        if (PhotonNetwork.JoinRandomRoom(ref error_msg))
         {
-            CurrentRoomName = PhotonNetwork.CurrentRoom.Name;
+            if (PhotonNetwork.InRoom)
+                CurrentRoomName = PhotonNetwork.CurrentRoom.Name;
+
             return true;
         }
-        
+
+        ShowError(error_msg, -1);        
         return false;
     }
 
     public bool JoinRoom(string room_name)
     {
-        if (PhotonNetwork.JoinRoom(room_name))
+        string error_msg = "";
+        if (PhotonNetwork.JoinRoom(room_name, ref error_msg))
         {
             CurrentRoomName = room_name;
             return true;
         }
 
+        ShowError(error_msg, -1);
         return false;
     }
 
     public bool CreateRoom(string room_name)
     {
+        string error_msg = "";
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = (byte)MaxPlayers;
 
-        if (PhotonNetwork.CreateRoom(room_name, options, TypedLobby.Default))
+        if (PhotonNetwork.CreateRoom(room_name, ref error_msg, options, TypedLobby.Default))
         {
             CurrentRoomName = room_name;
             return true;
         }
 
+        ShowError(error_msg, -1);
         return false;
     }
 
     public bool JoinOrCreateRoom(string room_name)
     {
+        string error_msg = "";        
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = (byte)MaxPlayers;
 
-        if (PhotonNetwork.JoinOrCreateRoom(room_name, options, TypedLobby.Default))
+        if (PhotonNetwork.JoinOrCreateRoom(room_name, options, TypedLobby.Default, ref error_msg))
         {
             CurrentRoomName = room_name;
             return true;
         }
 
+        ShowError(error_msg, -1);        
         return false;
     }
 
