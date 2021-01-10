@@ -16,7 +16,6 @@ public class UIConnectionManager : MonoBehaviour
     [SerializeField]
     private Text ErrorText;
     private Timer m_ErrorTextTime;
-    private Timer m_ChangeScreenTime;
 
     private bool m_ChangeScreen = false;
 
@@ -24,11 +23,6 @@ public class UIConnectionManager : MonoBehaviour
     private void Start()
     {
         m_ErrorTextTime = GetComponent<Timer>();
-
-        Timer[] timers = GetComponents<Timer>();
-        m_ErrorTextTime = timers[0];
-        m_ChangeScreenTime = timers[1];
-
         ConnectionManager = ConnectionManagerObject.GetComponent<ConnectionManager>();
     }
 
@@ -37,17 +31,18 @@ public class UIConnectionManager : MonoBehaviour
         if (!ConnectionManager)
             Debug.LogError("Connection Manager GameObject DOES NOT HAVE a ConnectionManager Script!");
 
-        if(m_ChangeScreen && m_ChangeScreenTime.ReadTime() > 0.5f)
+        // If UIScreen should change & we are in a room, change to RoomUI
+        bool hide_error = false;
+        if(m_ChangeScreen && ConnectionManager.IsInRoom())
         {
-            m_ChangeScreen = false;
-            m_ChangeScreenTime.Restart();
-            m_ChangeScreenTime.Stop();
-
             ConnectionManager.SetRoomName();
             SetRoomScreen();
+            m_ChangeScreen = false;
+            hide_error = true;
         }
 
-        if (ErrorText.IsActive() && m_ErrorTextTime.ReadTime() > 3.0f)
+        // If the error text is being shown, unactive & reset it after 3s OR when it must
+        if ((ErrorText.IsActive() && m_ErrorTextTime.ReadTime() > 3.0f) || hide_error)
         {
             m_ErrorTextTime.Restart();
             m_ErrorTextTime.Stop();
@@ -59,11 +54,6 @@ public class UIConnectionManager : MonoBehaviour
 
     public void ShowErrorOnUI(string message_log, short error_num)
     {
-        // Check & Set for Change Screen
-        m_ChangeScreen = false;
-        m_ChangeScreenTime.Restart();
-        m_ChangeScreenTime.Stop();
-
         // Show & Log error message
         string error_message = message_log + " (#" + error_num + ")";
 
@@ -83,7 +73,7 @@ public class UIConnectionManager : MonoBehaviour
     {
         ConnectionUI.SetActive(false);
 
-        Text[] text_components = RoomUI.GetComponentsInChildren<Text>();//.text = ConnectionManager.GetCurrentRoomName;
+        Text[] text_components = RoomUI.GetComponentsInChildren<Text>();
         foreach (Text text in text_components)
         {
             if (text.gameObject.name == "RoomNameText")
@@ -113,14 +103,17 @@ public class UIConnectionManager : MonoBehaviour
             }
 
             RoomListController rooms = ConnectionUI.GetComponentInChildren<RoomListController>();
+            if(rooms.CurrentSelectedRoom == "")
+            {
+                ShowErrorOnUI("A Room must be selected!", 0);
+                return;
+            }
+
             if (rooms)
             {
                 string room_name = rooms.CurrentSelectedRoom;
                 if (ConnectionManager.JoinRoom(room_name))
-                {
                     m_ChangeScreen = true;
-                    m_ChangeScreenTime.Start();
-                }
             }
             else
                 Debug.LogError("Couldn't Find Rooms List Controller!");
@@ -138,10 +131,7 @@ public class UIConnectionManager : MonoBehaviour
             }
 
             if (ConnectionManager.JoinRandomRoom())
-            {
                 m_ChangeScreen = true;
-                m_ChangeScreenTime.Start();
-            }
         }
     }
 
@@ -155,11 +145,14 @@ public class UIConnectionManager : MonoBehaviour
                 return;
             }
 
-            if (ConnectionManager.CreateRoom(new_room_name.text))
+            if (string.IsNullOrEmpty(new_room_name.text) || string.IsNullOrWhiteSpace(new_room_name.text))
             {
-                m_ChangeScreen = true;
-                m_ChangeScreenTime.Start();
+                ShowErrorOnUI("A Valid Room Name is Required!", 0);
+                return;
             }
+
+            if (ConnectionManager.CreateRoom(new_room_name.text))
+                m_ChangeScreen = true;
         }
     }
 }

@@ -42,6 +42,11 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             CurrentRoomName = PhotonNetwork.CurrentRoom.Name;
     }
 
+    public bool IsInRoom()
+    {
+        return PhotonNetwork.InRoom;
+    }
+
 
     // --- Connection Override Callbacks ---
     public override void OnConnectedToMaster()

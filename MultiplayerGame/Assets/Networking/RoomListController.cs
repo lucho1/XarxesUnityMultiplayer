@@ -45,7 +45,10 @@ public class RoomListController : MonoBehaviourPunCallbacks
                     if (obj_text.text == room.Name)
                     {
                         if (obj_text.GetComponentInChildren<Button>() == m_LastSelectedButton)
+                        {
                             m_LastSelectedButton = null;
+                            CurrentSelectedRoom = "";
+                        }
 
                         m_ExistingRoomsList.Remove(obj);
                         Destroy(obj);
