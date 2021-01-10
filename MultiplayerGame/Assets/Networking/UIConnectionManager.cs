@@ -79,6 +79,17 @@ public class UIConnectionManager : MonoBehaviour
     private void SetRoomScreen()
     {
         ConnectionUI.SetActive(false);
+
+        Text[] text_components = RoomUI.GetComponentsInChildren<Text>();//.text = ConnectionManager.GetCurrentRoomName;
+        foreach (Text text in text_components)
+        {
+            if (text.gameObject.name == "RoomNameText")
+            {
+                text.text = ConnectionManager.GetCurrentRoomName;
+                break;
+            }
+        }
+
         RoomUI.SetActive(true);
     }
 
@@ -123,7 +134,7 @@ public class UIConnectionManager : MonoBehaviour
     {
         if (ConnectionUI.activeInHierarchy)
         {
-            if (ConnectionManager.CreateRoom(new_room_name.name))
+            if (ConnectionManager.CreateRoom(new_room_name.text))
             {
                 m_ChangeScreen = true;
                 m_ChangeScreenTime.Start();

@@ -11,6 +11,9 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public string GameVersion = "1.0";
     public string Username = "Lucho";
 
+    private string CurrentRoomName = "";
+    public string GetCurrentRoomName { get { return CurrentRoomName; } }
+
     private void Awake()
     {
         // This will allow us to use PhotonNetwork.LoadLevel() on the master and all clients in room will sync their level automatically
@@ -57,7 +60,10 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public bool JoinRandomRoom()
     {
         if (PhotonNetwork.JoinRandomRoom())
+        {
+            CurrentRoomName = PhotonNetwork.CurrentRoom.Name;
             return true;
+        }
         
         return false;
     }
@@ -65,7 +71,10 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public bool JoinRoom(string room_name)
     {
         if (PhotonNetwork.JoinRoom(room_name))
+        {
+            CurrentRoomName = room_name;
             return true;
+        }
 
         return false;
     }
@@ -76,7 +85,10 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         options.MaxPlayers = (byte)MaxPlayers;
 
         if (PhotonNetwork.CreateRoom(room_name, options, TypedLobby.Default))
+        {
+            CurrentRoomName = room_name;
             return true;
+        }
 
         return false;
     }
@@ -87,7 +99,10 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         options.MaxPlayers = (byte)MaxPlayers;
 
         if (PhotonNetwork.JoinOrCreateRoom(room_name, options, TypedLobby.Default))
+        {
+            CurrentRoomName = room_name;
             return true;
+        }
 
         return false;
     }
