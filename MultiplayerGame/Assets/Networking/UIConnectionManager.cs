@@ -41,6 +41,9 @@ public class UIConnectionManager : MonoBehaviour
             hide_error = true;
         }
 
+        if (RoomUI.activeInHierarchy && !ConnectionManager.IsInRoom())
+            Debug.LogError("WE ARE NOT IN A ROOM!");
+
         // If the error text is being shown, unactive & reset it after 3s OR when it must
         if ((ErrorText.IsActive() && m_ErrorTextTime.ReadTime() > 3.0f) || hide_error)
         {
@@ -86,12 +89,8 @@ public class UIConnectionManager : MonoBehaviour
         RoomUI.SetActive(true);
     }
 
-    private void SetConnectionScreen()
-    {
-        ConnectionUI.SetActive(true);
-        RoomUI.SetActive(false);
-    }
 
+    // ---- MENU FUNCTIONS FOR BUTTONS ----
     public void JoinSelectedRoom()
     {
         if (ConnectionUI.activeInHierarchy)
