@@ -28,7 +28,7 @@ public class PlayerListController : MonoBehaviourPunCallbacks
     {
         foreach (GameObject obj in m_ExistingPlayersList)
         {
-            if (obj.GetComponent<Text>().text == otherPlayer.NickName)
+            if (obj.GetComponentInChildren<Text>().text == otherPlayer.NickName)
             {
                 m_ExistingPlayersList.Remove(obj);
                 Destroy(obj);

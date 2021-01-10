@@ -10,7 +10,5 @@ public class ListButtonOnClick : MonoBehaviour
         GameObject rooms_list = GameObject.Find("RoomList");
         if (rooms_list)
             rooms_list.GetComponent<RoomListController>().SetSelectedRoom(text);
-        else
-            Debug.LogError("Couldn't Find Rooms List!");
     }
 }
