@@ -51,6 +51,11 @@ public class PlayerListController : MonoBehaviourPunCallbacks
 
     public void SetPlayersInRoom()
     {
+        if (!PhotonNetwork.IsConnected)
+            return;
+        if (PhotonNetwork.CurrentRoom == null || PhotonNetwork.CurrentRoom.Players == null)
+            return;
+
         if (PhotonNetwork.InRoom)
         {
             foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)

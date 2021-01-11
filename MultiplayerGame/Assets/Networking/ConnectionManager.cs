@@ -14,23 +14,19 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     private string CurrentRoomName = "";
     public string GetCurrentRoomName { get { return CurrentRoomName; } }
 
-    public GameObject PlayerListObject;
-
-    private void Awake()
-    {
-        // This will allow us to use PhotonNetwork.LoadLevel() on the master and all clients in room will sync their level automatically
-        PhotonNetwork.AutomaticallySyncScene = true;
-    }
 
     // Start is called before the first frame update
     private void Start()
     {
         print("Connecting to Server");
 
+        // This will allow us to use PhotonNetwork.LoadLevel() on the master and all clients in room will sync their level automatically
+        PhotonNetwork.AutomaticallySyncScene = true;
+
         SetUsername(Username);
         PhotonNetwork.GameVersion = GameVersion;
         PhotonNetwork.ConnectUsingSettings();
-        //PhotonNetwork.AddCallbackTarget(this);
+        PhotonNetwork.AddCallbackTarget(this.gameObject);
 
     }
 
@@ -120,6 +116,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             string error_msg = "";
             RoomOptions options = new RoomOptions();
             options.MaxPlayers = (byte)MaxPlayers;
+            options.BroadcastPropsChangeToAll = true;
 
             if (PhotonNetwork.CreateRoom(room_name, ref error_msg, options, TypedLobby.Default))
             {
@@ -142,6 +139,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             string error_msg = "";
             RoomOptions options = new RoomOptions();
             options.MaxPlayers = (byte)MaxPlayers;
+            options.BroadcastPropsChangeToAll = true;
 
             if (PhotonNetwork.JoinOrCreateRoom(room_name, options, TypedLobby.Default, ref error_msg))
             {
@@ -166,6 +164,18 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             if(!PhotonNetwork.InLobby)
                 PhotonNetwork.JoinLobby(TypedLobby.Default);
         }
+    }
+
+    public void LoadScene(int scene_index)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false; // Room can't be joined (or we should allow it?)
+            PhotonNetwork.CurrentRoom.IsVisible = false;
+            PhotonNetwork.LoadLevel(scene_index);
+        }
+        else
+            ShowError("Only the Room Host can Start the Game!", 0);
     }
 
 

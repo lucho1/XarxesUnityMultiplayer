@@ -162,4 +162,9 @@ public class UIConnectionManager : MonoBehaviour
         ConnectionUI.SetActive(true);
         RoomUI.SetActive(false);
     }
+
+    public void StartGame()
+    {
+        ConnectionManager.LoadScene(1);
+    }
 }
