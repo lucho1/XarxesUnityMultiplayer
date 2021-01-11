@@ -16,26 +16,29 @@ public class PlayerListController : MonoBehaviourPunCallbacks
 
     public void Update()
     {
-        foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
+        if (PhotonNetwork.InRoom)
         {
-            bool found_player = false;
-        
-            foreach (GameObject obj in m_ExistingPlayersList)
+            foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
             {
-                if (obj.GetComponentInChildren<Text>().text == player.Value.NickName)
+                bool found_player = false;
+
+                foreach (GameObject obj in m_ExistingPlayersList)
                 {
-                    found_player = true;
-                    break;
+                    if (obj.GetComponentInChildren<Text>().text == player.Value.NickName)
+                    {
+                        found_player = true;
+                        break;
+                    }
                 }
-            }
-        
-            if (!found_player)
-            {
-                GameObject list_element = Instantiate(ListElement, ListContent);
-                if (list_element)
+
+                if (!found_player)
                 {
-                    list_element.GetComponentInChildren<Text>().text = player.Value.NickName;
-                    m_ExistingPlayersList.Add(list_element);
+                    GameObject list_element = Instantiate(ListElement, ListContent);
+                    if (list_element)
+                    {
+                        list_element.GetComponentInChildren<Text>().text = player.Value.NickName;
+                        m_ExistingPlayersList.Add(list_element);
+                    }
                 }
             }
         }
@@ -48,9 +51,9 @@ public class PlayerListController : MonoBehaviourPunCallbacks
 
     public void SetPlayersInRoom()
     {
-        if(PhotonNetwork.InRoom)
+        if (PhotonNetwork.InRoom)
         {
-            foreach(KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
+            foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
             {
                 GameObject list_element = Instantiate(ListElement, ListContent);
                 if (list_element)
@@ -62,20 +65,20 @@ public class PlayerListController : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnJoinedRoom()
-    {
-        SetPlayersInRoom();
-    }
-
     
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        GameObject list_element = Instantiate(ListElement, ListContent);
-        if (list_element)
+        int index = m_ExistingPlayersList.FindIndex(x => x.GetComponentInChildren<Text>().text == newPlayer.NickName);
+
+        if (index == -1)
         {
-            list_element.GetComponentInChildren<Text>().text = newPlayer.NickName;
-            m_ExistingPlayersList.Add(list_element);
+            GameObject list_element = Instantiate(ListElement, ListContent);
+            if (list_element)
+            {
+                list_element.GetComponentInChildren<Text>().text = newPlayer.NickName;
+                m_ExistingPlayersList.Add(list_element);
+            }
         }
     }
 
@@ -90,5 +93,16 @@ public class PlayerListController : MonoBehaviourPunCallbacks
                 break;
             }
         }
+    }
+
+    public override void OnDisable()
+    {
+        foreach (GameObject list_element in m_ExistingPlayersList)
+        {
+            m_ExistingPlayersList.Remove(list_element);
+            Destroy(list_element);
+        }
+
+        m_ExistingPlayersList.Clear();
     }
 }

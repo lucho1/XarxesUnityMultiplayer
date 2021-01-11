@@ -56,7 +56,8 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         print("Connected to MasterServer");
-        PhotonNetwork.JoinLobby();
+        if(!PhotonNetwork.InLobby)
+            PhotonNetwork.JoinLobby(TypedLobby.Default);
     }
 
     public override void OnConnected()
@@ -74,62 +75,97 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     // ---------- ROOMS ----------
     public bool JoinRandomRoom()
     {
-        string error_msg = "";
-        if (PhotonNetwork.JoinRandomRoom(ref error_msg))
+        if (PhotonNetwork.IsConnectedAndReady)
         {
-            if (PhotonNetwork.InRoom)
-                CurrentRoomName = PhotonNetwork.CurrentRoom.Name;
+            string error_msg = "";
+            if (PhotonNetwork.JoinRandomRoom(ref error_msg))
+            {
+                if (PhotonNetwork.InRoom)
+                    CurrentRoomName = PhotonNetwork.CurrentRoom.Name;
 
-            return true;
+                return true;
+            }
+
+            ShowError(error_msg, -1);
         }
+        else
+            ShowError("Still Not Prepared to JoinRoom, Wait", 0);
 
-        ShowError(error_msg, -1);        
         return false;
     }
 
     public bool JoinRoom(string room_name)
     {
-        string error_msg = "";
-        if (PhotonNetwork.JoinRoom(room_name, ref error_msg))
+        if (PhotonNetwork.IsConnectedAndReady)
         {
-            CurrentRoomName = room_name;
-            return true;
-        }
+            string error_msg = "";
+            if (PhotonNetwork.JoinRoom(room_name, ref error_msg))
+            {
+                CurrentRoomName = room_name;
+                return true;
+            }
 
-        ShowError(error_msg, -1);
+            ShowError(error_msg, -1);
+        }
+        else
+            ShowError("Still Not Prepared to JoinRoom, Wait", 0);
+
         return false;
     }
 
     public bool CreateRoom(string room_name)
     {
-        string error_msg = "";
-        RoomOptions options = new RoomOptions();
-        options.MaxPlayers = (byte)MaxPlayers;
-
-        if (PhotonNetwork.CreateRoom(room_name, ref error_msg, options, TypedLobby.Default))
+        if (PhotonNetwork.IsConnectedAndReady)
         {
-            CurrentRoomName = room_name;
-            return true;
-        }
+            string error_msg = "";
+            RoomOptions options = new RoomOptions();
+            options.MaxPlayers = (byte)MaxPlayers;
 
-        ShowError(error_msg, -1);
+            if (PhotonNetwork.CreateRoom(room_name, ref error_msg, options, TypedLobby.Default))
+            {
+                CurrentRoomName = room_name;
+                return true;
+            }
+
+            ShowError(error_msg, -1);
+        }
+        else
+            ShowError("Still Not Prepared to JoinRoom, Wait", 0);
+
         return false;
     }
 
     public bool JoinOrCreateRoom(string room_name)
     {
-        string error_msg = "";        
-        RoomOptions options = new RoomOptions();
-        options.MaxPlayers = (byte)MaxPlayers;
-
-        if (PhotonNetwork.JoinOrCreateRoom(room_name, options, TypedLobby.Default, ref error_msg))
+        if (PhotonNetwork.IsConnectedAndReady)
         {
-            CurrentRoomName = room_name;
-            return true;
-        }
+            string error_msg = "";
+            RoomOptions options = new RoomOptions();
+            options.MaxPlayers = (byte)MaxPlayers;
 
-        ShowError(error_msg, -1);        
+            if (PhotonNetwork.JoinOrCreateRoom(room_name, options, TypedLobby.Default, ref error_msg))
+            {
+                CurrentRoomName = room_name;
+                return true;
+            }
+
+            ShowError(error_msg, -1);
+        }
+        else
+            ShowError("Still Not Prepared to JoinRoom, Wait", 0);
+
         return false;
+    }
+
+    public void LeaveFromRoom()
+    {
+        if (PhotonNetwork.InRoom && PhotonNetwork.IsConnectedAndReady)
+        {
+            PhotonNetwork.LeaveRoom(true);
+            
+            if(!PhotonNetwork.InLobby)
+                PhotonNetwork.JoinLobby(TypedLobby.Default);
+        }
     }
 
 

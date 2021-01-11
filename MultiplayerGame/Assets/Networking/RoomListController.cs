@@ -17,6 +17,28 @@ public class RoomListController : MonoBehaviourPunCallbacks
     public string CurrentSelectedRoom = "";
     private Button m_LastSelectedButton = null;
 
+    public GameObject PlayerListObject;
+    private PlayerListController PlayerListController;
+
+    public void Start()
+    {
+        PlayerListController = PlayerListObject.GetComponent<PlayerListController>();
+    }
+
+    public override void OnJoinedRoom()
+    {
+        foreach (GameObject list_element in m_ExistingRoomsList)
+        {
+            m_ExistingRoomsList.Remove(list_element);
+            Destroy(list_element);
+        }
+
+        m_ExistingRoomsList.Clear();
+
+        if (PlayerListController)
+            PlayerListController.SetPlayersInRoom();
+    }
+
     public void SetSelectedRoom(Text RoomName)
     {
         if (m_LastSelectedButton && m_LastSelectedButton.GetComponentInParent<Text>() == RoomName)
@@ -29,8 +51,10 @@ public class RoomListController : MonoBehaviourPunCallbacks
         m_LastSelectedButton = RoomName.gameObject.GetComponentInChildren<Button>();
 
         foreach (GameObject list_element in m_ExistingRoomsList)
+        {
             if (list_element.GetComponentInChildren<Button>() == m_LastSelectedButton)
                 list_element.GetComponentInChildren<Button>().interactable = false;
+        }
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -58,11 +82,15 @@ public class RoomListController : MonoBehaviourPunCallbacks
             }
             else
             {
-                GameObject list_element = Instantiate(ListElement, ListContent);
-                if (list_element)
+                int index = m_ExistingRoomsList.FindIndex(x => x.GetComponentInChildren<Text>().text == room.Name);
+                if (index == -1)
                 {
-                    list_element.GetComponentInChildren<Text>().text = room.Name;
-                    m_ExistingRoomsList.Add(list_element);
+                    GameObject list_element = Instantiate(ListElement, ListContent);
+                    if (list_element)
+                    {
+                        list_element.GetComponentInChildren<Text>().text = room.Name;
+                        m_ExistingRoomsList.Add(list_element);
+                    }
                 }
             }
         }

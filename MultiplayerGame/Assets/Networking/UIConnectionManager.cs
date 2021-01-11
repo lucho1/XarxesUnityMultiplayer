@@ -154,4 +154,12 @@ public class UIConnectionManager : MonoBehaviour
                 m_ChangeScreen = true;
         }
     }
+
+    public void LeaveRoom()
+    {
+        ConnectionManager.LeaveFromRoom();
+
+        ConnectionUI.SetActive(true);
+        RoomUI.SetActive(false);
+    }
 }
