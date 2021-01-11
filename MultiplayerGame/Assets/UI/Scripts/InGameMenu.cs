@@ -11,7 +11,7 @@ public class InGameMenu : MonoBehaviour
 
     void Update()
     {
-        menuEnabled = IngameMenu.active;
+        menuEnabled = IngameMenu.activeSelf;
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("StartButton"))
         {
