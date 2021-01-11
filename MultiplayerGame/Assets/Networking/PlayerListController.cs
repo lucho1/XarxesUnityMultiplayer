@@ -14,12 +14,39 @@ public class PlayerListController : MonoBehaviourPunCallbacks
     private GameObject ListElement;
     private List<GameObject> m_ExistingPlayersList = new List<GameObject>();
 
-    private void OnEnable()
+    public void Update()
+    {
+        foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
+        {
+            bool found_player = false;
+        
+            foreach (GameObject obj in m_ExistingPlayersList)
+            {
+                if (obj.GetComponentInChildren<Text>().text == player.Value.NickName)
+                {
+                    found_player = true;
+                    break;
+                }
+            }
+        
+            if (!found_player)
+            {
+                GameObject list_element = Instantiate(ListElement, ListContent);
+                if (list_element)
+                {
+                    list_element.GetComponentInChildren<Text>().text = player.Value.NickName;
+                    m_ExistingPlayersList.Add(list_element);
+                }
+            }
+        }
+    }
+
+    public override void OnEnable()
     {
         SetPlayersInRoom();
     }
 
-    private void SetPlayersInRoom()
+    public void SetPlayersInRoom()
     {
         if(PhotonNetwork.InRoom)
         {

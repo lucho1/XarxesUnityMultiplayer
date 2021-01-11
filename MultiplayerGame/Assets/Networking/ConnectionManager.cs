@@ -14,6 +14,8 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     private string CurrentRoomName = "";
     public string GetCurrentRoomName { get { return CurrentRoomName; } }
 
+    public GameObject PlayerListObject;
+
     private void Awake()
     {
         // This will allow us to use PhotonNetwork.LoadLevel() on the master and all clients in room will sync their level automatically
@@ -28,6 +30,8 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         SetUsername(Username);
         PhotonNetwork.GameVersion = GameVersion;
         PhotonNetwork.ConnectUsingSettings();
+        //PhotonNetwork.AddCallbackTarget(this);
+
     }
 
     public void SetUsername(string name)
@@ -134,10 +138,10 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Created Room Successfully", this);
     }
-    public override void OnJoinedRoom()
-    {
-        Debug.Log("Joined Room Successfully", this);
-    }
+    //public override void OnJoinedRoom()
+    //{
+    //    Debug.Log("Joined Room Successfully", this);
+    //}
 
     private void ShowError(string message_log, short error_num)
     {

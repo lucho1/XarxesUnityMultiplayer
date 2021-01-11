@@ -17286,6 +17286,7 @@ MonoBehaviour:
   MaxPlayers: 10
   GameVersion: 1.0
   Username: Lucho
+  PlayerListObject: {fileID: 462582330}
 --- !u!4 &329035230
 Transform:
   m_ObjectHideFlags: 0
