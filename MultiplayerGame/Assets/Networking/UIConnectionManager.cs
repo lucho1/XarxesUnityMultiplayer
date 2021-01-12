@@ -31,6 +31,11 @@ public class UIConnectionManager : MonoBehaviour
         if (!ConnectionManager)
             Debug.LogError("Connection Manager GameObject DOES NOT HAVE a ConnectionManager Script!");
 
+        if (ConnectionManager.IsConnectedAndReady())
+            ShowErrorOnUI("Connected", 0);
+        else
+            ShowErrorOnUI("Connecting...", 0);
+
         // If UIScreen should change & we are in a room, change to RoomUI
         bool hide_error = false;
         if(m_ChangeScreen && ConnectionManager.IsInRoom())
@@ -79,7 +84,7 @@ public class UIConnectionManager : MonoBehaviour
         Text[] text_components = RoomUI.GetComponentsInChildren<Text>();
         foreach (Text text in text_components)
         {
-            if (text.gameObject.name == "RoomNameText")
+            if (text.gameObject.name == "Room_Txt")
             {
                 text.text = ConnectionManager.GetCurrentRoomName;
                 break;

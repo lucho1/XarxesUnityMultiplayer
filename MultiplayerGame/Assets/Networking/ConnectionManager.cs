@@ -47,6 +47,10 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         return PhotonNetwork.InRoom;
     }
 
+    public bool IsConnectedAndReady()
+    {
+        return PhotonNetwork.IsConnectedAndReady;
+    }
 
     // --- Connection Override Callbacks ---
     public override void OnConnectedToMaster()
