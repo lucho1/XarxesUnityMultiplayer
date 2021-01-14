@@ -45,11 +45,15 @@ public class WeaponController : MonoBehaviour
         {
             m_AudioSource.clip = ShootSound;
             m_AudioSource.Play();
-            if (NetworkMode)
+            if (NetworkMode) {
                 m_PhotonView.RPC("NetworkPlayShootingSound", RpcTarget.Others);
+                PhotonNetwork.Instantiate("Objects/Bullet", FirePosition.transform.position, transform.rotation);
+            }
+            else
+                Instantiate(BulletPrefab, FirePosition.transform.position, transform.rotation);
+
 
             m_WeaponShootTimer.Start();
-            Instantiate(BulletPrefab, FirePosition.transform.position, transform.rotation);
         }
     }
 
