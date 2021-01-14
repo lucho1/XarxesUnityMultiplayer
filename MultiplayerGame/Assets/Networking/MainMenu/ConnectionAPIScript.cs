@@ -9,17 +9,17 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     public int MaxPlayers = 10;
     public string GameVersion = "1.0";
 
-    [SerializeField]
-    private GameObject RoomObject;
-    private RoomScript RoomManager;
-
-    [SerializeField]
-    private GameObject LobbyObject;
-    private LobbyScript LobbyManager;
-
-    [SerializeField]
-    private GameObject NetworkObject;
-    private NetworkUIScript NetUIManager;
+    //[SerializeField]
+    //private GameObject RoomObject;
+    //private RoomScript RoomManager;
+    //
+    //[SerializeField]
+    //private GameObject LobbyObject;
+    //private LobbyScript LobbyManager;
+    //
+    //[SerializeField]
+    //private GameObject NetworkObject;
+    //private NetworkUIScript NetUIManager;
 
 
     // Start is called before the first frame update
@@ -27,9 +27,9 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     {
         ConnectToNetwork();
 
-        NetUIManager = NetworkObject.GetComponent<NetworkUIScript>();
-        LobbyManager = LobbyManager.GetComponent<LobbyScript>();
-        RoomManager = RoomObject.GetComponent<RoomScript>();
+        //NetUIManager = NetworkObject.GetComponent<NetworkUIScript>();
+        //LobbyManager = LobbyManager.GetComponent<LobbyScript>();
+        //RoomManager = RoomObject.GetComponent<RoomScript>();
     }
 
 
@@ -38,7 +38,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     // ------------------------ CONNECTION FUNCTIONS ------------------------
     public void ConnectToNetwork()
     {
-        print("Connecting to Server");
+        print("Connecting to Server...");
 
         // This allow us to use PhotonNetwork.LoadLevel() on the master and all clients in room will sync their level automatically
         PhotonNetwork.AutomaticallySyncScene = true;
