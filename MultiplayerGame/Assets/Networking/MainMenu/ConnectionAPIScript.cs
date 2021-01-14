@@ -6,6 +6,23 @@ using Photon.Realtime;
 
 public class ConnectionAPIScript : MonoBehaviourPunCallbacks
 {
+    // --- Singleton ---
+    private static ConnectionAPIScript m_Instance;
+    private void Awake()
+    {
+        if (m_Instance == null)
+        {
+            m_Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+    // ------------------
+
+
     public int MaxPlayers = 10;
     public string GameVersion = "1.0";
 
@@ -50,7 +67,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
 
         // Connect and add callback
         PhotonNetwork.ConnectUsingSettings();
-        PhotonNetwork.AddCallbackTarget(this.gameObject);
+        PhotonNetwork.AddCallbackTarget(this);
     }
 
     public override void OnConnectedToMaster()

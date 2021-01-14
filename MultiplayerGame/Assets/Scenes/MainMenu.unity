@@ -17402,6 +17402,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 329035230}
+  - component: {fileID: 329035229}
   m_Layer: 0
   m_Name: ConnectionManager
   m_TagString: Untagged
@@ -17409,6 +17410,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &329035229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329035228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 350d4edda5ae4b14b826077305a3dd01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxPlayers: 10
+  GameVersion: 1.0
 --- !u!4 &329035230
 Transform:
   m_ObjectHideFlags: 0
@@ -23600,7 +23615,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 634266643}
   m_HandleRect: {fileID: 634266642}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
