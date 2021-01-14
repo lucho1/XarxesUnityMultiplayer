@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class WeaponController : MonoBehaviour
 {
@@ -8,15 +9,21 @@ public class WeaponController : MonoBehaviour
     public GameObject BulletPrefab;
     public float FireRate = 1.0f;
     public AudioClip ShootSound;
+    public bool NetworkMode = true;
 
     private Timer m_WeaponShootTimer;
     private AudioSource m_AudioSource;
+    private PhotonView m_PhotonView;
 
     // Start is called before the first frame update
     void Start()
     {
         m_WeaponShootTimer = GetComponent<Timer>();
         m_AudioSource = GetComponentInChildren<AudioSource>();
+
+        m_PhotonView = GetComponent<PhotonView>();
+        if (NetworkMode && m_PhotonView && !m_PhotonView.IsMine)
+            this.enabled = false;
     }
 
     // Update is called once per frame
@@ -38,9 +45,17 @@ public class WeaponController : MonoBehaviour
         {
             m_AudioSource.clip = ShootSound;
             m_AudioSource.Play();
+            if (NetworkMode)
+                m_PhotonView.RPC("NetworkPlayShootingSound", RpcTarget.Others);
 
             m_WeaponShootTimer.Start();
             Instantiate(BulletPrefab, FirePosition.transform.position, transform.rotation);
         }
+    }
+
+    [PunRPC]
+    void NetworkPlayShootingSound(PhotonMessageInfo info) {
+        m_AudioSource.clip = ShootSound;
+        m_AudioSource.Play();
     }
 }
