@@ -27,12 +27,12 @@ public class RoomScript : MonoBehaviour
 
 
     // --- UI Callbacks ---
-    private void StartButton()
+    public void StartButton()
     {
 
     }
 
-    private void LeaveButton()
+    public void LeaveButton()
     {
 
     }

@@ -42,7 +42,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
 
 
     // ----------------------------------------------------------------------
-    // ------------------------ CONNECTION FUNCTIONS ------------------------
+    // ------------------------- NETWORK FUNCTIONS --------------------------
     public void ConnectToNetwork()
     {
         print("Connecting to Server...");
@@ -116,8 +116,105 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     }
 
 
+
+    // ----------------------------------------------------------------------
+    // ------------------------ CONNECTION FUNCTIONS ------------------------
+    public void JoinRoom(string room_name)
+    {
+        if(string.IsNullOrEmpty(room_name) || string.IsNullOrWhiteSpace(room_name))
+        {
+            NetUIManager.ShowWarn("Invalid Room Name!");
+            return;
+        }
+
+        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
+        {
+            string error = "";
+            if(!PhotonNetwork.JoinRoom(room_name, ref error))
+                NetUIManager.ShowError(("Join Room Error: " + error));
+        }
+        else
+            NetUIManager.ShowWarn("Still Connecting or Not Ready to Join Room");
+    }
+
+
+    public void JoinRandomRoom()
+    {
+        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
+        {
+            string error = "";
+            if (!PhotonNetwork.JoinRandomRoom(ref error))
+                NetUIManager.ShowError(("Join Random Room Error: " + error));
+        }
+        else
+            NetUIManager.ShowWarn("Still Connecting or Not Ready to Join Room");
+    }
+
+
+    public void HostRoom(string room_name)
+    {
+        if (string.IsNullOrEmpty(room_name) || string.IsNullOrWhiteSpace(room_name))
+        {
+            NetUIManager.ShowWarn("Invalid Room Name!");
+            return;
+        }
+
+        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
+        {
+            string error = "";
+            RoomOptions options = new RoomOptions();
+            options.MaxPlayers = (byte)MaxPlayers;
+            options.BroadcastPropsChangeToAll = true;
+
+            if (!PhotonNetwork.CreateRoom(room_name, ref error, options, TypedLobby.Default))
+                NetUIManager.ShowError(("Create Room Error: " + error));
+        }
+        else
+            NetUIManager.ShowWarn("Still Connecting or Not Ready to Create Room");
+    }
+
+
     // ----------------------------------------------------------------------
     // ------------------------ CONNECTION CALLBACKS ------------------------
+    // --- Rooms ---
+    public override void OnJoinedRoom()
+    {
+        NetUIManager.JoinedRoom();
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        NetUIManager.JoinedRoomFailed(message, (int)returnCode);
+    }
+
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        NetUIManager.JoinedRoomFailed(message, (int)returnCode);
+    }
+
+    public override void OnCreatedRoom()
+    {
+        NetUIManager.RoomCreated();
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        // Very ugly hardcoded piece of code, but this message is more readable this way :)
+        // and I cannot access to the message creator because it's a server response :(
+        if(message.Contains("A game with the specified id already exist"))
+        {
+            message = "A Room with this Name already exists!";
+            returnCode = 0;
+        }
+
+        NetUIManager.RoomCreatedFailure(message, (int)returnCode);
+    }
+
+    public override void OnLeftRoom()
+    {
+        NetUIManager.RoomLeft();
+    }
+
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         foreach(RoomInfo room in roomList)

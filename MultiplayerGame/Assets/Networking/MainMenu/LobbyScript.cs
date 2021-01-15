@@ -29,29 +29,29 @@ public class LobbyScript : MonoBehaviour
     {
         if(removed)
             m_RoomList.Remove(room_name);
-        else if(m_RoomList.FindIndex(0, m_RoomList.Count, x=>x == room_name) != -1)
-                m_RoomList.Add(room_name);
+        else if(m_RoomList.FindIndex(0, m_RoomList.Count, x=>x == room_name) == -1)
+            m_RoomList.Add(room_name);
     }
 
 
     // --- UI Callbacks ---
-    private void SetUsername(Text name)
+    public void SetUsername(Text name)
     {
         ConnectionManager.SetUsername(name.text);
     }
 
-    private void JoinRoomButton()
+    public void JoinRoomButton(Text room_name)
     {
-
+        ConnectionManager.JoinRoom(room_name.text);
     }
 
-    private void HostRoomButton()
+    public void HostRoomButton(Text room_name)
     {
-
+        ConnectionManager.HostRoom(room_name.text);
     }
 
-    private void QuickStartButton()
+    public void QuickStartButton()
     {
-
+        ConnectionManager.JoinRandomRoom();
     }
 }

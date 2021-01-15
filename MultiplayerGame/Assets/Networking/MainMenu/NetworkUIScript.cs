@@ -3,9 +3,11 @@ using UnityEngine.UI;
 
 public class NetworkUIScript : MonoBehaviour
 {
+    // --- Connection Manager ---
     [SerializeField]
     private ConnectionAPIScript ConnectionManager;    
 
+    // --- Log Texts ---
     [SerializeField]
     private Text ConnectionText;
 
@@ -15,6 +17,19 @@ public class NetworkUIScript : MonoBehaviour
     [SerializeField]
     private Text ErrorText;
 
+    private bool m_HideLogTexts = false;
+
+    // --- UI Objects ---
+    [SerializeField]
+    private GameObject RoomUI;
+
+    [SerializeField]
+    private Text RoomName_UIText;
+
+    [SerializeField]
+    private GameObject LobbyUI;
+
+    // --- Timers ---
     private Timer m_WarnTimer;
     private Timer m_ErrorTimer;
 
@@ -30,8 +45,6 @@ public class NetworkUIScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool hide_error = false, hide_warn = false;
-
         // Show Connection Status
         if (ConnectionManager.IsConnectedAndReady())
             ConnectionText.GetComponent<Text>().text = "Connected";
@@ -39,21 +52,44 @@ public class NetworkUIScript : MonoBehaviour
             ConnectionText.GetComponent<Text>().text = "Connecting...";
 
         // Hide Warn
-        if (hide_warn || WarnText.gameObject.activeSelf && m_WarnTimer.ReadTime() > 3.0f)
+        if (m_HideLogTexts || WarnText.gameObject.activeSelf && m_WarnTimer.ReadTime() > 3.0f)
         {
             m_WarnTimer.RestartAndStop();
             WarnText.gameObject.SetActive(false);
         }
 
         // Hide Error
-        if (hide_error || ErrorText.gameObject.activeSelf && m_ErrorTimer.ReadTime() > 3.0f)
+        if (m_HideLogTexts || ErrorText.gameObject.activeSelf && m_ErrorTimer.ReadTime() > 3.0f)
         {
             m_ErrorTimer.RestartAndStop();
             ErrorText.gameObject.SetActive(false);
         }
+
+        m_HideLogTexts = false;
     }
 
-    public void ShowError(string message_log, int error_num)
+
+    // --- UI Methods ---
+    private void ChangeScreen(bool enter_room)
+    {
+        if(enter_room)
+        {
+            //m_HideLogTexts = true;
+            RoomName_UIText.text = ConnectionManager.GetRoomName();
+            LobbyUI.SetActive(false);
+            RoomUI.SetActive(true);
+        }
+        else
+        {
+            //m_HideLogTexts = true;
+            RoomUI.SetActive(false);
+            LobbyUI.SetActive(true);
+        }
+    }
+    
+
+    // --- Errors ---
+    public void ShowError(string message_log, int error_num = 0)
     {
         // Show & Log error message
         if(error_num != 0)
@@ -76,29 +112,33 @@ public class NetworkUIScript : MonoBehaviour
         Debug.Log(message_log, this);
     }
 
-    // --- Room Creation, Join & Left Callbacks ---
+
+    // --- Room Callbacks ---
     public void RoomCreated()
     {
-
+        ChangeScreen(true);
+        ShowWarn("Created Room Successfully");
     }
 
-    public void RoomCreatedFailure()
+    public void RoomCreatedFailure(string message_log, int error_num)
     {
-
+        ShowError(message_log, error_num);
     }
 
     public void JoinedRoom()
     {
-
+        ChangeScreen(true);
+        ShowWarn("Joined Room Successfully");
     }
 
-    public void JoinedRoomFailed()
+    public void JoinedRoomFailed(string message_log, int error_num)
     {
-
+        ShowError(message_log, error_num);
     }
 
     public void RoomLeft()
     {
-
+        ChangeScreen(false);
+        ShowWarn("Room Left Successfully");
     }
 }

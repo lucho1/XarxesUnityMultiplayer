@@ -17424,9 +17424,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxPlayers: 10
   GameVersion: 1.0
-  RoomObject: {fileID: 0}
-  LobbyObject: {fileID: 0}
-  NetworkObject: {fileID: 0}
+  RoomManager: {fileID: 437893754}
+  LobbyManager: {fileID: 995496627}
+  NetUIManager: {fileID: 1341194959}
 --- !u!4 &329035230
 Transform:
   m_ObjectHideFlags: 0
@@ -21658,6 +21658,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 437893753}
+  - component: {fileID: 437893754}
   m_Layer: 5
   m_Name: RoomUI
   m_TagString: Untagged
@@ -21692,6 +21693,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &437893754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 437893752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6984578cbf938442971abdeb51af2d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &442544328
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46671,8 +46684,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 995496626}
+  - component: {fileID: 995496627}
   m_Layer: 5
-  m_Name: ConnectionUI
+  m_Name: LobbyUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46705,6 +46719,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &995496627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995496625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 532b67443475e08418084008430a3a53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConnectionManager: {fileID: 329035229}
+  RoomListText: {fileID: 1438344919}
 --- !u!1001 &996585371
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52171,7 +52199,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1165072314}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 995496627}
+        m_MethodName: JoinRoomButton
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 300793887}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Text, UnityEngine.UI
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1165072314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63867,6 +63906,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1341194958}
   - component: {fileID: 1341194959}
+  - component: {fileID: 1341194961}
+  - component: {fileID: 1341194960}
   m_Layer: 5
   m_Name: NetworksUI
   m_TagString: Untagged
@@ -63912,9 +63953,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConnectionManager: {fileID: 329035229}
-  ErrorText: {fileID: 715735021}
-  WarnText: {fileID: 1105758284}
   ConnectionText: {fileID: 1120210615}
+  WarnText: {fileID: 1105758284}
+  ErrorText: {fileID: 715735021}
+  RoomUI: {fileID: 437893752}
+  RoomName_UIText: {fileID: 56560376}
+  LobbyUI: {fileID: 995496625}
+--- !u!114 &1341194960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341194957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1272d50ff8f92240ab0bd8521b5857d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingTime: 0
+--- !u!114 &1341194961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341194957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1272d50ff8f92240ab0bd8521b5857d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingTime: 0
 --- !u!4 &1344236209 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5074329001546000765, guid: e57e2907e2c0b6d46af53990d2144605,
@@ -68289,8 +68359,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 162, y: 158}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 162, y: -1}
+  m_SizeDelta: {x: 160, y: 445.65958}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1438344921
 MonoBehaviour:
@@ -78972,7 +79042,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1673719924}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 995496627}
+        m_MethodName: HostRoomButton
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1950079537}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Text, UnityEngine.UI
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1673719924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89767,7 +89848,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1959323549}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 995496627}
+        m_MethodName: QuickStartButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1959323549
 MonoBehaviour:
   m_ObjectHideFlags: 0
