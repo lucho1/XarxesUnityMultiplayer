@@ -7,8 +7,8 @@ public class ListButtonOnClick : MonoBehaviour
 {
     public void SetSelectedRoom(Text text)
     {
-        GameObject rooms_list = GameObject.Find("RoomList");
-        if (rooms_list)
-            rooms_list.GetComponent<RoomListController>().SetSelectedRoom(text);
+        //GameObject rooms_list = GameObject.Find("RoomList");
+        //if (rooms_list)
+        //    rooms_list.GetComponent<RoomListController>().SetSelectedRoom(text);
     }
 }

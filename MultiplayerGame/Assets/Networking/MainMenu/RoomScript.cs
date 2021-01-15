@@ -1,18 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RoomScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
+    {
+        // Set room name and username
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        // Show list of players        
+    }
+
+
+    // --- Connection Callbacks ---
+    public void PlayerJoined()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PlayerLeft()
     {
         
+    }
+
+
+    // --- UI Callbacks ---
+    private void StartButton()
+    {
+
+    }
+
+    private void LeaveButton()
+    {
+
     }
 }

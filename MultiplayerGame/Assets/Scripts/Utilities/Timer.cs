@@ -38,6 +38,12 @@ public class Timer : MonoBehaviour
         m_timerActive = false;
     }
 
+    public void RestartAndStop()
+    {
+        m_Time = startingTime;
+        m_timerActive = false;
+    }
+
     public void Play()
     {
         m_timerActive = true;

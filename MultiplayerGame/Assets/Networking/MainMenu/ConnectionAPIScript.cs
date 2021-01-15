@@ -16,9 +16,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
             DontDestroyOnLoad(this.gameObject);
         }
         else
-        {
             Destroy(this);
-        }
     }
     // ------------------
 
@@ -26,29 +24,21 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     public int MaxPlayers = 10;
     public string GameVersion = "1.0";
 
-    //[SerializeField]
-    //private GameObject RoomObject;
-    //private RoomScript RoomManager;
-    //
-    //[SerializeField]
-    //private GameObject LobbyObject;
-    //private LobbyScript LobbyManager;
-    //
-    //[SerializeField]
-    //private GameObject NetworkObject;
-    //private NetworkUIScript NetUIManager;
+    [SerializeField]
+    private RoomScript RoomManager;
+    
+    [SerializeField]
+    private LobbyScript LobbyManager;
+    
+    [SerializeField]
+    private NetworkUIScript NetUIManager;
 
 
     // Start is called before the first frame update
     void Start()
     {
         ConnectToNetwork();
-
-        //NetUIManager = NetworkObject.GetComponent<NetworkUIScript>();
-        //LobbyManager = LobbyManager.GetComponent<LobbyScript>();
-        //RoomManager = RoomObject.GetComponent<RoomScript>();
     }
-
 
 
     // ----------------------------------------------------------------------
@@ -72,7 +62,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        print("Connecting to Master Server - Ready to Operate");
+        print("Connected to Master Server - Ready to Operate");
 
         if (!PhotonNetwork.InLobby)
             PhotonNetwork.JoinLobby(TypedLobby.Default);
@@ -126,10 +116,11 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     }
 
 
-
-
-
     // ----------------------------------------------------------------------
     // ------------------------ CONNECTION CALLBACKS ------------------------
-    
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        foreach(RoomInfo room in roomList)
+            LobbyManager.RoomListUpdate(room.RemovedFromList, room.Name);
+    }
 }
