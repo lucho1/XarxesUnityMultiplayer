@@ -11,6 +11,14 @@ public class LobbyScript : MonoBehaviour
     private Text RoomListText;
     private List<string> m_RoomList = new List<string>();
 
+    [SerializeField]
+    private InputField UsernameInput;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        UsernameInput.text = ConnectionManager.GetUsername();
+    }
 
     // Update is called once per frame
     void Update()
