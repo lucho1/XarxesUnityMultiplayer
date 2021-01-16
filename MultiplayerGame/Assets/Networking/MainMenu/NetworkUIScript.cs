@@ -47,7 +47,7 @@ public class NetworkUIScript : MonoBehaviour
     {
         // Show Connection Status
         if (ConnectionManager.IsConnectedAndReady())
-            ConnectionText.GetComponent<Text>().text = "Connected";
+            ConnectionText.GetComponent<Text>().text = "Connected - Ping: " + ConnectionManager.GetPing() + "ms";
         else
             ConnectionText.GetComponent<Text>().text = "Connecting...";
 

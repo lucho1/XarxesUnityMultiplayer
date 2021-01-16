@@ -92,6 +92,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     
     // --- Status ---
     public bool IsConnectedAndReady()       { return PhotonNetwork.IsConnectedAndReady; }
+    public int GetPing()                    { return PhotonNetwork.GetPing(); }
 
     // --- Room Stuff ---
     public int GetPlayersCount()
