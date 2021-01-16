@@ -71,12 +71,22 @@ public class RoomScript : MonoBehaviour
         //}
     }
 
-    public void AddPlayerToList(string player_name)
+    private void AddPlayerToList(string player_name, GameObject instance = null)
     {
-        GameObject new_element = Instantiate(ListElement, ListContainer);
-        new_element.GetComponentInChildren<Text>().text = player_name;
+        string show_name = player_name;
 
-        m_PlayerList.Add(player_name, new_element);
+        if (player_name == ConnectionManager.GetUsername())
+            show_name += " (You)";
+
+        if(player_name == ConnectionManager.GetRoomHost())
+            show_name += " (Host)";
+
+        if(instance == null)
+            instance = Instantiate(ListElement, ListContainer);
+
+        //GameObject new_element = Instantiate(ListElement, ListContainer);
+        instance.GetComponentInChildren<Text>().text = show_name;
+        m_PlayerList.Add(player_name, instance);
     }
 
     // --- Connection Callbacks ---
@@ -93,6 +103,13 @@ public class RoomScript : MonoBehaviour
             Destroy(m_PlayerList[player_name]);
             m_PlayerList.Remove(player_name);
         }
+    }
+
+    public void ChangeHost(string new_host_name)
+    {
+        GameObject new_host_object = m_PlayerList[new_host_name];
+        m_PlayerList.Remove(new_host_name);
+        AddPlayerToList(new_host_name, new_host_object);
     }
 
 

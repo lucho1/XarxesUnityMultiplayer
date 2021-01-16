@@ -30,7 +30,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
 
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         ConnectToNetwork();
     }
@@ -38,7 +38,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
 
     // ----------------------------------------------------------------------
     // ------------------------- NETWORK FUNCTIONS --------------------------
-    public void ConnectToNetwork()
+    private void ConnectToNetwork()
     {
         print("Connecting to Server...");
 
@@ -269,5 +269,10 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         NetUIManager.PlayerLeft(otherPlayer.NickName);
+    }
+
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        NetUIManager.SwitchHost(newMasterClient.NickName);
     }
 }

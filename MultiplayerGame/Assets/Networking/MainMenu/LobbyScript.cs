@@ -20,7 +20,7 @@ public class LobbyScript : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         UsernameInput.textComponent.text = ConnectionManager.GetUsername();
         UsernameInput.text = ConnectionManager.GetUsername();

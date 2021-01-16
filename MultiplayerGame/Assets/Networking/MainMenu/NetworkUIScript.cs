@@ -42,7 +42,7 @@ public class NetworkUIScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // Show Connection Status
         if (ConnectionManager.IsConnectedAndReady())
@@ -159,5 +159,11 @@ public class NetworkUIScript : MonoBehaviour
     {
         ShowWarn(player_name + " Left the Room!");
         RoomUI.GetComponent<RoomScript>().PlayerLeftRoom(player_name);
+    }
+
+    public void SwitchHost(string new_host_name)
+    {
+        ShowWarn("Host Changed, now " + new_host_name + " is the host");
+        RoomUI.GetComponent<RoomScript>().ChangeHost(new_host_name);
     }
 }
