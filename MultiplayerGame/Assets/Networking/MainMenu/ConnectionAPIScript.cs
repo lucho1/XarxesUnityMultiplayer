@@ -21,14 +21,9 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     // ------------------
 
 
-    public int MaxPlayers = 10;
+    public int MaxPlayersPerMatch = 8;
     public string GameVersion = "1.0";
-
-    [SerializeField]
-    private RoomScript RoomManager;
-    
-    [SerializeField]
-    private LobbyScript LobbyManager;
+    public bool RoomIsJoinableAfterStart = false;
     
     [SerializeField]
     private NetworkUIScript NetUIManager;
@@ -180,7 +175,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
         {
             string error = "";
             RoomOptions options = new RoomOptions();
-            options.MaxPlayers = (byte)MaxPlayers;
+            options.MaxPlayers = (byte)MaxPlayersPerMatch;
             options.BroadcastPropsChangeToAll = true;
 
             if (!PhotonNetwork.CreateRoom(room_name, ref error, options, TypedLobby.Default))
@@ -196,8 +191,8 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
             {
-                PhotonNetwork.CurrentRoom.IsOpen = false; // Room can't be joined (or we should allow it?)
-                PhotonNetwork.CurrentRoom.IsVisible = false;
+                PhotonNetwork.CurrentRoom.IsOpen = RoomIsJoinableAfterStart; // Room can't be joined (or we should allow it?)
+                PhotonNetwork.CurrentRoom.IsVisible = RoomIsJoinableAfterStart;
                 PhotonNetwork.LoadLevel(scene_index);
             }
             else
@@ -262,7 +257,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         foreach(RoomInfo room in roomList)
-            LobbyManager.RoomListUpdate(room.RemovedFromList, room.Name);
+            NetUIManager.RoomListUpdated(room.RemovedFromList, room.Name);
     }
 
     // --- Players ---

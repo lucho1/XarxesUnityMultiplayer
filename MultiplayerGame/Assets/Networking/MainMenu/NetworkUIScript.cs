@@ -16,7 +16,6 @@ public class NetworkUIScript : MonoBehaviour
 
     [SerializeField]
     private Text ErrorText;
-
     private bool m_HideLogTexts = false;
 
     // --- UI Objects ---
@@ -140,6 +139,11 @@ public class NetworkUIScript : MonoBehaviour
     {
         ChangeScreen(false);
         ShowWarn("Room Left Successfully");
+    }
+
+    public void RoomListUpdated(bool room_removed, string room_name)
+    {
+        LobbyUI.GetComponent<LobbyScript>().RoomListUpdate(room_removed, room_name);
     }
 
     // --- Player Callbacks ---
