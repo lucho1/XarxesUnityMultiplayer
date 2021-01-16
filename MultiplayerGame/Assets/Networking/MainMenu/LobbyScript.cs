@@ -33,7 +33,6 @@ public class LobbyScript : MonoBehaviour
             if(m_RoomList.ContainsKey(m_RoomSelected))
                 m_RoomList[m_RoomSelected].GetComponentInChildren<Button>().interactable = true;
 
-
             m_RoomList[room_name].GetComponentInChildren<Button>().interactable = false;
             m_RoomSelected = room_name;
         }
@@ -68,9 +67,9 @@ public class LobbyScript : MonoBehaviour
         ConnectionManager.SetUsername(name.text);
     }
 
-    public void JoinRoomButton(Text room_name)
+    public void JoinRoomButton()
     {
-        ConnectionManager.JoinRoom(room_name.text);
+        ConnectionManager.JoinRoom(m_RoomSelected);
     }
 
     public void HostRoomButton(Text room_name)

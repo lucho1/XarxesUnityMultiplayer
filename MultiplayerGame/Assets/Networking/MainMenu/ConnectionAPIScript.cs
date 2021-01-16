@@ -135,7 +135,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     {
         if(string.IsNullOrEmpty(room_name) || string.IsNullOrWhiteSpace(room_name))
         {
-            NetUIManager.ShowWarn("Invalid Room Name!");
+            NetUIManager.ShowWarn("No Room Selected or Invalid Room Name!");
             return;
         }
 
