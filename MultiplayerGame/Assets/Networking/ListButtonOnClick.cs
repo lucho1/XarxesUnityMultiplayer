@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class ListButtonOnClick : MonoBehaviour
 {
+    public GameObject LobbyObject = null;
     public void SetSelectedRoom(Text text)
     {
-        //GameObject rooms_list = GameObject.Find("RoomList");
-        //if (rooms_list)
-        //    rooms_list.GetComponent<RoomListController>().SetSelectedRoom(text);
+        if(LobbyObject)
+            LobbyObject.GetComponent<LobbyScript>().SetCurrentSelectedRoom(text.text);
     }
 }

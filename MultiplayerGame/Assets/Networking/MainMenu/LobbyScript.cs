@@ -6,13 +6,18 @@ public class LobbyScript : MonoBehaviour
 {
     [SerializeField]
     private ConnectionAPIScript ConnectionManager;
-
-    [SerializeField]
-    private Text RoomListText;
-    private List<string> m_RoomList = new List<string>();
-
+    
     [SerializeField]
     private InputField UsernameInput;
+
+    [SerializeField]
+    private Transform ListContainer;
+
+    [SerializeField]
+    private GameObject ListElement;
+    private string m_RoomSelected = "";
+    private Dictionary<string, GameObject> m_RoomList = new Dictionary<string, GameObject>();
+
 
     // Start is called before the first frame update
     void Start()
@@ -21,15 +26,26 @@ public class LobbyScript : MonoBehaviour
         UsernameInput.text = ConnectionManager.GetUsername();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetCurrentSelectedRoom(string room_name)
     {
-        if (m_RoomList.Count > 0)
+        if(room_name != m_RoomSelected && m_RoomList.ContainsKey(room_name))
         {
-            RoomListText.text = "";
-            foreach (string room in m_RoomList)
-                RoomListText.text += "\n" + room;
+            if(m_RoomList.ContainsKey(m_RoomSelected))
+                m_RoomList[m_RoomSelected].GetComponentInChildren<Button>().interactable = true;
+
+
+            m_RoomList[room_name].GetComponentInChildren<Button>().interactable = false;
+            m_RoomSelected = room_name;
         }
+    }
+
+    private void AddRoomToList(string room_name)
+    {
+        GameObject new_element = Instantiate(ListElement, ListContainer);
+        new_element.GetComponent<ListButtonOnClick>().LobbyObject = gameObject;
+        new_element.GetComponentInChildren<Text>().text = room_name;
+
+        m_RoomList.Add(room_name, new_element);
     }
 
 
@@ -37,9 +53,12 @@ public class LobbyScript : MonoBehaviour
     public void RoomListUpdate(bool removed, string room_name)
     {
         if(removed)
+        {
+            Destroy(m_RoomList[room_name]);
             m_RoomList.Remove(room_name);
-        else if(m_RoomList.FindIndex(0, m_RoomList.Count, x=>x == room_name) == -1)
-            m_RoomList.Add(room_name);
+        }
+        else if (!m_RoomList.ContainsKey(room_name))
+            AddRoomToList(room_name);
     }
 
 
