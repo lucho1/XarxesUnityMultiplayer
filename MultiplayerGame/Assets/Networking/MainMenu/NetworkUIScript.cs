@@ -75,6 +75,8 @@ public class NetworkUIScript : MonoBehaviour
         {
             //m_HideLogTexts = true;
             RoomName_UIText.text = ConnectionManager.GetRoomName();
+            
+            LobbyUI.GetComponent<LobbyScript>().DeselectRoom();
             LobbyUI.SetActive(false);
             RoomUI.SetActive(true);
         }
@@ -150,10 +152,12 @@ public class NetworkUIScript : MonoBehaviour
     public void PlayerJoined(string player_name)
     {
         ShowWarn(player_name + " Joined the Room!");
+        RoomUI.GetComponent<RoomScript>().PlayerJoinedRoom(player_name);
     }
 
     public void PlayerLeft(string player_name)
     {
         ShowWarn(player_name + " Left the Room!");
+        RoomUI.GetComponent<RoomScript>().PlayerLeftRoom(player_name);
     }
 }

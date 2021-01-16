@@ -26,6 +26,15 @@ public class LobbyScript : MonoBehaviour
         UsernameInput.text = ConnectionManager.GetUsername();
     }
 
+    public void DeselectRoom()
+    {
+        if (m_RoomList.ContainsKey(m_RoomSelected))
+        {
+            m_RoomList[m_RoomSelected].GetComponentInChildren<Button>().interactable = true;
+            m_RoomSelected = "";
+        }
+    }
+
     public void SetCurrentSelectedRoom(string room_name)
     {
         if(room_name != m_RoomSelected && m_RoomList.ContainsKey(room_name))
@@ -53,8 +62,11 @@ public class LobbyScript : MonoBehaviour
     {
         if(removed)
         {
-            Destroy(m_RoomList[room_name]);
-            m_RoomList.Remove(room_name);
+            if (m_RoomList.ContainsKey(room_name))
+            {
+                Destroy(m_RoomList[room_name]);
+                m_RoomList.Remove(room_name);
+            }
         }
         else if (!m_RoomList.ContainsKey(room_name))
             AddRoomToList(room_name);
