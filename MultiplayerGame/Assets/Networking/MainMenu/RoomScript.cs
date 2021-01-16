@@ -14,6 +14,9 @@ public class RoomScript : MonoBehaviour
     private Text RoomText;
 
     [SerializeField]
+    private Text PlayersText;
+
+    [SerializeField]
     private Text PlayersListText;
 
 
@@ -27,10 +30,23 @@ public class RoomScript : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        // Show players quantity (in room)
+        PlayersText.text = "Players: " + ConnectionManager.GetPlayersCount();
+
         // Show list of players
         List<string> players = ConnectionManager.GetPlayerNamesInRoom();
         if (players.Count > 0)
         {
+            // Add a marker for your user and Host user
+            int player_index = players.FindIndex(x => x == ConnectionManager.GetUsername());
+            int master_index = players.FindIndex(x => x == ConnectionManager.GetRoomHost());
+
+            if(master_index != -1)
+                players[master_index] += " (Master)";
+            if (player_index != -1)
+                players[player_index] += " (You)";
+
+            // Setup the Players List
             PlayersListText.text = "";
             foreach (string player in players)
                 PlayersListText.text += "\n" + player;

@@ -94,12 +94,28 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     public bool IsConnectedAndReady()       { return PhotonNetwork.IsConnectedAndReady; }
 
     // --- Room Stuff ---
+    public int GetPlayersCount()
+    {
+        if (PhotonNetwork.InRoom)
+            return PhotonNetwork.PlayerList.Length;
+
+        return -1;
+    }
+
+    public string GetRoomHost()
+    {
+        if (PhotonNetwork.InRoom)
+            return PhotonNetwork.MasterClient.NickName;
+
+        return null;
+    }
+
     public string GetRoomName()
     {
         if (PhotonNetwork.InRoom)
             return PhotonNetwork.CurrentRoom.Name;
-        else
-            return null;
+        
+        return null;
     }
 
     public List<string> GetPlayerNamesInRoom()
