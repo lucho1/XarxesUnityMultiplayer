@@ -141,4 +141,15 @@ public class NetworkUIScript : MonoBehaviour
         ChangeScreen(false);
         ShowWarn("Room Left Successfully");
     }
+
+    // --- Player Callbacks ---
+    public void PlayerJoined(string player_name)
+    {
+        ShowWarn(player_name + " Joined the Room!");
+    }
+
+    public void PlayerLeft(string player_name)
+    {
+        ShowWarn(player_name + " Left the Room!");
+    }
 }

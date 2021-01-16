@@ -104,7 +104,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
 
     public List<string> GetPlayerNamesInRoom()
     {
-        List<string> ret = null;
+        List<string> ret = new List<string>();
 
         if (PhotonNetwork.InRoom)
         {
@@ -173,6 +173,33 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
             NetUIManager.ShowWarn("Still Connecting or Not Ready to Create Room");
     }
 
+    public void LoadLevel(int scene_index)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.CurrentRoom.IsOpen = false; // Room can't be joined (or we should allow it?)
+                PhotonNetwork.CurrentRoom.IsVisible = false;
+                PhotonNetwork.LoadLevel(scene_index);
+            }
+            else
+                NetUIManager.ShowWarn("Still Connecting or Not in Room");
+        }
+        else
+            NetUIManager.ShowWarn("Only the Room Host can Start the Game!");
+    }
+
+    public void LeaveRoom()
+    {
+        if (PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom(true);
+            if (!PhotonNetwork.InLobby)
+                PhotonNetwork.JoinLobby(TypedLobby.Default);
+        }
+    }
+
 
     // ----------------------------------------------------------------------
     // ------------------------ CONNECTION CALLBACKS ------------------------
@@ -219,5 +246,16 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     {
         foreach(RoomInfo room in roomList)
             LobbyManager.RoomListUpdate(room.RemovedFromList, room.Name);
+    }
+
+    // --- Players ---
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        NetUIManager.PlayerJoined(newPlayer.NickName);
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        NetUIManager.PlayerLeft(otherPlayer.NickName);
     }
 }

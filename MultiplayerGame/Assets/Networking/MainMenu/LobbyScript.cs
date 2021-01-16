@@ -8,7 +8,7 @@ public class LobbyScript : MonoBehaviour
     private ConnectionAPIScript ConnectionManager;
 
     [SerializeField]
-    private GameObject RoomListText;
+    private Text RoomListText;
     private List<string> m_RoomList = new List<string>();
 
 
@@ -17,9 +17,9 @@ public class LobbyScript : MonoBehaviour
     {
         if (m_RoomList.Count > 0)
         {
-            RoomListText.GetComponent<Text>().text = "";
+            RoomListText.text = "";
             foreach (string room in m_RoomList)
-                RoomListText.GetComponent<Text>().text += "\n" + room;
+                RoomListText.text += "\n" + room;
         }
     }
 
