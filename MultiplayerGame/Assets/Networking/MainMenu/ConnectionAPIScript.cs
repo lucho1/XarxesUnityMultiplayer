@@ -144,7 +144,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
         }
 
         // Check if we are ready to make operations
-        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
+        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom && PhotonNetwork.InLobby)
         {
             string error = "";
             if(!PhotonNetwork.JoinRoom(room_name, ref error))
@@ -158,7 +158,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     public void JoinRandomRoom()
     {
         // Check if we are ready to make operations
-        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
+        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom && PhotonNetwork.InLobby)
         {
             string error = "";
             if (!PhotonNetwork.JoinRandomRoom(ref error))
@@ -179,7 +179,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
         }
 
         // Check if we are ready to make operations
-        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
+        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom && PhotonNetwork.InLobby)
         {
             string error = "";
             RoomOptions options = new RoomOptions();
