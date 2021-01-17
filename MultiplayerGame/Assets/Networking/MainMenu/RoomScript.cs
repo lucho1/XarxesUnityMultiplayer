@@ -16,17 +16,16 @@ public class RoomScript : MonoBehaviour
     [SerializeField]
     private Text PlayersText;
 
-    [SerializeField]
-    private Text PlayersListText;
-
     // --- Players List ---
     [SerializeField]
     private Transform ListContainer;
+
     [SerializeField]
     private GameObject ListElement;
     private Dictionary<string, GameObject> m_PlayerList = new Dictionary<string, GameObject>();
 
 
+    // --- Class Methods ---
     private void OnEnable()
     {
         // Set room name and username
@@ -45,34 +44,9 @@ public class RoomScript : MonoBehaviour
         m_PlayerList.Clear();
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-        // Show players quantity (in room)
-        PlayersText.text = "Players: " + ConnectionManager.GetPlayersCount();
-
-        // Show list of players
-        //List<string> players = ConnectionManager.GetPlayerNamesInRoom();
-        //if (players.Count > 0)
-        //{
-        //    // Add a marker for your user and Host user
-        //    int player_index = players.FindIndex(x => x == ConnectionManager.GetUsername());
-        //    int master_index = players.FindIndex(x => x == ConnectionManager.GetRoomHost());
-        //
-        //    if(master_index != -1)
-        //        players[master_index] += " (Master)";
-        //    if (player_index != -1)
-        //        players[player_index] += " (You)";
-        //
-        //    // Setup the Players List
-        //    PlayersListText.text = "";
-        //    foreach (string player in players)
-        //        PlayersListText.text += "\n" + player;
-        //}
-    }
-
     private void AddPlayerToList(string player_name, GameObject instance = null)
     {
+        PlayersText.text = "Players: " + ConnectionManager.GetPlayersCount();
         string show_name = player_name;
 
         if (player_name == ConnectionManager.GetUsername())
@@ -84,7 +58,6 @@ public class RoomScript : MonoBehaviour
         if(instance == null)
             instance = Instantiate(ListElement, ListContainer);
 
-        //GameObject new_element = Instantiate(ListElement, ListContainer);
         instance.GetComponentInChildren<Text>().text = show_name;
         m_PlayerList.Add(player_name, instance);
     }
@@ -102,6 +75,7 @@ public class RoomScript : MonoBehaviour
         {
             Destroy(m_PlayerList[player_name]);
             m_PlayerList.Remove(player_name);
+            PlayersText.text = "Players: " + ConnectionManager.GetPlayersCount();
         }
     }
 

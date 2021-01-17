@@ -46,7 +46,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
 
         // Set Settings
-        string name = "User" + Random.Range(0000, 9999);
+        string name = "User" + Random.Range(0000, 9999).ToString("0000");
         PhotonNetwork.NickName = name;
         PhotonNetwork.GameVersion = GameVersion;
 

@@ -15,6 +15,7 @@ public class LobbyScript : MonoBehaviour
 
     [SerializeField]
     private GameObject ListElement;
+
     private string m_RoomSelected = "";
     private Dictionary<string, GameObject> m_RoomList = new Dictionary<string, GameObject>();
 
