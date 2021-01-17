@@ -4,9 +4,11 @@ using UnityEngine.UI;
 
 public class LobbyScript : MonoBehaviour
 {
+    // --- Connection Manager ---
     [SerializeField]
     private ConnectionAPIScript ConnectionManager;
-    
+
+    // --- UI Objects ---
     [SerializeField]
     private InputField UsernameInput;
 
@@ -16,6 +18,7 @@ public class LobbyScript : MonoBehaviour
     [SerializeField]
     private InputField RoomFilterInput;
 
+    // --- Rooms List ---
     [SerializeField]
     private Transform ListContainer;
 
@@ -30,12 +33,14 @@ public class LobbyScript : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        // Set Input fields
         UsernameInput.textComponent.text = ConnectionManager.GetUsername();
         UsernameInput.text = ConnectionManager.GetUsername();
     }
 
     private void OnEnable()
     {
+        // Set Input fields
         UsernameInput.textComponent.text = ConnectionManager.GetUsername();
         UsernameInput.text = ConnectionManager.GetUsername();
 
@@ -66,10 +71,14 @@ public class LobbyScript : MonoBehaviour
 
     private void AddRoomToList(string room_name)
     {
+        // Set new ListElement
         GameObject new_element = Instantiate(ListElement, ListContainer);
-        new_element.GetComponent<ListButtonOnClick>().LobbyObject = gameObject;
         new_element.GetComponentInChildren<Text>().text = room_name;
+        
+        // Set its LobbyObject (this)
+        new_element.GetComponent<ListButtonOnClick>().LobbyObject = gameObject;
 
+        // Add ListElement to RoomList
         m_RoomList.Add(room_name, new_element);
     }
 

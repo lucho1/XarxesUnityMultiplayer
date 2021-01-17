@@ -33,6 +33,7 @@ public class NetworkUIScript : MonoBehaviour
     private Timer m_ErrorTimer;
 
 
+    // --- Class Methods ---
     // Start is called before the first frame update
     private void Start()
     {
@@ -74,15 +75,18 @@ public class NetworkUIScript : MonoBehaviour
         if(enter_room)
         {
             //m_HideLogTexts = true;
-            RoomName_UIText.text = ConnectionManager.GetRoomName();
-            
+            RoomName_UIText.text = ConnectionManager.GetRoomName();            
             LobbyUI.GetComponent<LobbyScript>().DeselectRoom();
+
+            // Switch Screens
             LobbyUI.SetActive(false);
             RoomUI.SetActive(true);
         }
         else
         {
             //m_HideLogTexts = true;
+
+            // Switch Screens
             RoomUI.SetActive(false);
             LobbyUI.SetActive(true);
         }
@@ -92,10 +96,11 @@ public class NetworkUIScript : MonoBehaviour
     // --- Errors ---
     public void ShowError(string message_log, int error_num = 0)
     {
-        // Show & Log error message
+        // Add error number if != 0
         if(error_num != 0)
             message_log += " (#" + error_num + ")";
 
+        // Set, Show & Log error message
         m_ErrorTimer.Start();
         ErrorText.text = message_log;
         ErrorText.gameObject.SetActive(true);
@@ -105,7 +110,7 @@ public class NetworkUIScript : MonoBehaviour
 
     public void ShowWarn(string message_log)
     {
-        // Show & Log warn message
+        // Set, Show & Log warn message
         m_WarnTimer.Start();
         WarnText.text = message_log;
         WarnText.gameObject.SetActive(true);

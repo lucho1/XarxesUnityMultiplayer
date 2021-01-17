@@ -21,14 +21,17 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     // ------------------
 
 
+    // --- Online General Settings ---
     public int MaxPlayersPerMatch = 8;
     public string GameVersion = "1.0";
     public bool RoomIsJoinableAfterStart = false;
-    
+
+    // --- UI Object for Networking ---
     [SerializeField]
     private NetworkUIScript NetUIManager;
 
 
+    // --- Class Methods ---
     // Start is called before the first frame update
     private void Start()
     {
@@ -133,12 +136,14 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     // ------------------------ CONNECTION FUNCTIONS ------------------------
     public void JoinRoom(string room_name)
     {
+        // Check if passed string is valid
         if(string.IsNullOrEmpty(room_name) || string.IsNullOrWhiteSpace(room_name))
         {
             NetUIManager.ShowWarn("No Room Selected or Invalid Room Name!");
             return;
         }
 
+        // Check if we are ready to make operations
         if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
         {
             string error = "";
@@ -152,6 +157,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
 
     public void JoinRandomRoom()
     {
+        // Check if we are ready to make operations
         if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
         {
             string error = "";
@@ -165,12 +171,14 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
 
     public void HostRoom(string room_name)
     {
+        // Check if passed string is valid
         if (string.IsNullOrEmpty(room_name) || string.IsNullOrWhiteSpace(room_name))
         {
             NetUIManager.ShowWarn("Invalid Room Name!");
             return;
         }
 
+        // Check if we are ready to make operations
         if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
         {
             string error = "";
@@ -187,12 +195,17 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
 
     public void LoadLevel(int scene_index)
     {
+        // Check if we are on MasterClient (host - only the host can begin the match)
         if (PhotonNetwork.IsMasterClient)
         {
+            // Check if we are ready to make operations
             if (PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
             {
-                PhotonNetwork.CurrentRoom.IsOpen = RoomIsJoinableAfterStart; // Room can't be joined (or we should allow it?)
+                // Set room visibility & openess once the game began
+                PhotonNetwork.CurrentRoom.IsOpen = RoomIsJoinableAfterStart;
                 PhotonNetwork.CurrentRoom.IsVisible = RoomIsJoinableAfterStart;
+
+                // Load Scene
                 PhotonNetwork.LoadLevel(scene_index);
             }
             else
@@ -204,6 +217,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
 
     public void LeaveRoom()
     {
+        // Check if we are ready to make operations
         if (PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
         {
             PhotonNetwork.LeaveRoom(true);
