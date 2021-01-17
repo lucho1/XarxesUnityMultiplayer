@@ -11,6 +11,12 @@ public class LobbyScript : MonoBehaviour
     private InputField UsernameInput;
 
     [SerializeField]
+    private InputField NewRoomInput;
+
+    [SerializeField]
+    private InputField RoomFilterInput;
+
+    [SerializeField]
     private Transform ListContainer;
 
     [SerializeField]
@@ -20,11 +26,21 @@ public class LobbyScript : MonoBehaviour
     private Dictionary<string, GameObject> m_RoomList = new Dictionary<string, GameObject>();
 
 
+    // --- Class Methods ---
     // Start is called before the first frame update
     private void Start()
     {
         UsernameInput.textComponent.text = ConnectionManager.GetUsername();
         UsernameInput.text = ConnectionManager.GetUsername();
+    }
+
+    private void OnEnable()
+    {
+        UsernameInput.textComponent.text = ConnectionManager.GetUsername();
+        UsernameInput.text = ConnectionManager.GetUsername();
+
+        RoomFilterInput.textComponent.text = NewRoomInput.textComponent.text = "";
+        RoomFilterInput.text = NewRoomInput.text = "";
     }
 
     public void DeselectRoom()
@@ -93,5 +109,16 @@ public class LobbyScript : MonoBehaviour
     public void QuickStartButton()
     {
         ConnectionManager.JoinRandomRoom();
+    }
+
+    public void FilterRooms(InputField text)
+    {
+        foreach(KeyValuePair<string, GameObject> room in m_RoomList)
+        {
+            if (!room.Key.Contains(text.text))
+                room.Value.SetActive(false);
+            else
+                room.Value.SetActive(true);
+        }
     }
 }
