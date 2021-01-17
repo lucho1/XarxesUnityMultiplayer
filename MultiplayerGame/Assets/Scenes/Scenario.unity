@@ -48379,7 +48379,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
   - {fileID: 945399691}
-  - {fileID: 0}
+  - {fileID: 2043849481}
   offet: {x: 11.59, y: 26.93, z: 1.54}
   smoothTime: 0.05
   minZoom: 74.69
@@ -89156,6 +89156,12 @@ Transform:
   m_Father: {fileID: 2103971194}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &2043849481 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1417296350303303406, guid: 8f0d2afc36eb6a64a94916efb84c5f0f,
+    type: 3}
+  m_PrefabInstance: {fileID: 518319995102652664}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2044507018
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -91640,6 +91646,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player_B
+      objectReference: {fileID: 0}
+    - target: {fileID: 1952445568343118794, guid: 8f0d2afc36eb6a64a94916efb84c5f0f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1952445568343118807, guid: 8f0d2afc36eb6a64a94916efb84c5f0f,
         type: 3}
