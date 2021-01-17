@@ -32,14 +32,23 @@ public class NetworkUIScript : MonoBehaviour
     private Timer m_WarnTimer;
     private Timer m_ErrorTimer;
 
+    // --- ---
+    private bool m_QuittingApp = false;
+
 
     // --- Class Methods ---
     // Start is called before the first frame update
     private void Start()
     {
+        m_QuittingApp = false;
         Timer[] timers = GetComponents<Timer>();
         m_WarnTimer = timers[0];
         m_ErrorTimer = timers[1];
+    }
+
+    private void OnApplicationQuit()
+    {
+        m_QuittingApp = true;
     }
 
     // Update is called once per frame
@@ -72,6 +81,9 @@ public class NetworkUIScript : MonoBehaviour
     // --- UI Methods ---
     private void ChangeScreen(bool enter_room)
     {
+        if (m_QuittingApp)
+            return;
+
         if(enter_room)
         {
             //m_HideLogTexts = true;
