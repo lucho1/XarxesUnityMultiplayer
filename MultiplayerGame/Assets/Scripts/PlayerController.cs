@@ -1,12 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerController : MonoBehaviour
 {
     public float PlayerSpeed = 2.0f;
     [Range(0.0f, 1.0f)] public float PlayerAcceleration = 0.10f;
+    public bool NetworkMode = true;
 
+
+    private PhotonView m_PhotonView;
     private CharacterController m_CharacterController;
     private Animator m_Animator;
 
@@ -19,6 +23,10 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        m_PhotonView = GetComponent<PhotonView>();
+        if (NetworkMode && m_PhotonView && !m_PhotonView.IsMine)
+            this.enabled = false;
+
         m_CharacterController = GetComponent<CharacterController>();
         m_Animator = gameObject.GetComponentInChildren<Animator>();
         m_RigidBody = gameObject.GetComponent<Rigidbody>();
