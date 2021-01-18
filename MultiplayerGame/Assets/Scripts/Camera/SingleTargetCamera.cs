@@ -6,10 +6,11 @@ public class SingleTargetCamera : MonoBehaviour
 {
     public Transform Target;
     public Vector3 Offset;
-    private Vector3 m_velocity;
     public float SmoothTime = .05f;
     public float Zoom = 78f;
     public bool FollowTarget = false;
+
+    private Vector3 m_velocity;
     private Camera m_camera;
 
     void Start ()
@@ -21,6 +22,9 @@ public class SingleTargetCamera : MonoBehaviour
 
     void LateUpdate()
     {
+        if (Zoom != m_camera.fieldOfView)
+            m_camera.fieldOfView = Zoom;
+            
         if (!FollowTarget)
             return;
 
