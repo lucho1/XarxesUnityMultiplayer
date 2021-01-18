@@ -183,4 +183,10 @@ public class NetworkUIScript : MonoBehaviour
         ShowWarn("Host Changed, now " + new_host_name + " is the host");
         RoomUI.GetComponent<RoomScript>().ChangeHost(new_host_name);
     }
+
+    public void PlayerJoinedTeam(string player_name)
+    {
+        ShowWarn("Player " + player_name + " joined a team!");
+        RoomUI.GetComponent<RoomScript>().PlayerJoinedTeam(player_name);
+    }
 }

@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using PhHashtable = ExitGames.Client.Photon.Hashtable;
 
-public class ConnectionAPIScript : MonoBehaviourPunCallbacks
+
+public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     // --- Singleton ---
     private static ConnectionAPIScript m_Instance;
@@ -30,6 +33,9 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     [SerializeField]
     private NetworkUIScript NetUIManager;
 
+    // --- Team Events ---
+    public byte PlayerTeamUpdated_Event = 1;
+
 
     // --- Class Methods ---
     // Start is called before the first frame update
@@ -39,6 +45,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     }
 
 
+    
     // ----------------------------------------------------------------------
     // ------------------------- NETWORK FUNCTIONS --------------------------
     private void ConnectToNetwork()
@@ -56,6 +63,21 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
         // Connect and add callback
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.AddCallbackTarget(this);
+    }
+
+    public void SendEvent(byte event_code, object content)
+    {
+        PhotonNetwork.RaiseEvent(event_code, content, new RaiseEventOptions { Receivers = ReceiverGroup.Others }, ExitGames.Client.Photon.SendOptions.SendReliable);
+    }
+
+    public void OnEvent(EventData photonEvent)
+    {
+        byte ev_code = photonEvent.Code;
+        if(ev_code == PlayerTeamUpdated_Event)
+        {
+            string player_name = (string)photonEvent.CustomData;
+            NetUIManager.PlayerJoinedTeam(player_name);
+        }
     }
 
     public override void OnConnectedToMaster()
@@ -82,17 +104,57 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     }
 
 
+
     // ----------------------------------------------------------------------
     // ------------------------- SETTERS && GETTERS -------------------------
-    // --- Username ---
-    public void SetUsername(string name)    { PhotonNetwork.NickName = name; }
-    public string GetUsername()             { return PhotonNetwork.NickName; }
-    
     // --- Status ---
-    public bool IsConnectedAndReady()       { return PhotonNetwork.IsConnectedAndReady; }
-    public int GetPing()                    { return PhotonNetwork.GetPing(); }
+    public bool     IsConnectedAndReady()       { return PhotonNetwork.IsConnectedAndReady; }
+    public int      GetPing()                   { return PhotonNetwork.GetPing(); }
+    
+    // --- Player ---
+    public void     SetUsername(string name)    { PhotonNetwork.NickName = name; }
+    public string   GetUsername()               { return PhotonNetwork.NickName; }
+    
+    public void SetLocalPlayerProperty<T>(string name, T property)
+    {
+        PhHashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+        hash[name] = property;
 
-    // --- Room Stuff ---
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+    }
+
+    public void SetPlayerProperty<T>(string player_name, string property_name, T property)
+    {
+        foreach (Player pl in PhotonNetwork.PlayerList)
+        {
+            if (pl.NickName == player_name)
+            {
+                PhHashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+                hash[property_name] = property;
+
+                pl.SetCustomProperties(hash);
+                return;
+            }
+        }
+    }
+
+    public object GetPlayerProperty(string player_name, string property_name)
+    {
+        foreach (Player pl in PhotonNetwork.PlayerList)
+        {
+            if (pl.NickName == player_name)
+            {
+                if(pl.CustomProperties.ContainsKey(property_name))
+                    return pl.CustomProperties[property_name];
+
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    // --- Rooms ---
     public int GetPlayersCount()
     {
         if (PhotonNetwork.InRoom)
@@ -225,6 +287,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
                 PhotonNetwork.JoinLobby(TypedLobby.Default);
         }
     }
+
 
 
     // ----------------------------------------------------------------------

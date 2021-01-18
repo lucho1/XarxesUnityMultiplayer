@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TEAMS { NONE, TEAM_A, TEAM_B };
+
 public class GameManager : MonoBehaviour
 {
     public GameObject StartingMusic;
