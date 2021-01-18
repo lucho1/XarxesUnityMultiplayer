@@ -99,6 +99,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 40
+  PlayerTags:
+  - Player
+  - My Player
 --- !u!114 &1320728139236308131
 MonoBehaviour:
   m_ObjectHideFlags: 0

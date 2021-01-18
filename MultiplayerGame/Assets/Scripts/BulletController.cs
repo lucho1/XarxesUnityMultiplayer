@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
 
 public class BulletController : MonoBehaviour
 {
     public float Speed = 40.0f;
+    [TagSelector]
+    public string[] PlayerTags;
     private bool m_UseNetworking = false;
     private PhotonView m_PhotonView;
     private Timer m_BulletLife;
@@ -39,7 +39,14 @@ public class BulletController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag != "Player")
+        bool isPlayer = false;
+        foreach(string tag in PlayerTags) 
+        {
+            if (other.tag == tag)
+                isPlayer = true;
+        }
+
+        if (isPlayer)
         {
             if (m_UseNetworking)
                 PhotonNetwork.Destroy(m_PhotonView);
@@ -50,7 +57,14 @@ public class BulletController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag != "Player")
+        bool isPlayer = false;
+        foreach(string tag in PlayerTags) 
+        {
+            if (collision.collider.tag == tag)
+                isPlayer = true;
+        }
+
+        if (isPlayer)
         {
             if (m_UseNetworking)
                 PhotonNetwork.Destroy(m_PhotonView);
