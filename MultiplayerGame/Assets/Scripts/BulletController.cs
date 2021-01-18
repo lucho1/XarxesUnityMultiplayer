@@ -46,7 +46,7 @@ public class BulletController : MonoBehaviour
                 isPlayer = true;
         }
 
-        if (isPlayer)
+        if (!isPlayer)
         {
             if (m_UseNetworking)
                 PhotonNetwork.Destroy(m_PhotonView);
@@ -64,7 +64,7 @@ public class BulletController : MonoBehaviour
                 isPlayer = true;
         }
 
-        if (isPlayer)
+        if (!isPlayer)
         {
             if (m_UseNetworking)
                 PhotonNetwork.Destroy(m_PhotonView);
