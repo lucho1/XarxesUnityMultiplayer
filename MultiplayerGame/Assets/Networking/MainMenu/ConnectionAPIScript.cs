@@ -3,6 +3,7 @@ using UnityEngine;
 
 using Photon.Pun;
 using Photon.Realtime;
+using PhHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class ConnectionAPIScript : MonoBehaviourPunCallbacks
 {
@@ -29,6 +30,9 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     // --- UI Object for Networking ---
     [SerializeField]
     private NetworkUIScript NetUIManager;
+
+    // --- Events Stuff ---
+    private const byte PlayerTeamUpdated_Event = 1;
 
 
     // --- Class Methods ---
@@ -84,13 +88,52 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
 
     // ----------------------------------------------------------------------
     // ------------------------- SETTERS && GETTERS -------------------------
-    // --- Username ---
-    public void SetUsername(string name)    { PhotonNetwork.NickName = name; }
-    public string GetUsername()             { return PhotonNetwork.NickName; }
-    
     // --- Status ---
     public bool IsConnectedAndReady()       { return PhotonNetwork.IsConnectedAndReady; }
     public int GetPing()                    { return PhotonNetwork.GetPing(); }
+    
+    // --- Player ---
+    public void SetUsername(string name)    { PhotonNetwork.NickName = name; }
+    public string GetUsername()             { return PhotonNetwork.NickName; }
+    
+    public void SetLocalPlayerProperty<T>(string name, T property)
+    {
+        PhHashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+        hash[name] = property;
+
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+    }
+
+    public void SetPlayerProperty<T>(string player_name, string property_name, T property)
+    {
+        foreach (Player pl in PhotonNetwork.PlayerList)
+        {
+            if (pl.NickName == player_name)
+            {
+                PhHashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+                hash[property_name] = property;
+
+                pl.SetCustomProperties(hash);
+                return;
+            }
+        }
+    }
+
+    public object GetPlayerProperty(string player_name, string property_name)
+    {
+        foreach (Player pl in PhotonNetwork.PlayerList)
+        {
+            if (pl.NickName == player_name)
+            {
+                if(pl.CustomProperties.ContainsKey(property_name))
+                    return pl.CustomProperties[property_name];
+
+                return null;
+            }
+        }
+
+        return null;
+    }
 
     // --- Room Stuff ---
     public int GetPlayersCount()

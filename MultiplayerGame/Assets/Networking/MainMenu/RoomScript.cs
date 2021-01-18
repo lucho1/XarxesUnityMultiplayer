@@ -26,13 +26,40 @@ public class RoomScript : MonoBehaviour
     private GameObject ListElement;
     private Dictionary<string, GameObject> m_PlayerList = new Dictionary<string, GameObject>();
 
+    private bool update_teams = false;
 
     // --- Class Methods ---
     private void OnEnable()
     {
-        // Set players list
+        // Set players list & teams
+        uint TeamA_Players = 0, TeamB_Players = 0;
         foreach (string player in ConnectionManager.GetPlayerNamesInRoom())
+        {
             AddPlayerToList(player);
+
+            if (player != ConnectionManager.GetUsername())
+            {
+                TEAMS team = (TEAMS)ConnectionManager.GetPlayerProperty(player, "Team");
+
+                if (team == TEAMS.TEAM_A)
+                    ++TeamA_Players;
+                else if (team == TEAMS.TEAM_B)
+                    ++TeamB_Players;
+            }
+        }
+
+        // Set player team
+        Text player_show_name = m_PlayerList[ConnectionManager.GetUsername()].GetComponentInChildren<Text>();
+        if (TeamA_Players <= TeamB_Players)
+        {
+            ConnectionManager.SetLocalPlayerProperty("Team", TEAMS.TEAM_A);
+            player_show_name.text += " -- TEAM A";
+        }
+        else
+        {
+            ConnectionManager.SetLocalPlayerProperty("Team", TEAMS.TEAM_B);
+            player_show_name.text += " -- TEAM B";
+        }
 
         // Set room name and username
         UsernameText.text = "You: " + ConnectionManager.GetUsername();
@@ -46,6 +73,28 @@ public class RoomScript : MonoBehaviour
             Destroy(player.Value);
 
         m_PlayerList.Clear();
+    }
+
+    private void Update()
+    {
+        if (update_teams)
+        {
+            foreach(KeyValuePair<string, GameObject> player in m_PlayerList)
+            {
+                Text player_show_name = player.Value.GetComponentInChildren<Text>();
+                if(!player_show_name.text.Contains(" -- TEAM ") && ConnectionManager.GetPlayerProperty(player.Key, "Team") != null)
+                {
+                    TEAMS team = (TEAMS)ConnectionManager.GetPlayerProperty(player.Key, "Team");
+
+                    if (team == TEAMS.TEAM_A)
+                        player_show_name.text += " -- TEAM A";
+                    else if (team == TEAMS.TEAM_B)
+                        player_show_name.text += " -- TEAM B";
+                }
+            }
+
+            update_teams = false;
+        }
     }
 
     private void AddPlayerToList(string player_name, GameObject instance = null)
@@ -63,12 +112,13 @@ public class RoomScript : MonoBehaviour
             show_name += " (Host)";
 
         // Set GameObject instance if null
-        if(instance == null)
+        if (instance == null)
             instance = Instantiate(ListElement, ListContainer);
 
         // Set object show name & Add it to players list
         instance.GetComponentInChildren<Text>().text = show_name;
         m_PlayerList.Add(player_name, instance);
+        update_teams = true;
     }
 
     // --- Connection Callbacks ---
