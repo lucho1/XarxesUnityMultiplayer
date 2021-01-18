@@ -59,6 +59,18 @@ public class ToTarget : MonoBehaviour
         MoveToTarget = true;
     }
 
+    public void SetToTarget(GameObject n_target)
+    {
+        MoveToTarget = true;
+        Target = n_target.GetComponent<Transform>();
+    }
+
+    public void RemoveTarget()
+    {
+        MoveToTarget = false;
+        Target = null;
+    }
+
     public void ResetCameraMovement()
     {
         MoveToTarget = false;
