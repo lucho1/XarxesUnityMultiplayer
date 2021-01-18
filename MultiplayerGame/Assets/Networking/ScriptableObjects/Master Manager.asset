@@ -10,5 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9e721ead30a32e419543076cab7df04, type: 3}
-  m_Name: MasterManager
+  m_Name: Master Manager
   m_EditorClassIdentifier: 
+  m_networkedPrefabs: []

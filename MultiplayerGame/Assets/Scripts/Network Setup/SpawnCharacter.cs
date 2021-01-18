@@ -16,7 +16,7 @@ public class SpawnCharacter : MonoBehaviour {
     {
         PHashtable myProperties = PhotonNetwork.LocalPlayer.CustomProperties;
         GameObject myPlayer = MasterManager.NetworkInstantiate(TeamAPrefab, StartPosition.position, Quaternion.identity);
-        myPlayer.tag = "My Player";
+        //myPlayer.tag = "My Player";
         PlayerSpawned.Invoke(myPlayer);
     }
 }

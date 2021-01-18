@@ -48087,13 +48087,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a732ad95c90573f42a8476eb9dabde60, type: 3}
+  m_Script: {fileID: 11500000, guid: 4324bd45fea2ff44a9885ba82f3da16d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
-  MoveToTarget: 0
-  ButtonController: {fileID: 0}
+  Offset: {x: 11, y: 29.12, z: 0}
   SmoothTime: 0.05
+  Zoom: 34
+  FollowTarget: 0
 --- !u!4 &963494549 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 737248211602893542, guid: a1e871376a00c724aa1e494a01e6af1b,
@@ -64671,7 +64672,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 963194229}
-        m_MethodName: SetToTarget
+        m_MethodName: SetTarget
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

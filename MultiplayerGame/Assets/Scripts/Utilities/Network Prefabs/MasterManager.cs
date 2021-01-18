@@ -23,8 +23,9 @@ public class MasterManager : ScriptableSingleton<MasterManager>
     #if UNITY_EDITOR
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    [MenuItem("Networking/NetworkPrefabs/PopulateNetworkPrefabs")]
     private static void PopulateNetworkPrefabs() {
-        
+        Debug.Log("Populating Network Prefabs");
         instance.m_networkedPrefabs.Clear();
         GameObject[] prefabs = Resources.LoadAll<GameObject>("");
         foreach (GameObject prefab in prefabs) {
