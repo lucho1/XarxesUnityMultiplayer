@@ -47808,12 +47808,6 @@ Transform:
   m_Father: {fileID: 1610948502}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &945399691 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2856221427001891050, guid: 933338587774bf644b2b62f96c012a2f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1421946021832977978}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &947270612
 GameObject:
   m_ObjectHideFlags: 0
@@ -48011,7 +48005,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
-  - component: {fileID: 963194230}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -48084,7 +48078,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 66, y: -90, z: 0}
---- !u!114 &963194230
+--- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -48093,17 +48087,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 703ef11aba22f8d40ac40ff791ac0491, type: 3}
+  m_Script: {fileID: 11500000, guid: a732ad95c90573f42a8476eb9dabde60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets:
-  - {fileID: 945399691}
-  - {fileID: 2043849481}
-  offet: {x: 11.59, y: 26.93, z: 1.54}
-  smoothTime: 0.05
-  minZoom: 74.69
-  maxZoom: 10
-  zoomLimiter: 50
+  Target: {fileID: 0}
+  MoveToTarget: 0
+  ButtonController: {fileID: 0}
+  SmoothTime: 0.05
 --- !u!4 &963494549 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 737248211602893542, guid: a1e871376a00c724aa1e494a01e6af1b,
@@ -64672,8 +64662,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ea9fc482aa3bda47b57688f163c8414, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Address: Character/Player_A
+  TeamAPrefab: {fileID: 1122187902249500682, guid: 933338587774bf644b2b62f96c012a2f,
+    type: 3}
+  TeamBPrefab: {fileID: 1952445568343118794, guid: 8f0d2afc36eb6a64a94916efb84c5f0f,
+    type: 3}
   StartPosition: {fileID: 2029165940837510701}
+  PlayerSpawned:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 963194229}
+        m_MethodName: SetToTarget
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &1551354877
 Transform:
   m_ObjectHideFlags: 0
@@ -89061,12 +89068,6 @@ Transform:
   m_Father: {fileID: 2103971194}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &2043849481 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1417296350303303406, guid: 8f0d2afc36eb6a64a94916efb84c5f0f,
-    type: 3}
-  m_PrefabInstance: {fileID: 518319995102652664}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2044507018
 PrefabInstance:
   m_ObjectHideFlags: 0
