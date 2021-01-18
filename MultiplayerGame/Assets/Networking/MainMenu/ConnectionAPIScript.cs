@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using PhHashtable = ExitGames.Client.Photon.Hashtable;
 
-public class ConnectionAPIScript : MonoBehaviourPunCallbacks
+
+public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     // --- Singleton ---
     private static ConnectionAPIScript m_Instance;
@@ -31,8 +33,8 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     [SerializeField]
     private NetworkUIScript NetUIManager;
 
-    // --- Events Stuff ---
-    private const byte PlayerTeamUpdated_Event = 1;
+    // --- Team Events ---
+    public byte PlayerTeamUpdated_Event = 1;
 
 
     // --- Class Methods ---
@@ -43,6 +45,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     }
 
 
+    
     // ----------------------------------------------------------------------
     // ------------------------- NETWORK FUNCTIONS --------------------------
     private void ConnectToNetwork()
@@ -60,6 +63,21 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
         // Connect and add callback
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.AddCallbackTarget(this);
+    }
+
+    public void SendEvent(byte event_code, object content)
+    {
+        PhotonNetwork.RaiseEvent(event_code, content, new RaiseEventOptions { Receivers = ReceiverGroup.Others }, ExitGames.Client.Photon.SendOptions.SendReliable);
+    }
+
+    public void OnEvent(EventData photonEvent)
+    {
+        byte ev_code = photonEvent.Code;
+        if(ev_code == PlayerTeamUpdated_Event)
+        {
+            string player_name = (string)photonEvent.CustomData;
+            NetUIManager.PlayerJoinedTeam(player_name);
+        }
     }
 
     public override void OnConnectedToMaster()
@@ -86,15 +104,16 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
     }
 
 
+
     // ----------------------------------------------------------------------
     // ------------------------- SETTERS && GETTERS -------------------------
     // --- Status ---
-    public bool IsConnectedAndReady()       { return PhotonNetwork.IsConnectedAndReady; }
-    public int GetPing()                    { return PhotonNetwork.GetPing(); }
+    public bool     IsConnectedAndReady()       { return PhotonNetwork.IsConnectedAndReady; }
+    public int      GetPing()                   { return PhotonNetwork.GetPing(); }
     
     // --- Player ---
-    public void SetUsername(string name)    { PhotonNetwork.NickName = name; }
-    public string GetUsername()             { return PhotonNetwork.NickName; }
+    public void     SetUsername(string name)    { PhotonNetwork.NickName = name; }
+    public string   GetUsername()               { return PhotonNetwork.NickName; }
     
     public void SetLocalPlayerProperty<T>(string name, T property)
     {
@@ -135,7 +154,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
         return null;
     }
 
-    // --- Room Stuff ---
+    // --- Rooms ---
     public int GetPlayersCount()
     {
         if (PhotonNetwork.InRoom)
@@ -268,6 +287,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks
                 PhotonNetwork.JoinLobby(TypedLobby.Default);
         }
     }
+
 
 
     // ----------------------------------------------------------------------

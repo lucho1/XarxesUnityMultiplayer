@@ -25,41 +25,39 @@ public class RoomScript : MonoBehaviour
     [SerializeField]
     private GameObject ListElement;
     private Dictionary<string, GameObject> m_PlayerList = new Dictionary<string, GameObject>();
-
-    private bool update_teams = false;
+    
 
     // --- Class Methods ---
     private void OnEnable()
     {
         // Set players list & teams
-        uint TeamA_Players = 0, TeamB_Players = 0;
+        uint PlayersTeamA = 0, PlayersTeamB = 0;
         foreach (string player in ConnectionManager.GetPlayerNamesInRoom())
         {
             AddPlayerToList(player);
-
             if (player != ConnectionManager.GetUsername())
             {
                 TEAMS team = (TEAMS)ConnectionManager.GetPlayerProperty(player, "Team");
+                Text show_name = m_PlayerList[player].GetComponentInChildren<Text>();
 
                 if (team == TEAMS.TEAM_A)
-                    ++TeamA_Players;
+                {
+                    ++PlayersTeamA;
+                    show_name.text += " -- TEAM A";
+                }
                 else if (team == TEAMS.TEAM_B)
-                    ++TeamB_Players;
+                {
+                    ++PlayersTeamB;
+                    show_name.text += " -- TEAM B";
+                }
             }
         }
 
         // Set player team
-        Text player_show_name = m_PlayerList[ConnectionManager.GetUsername()].GetComponentInChildren<Text>();
-        if (TeamA_Players <= TeamB_Players)
-        {
-            ConnectionManager.SetLocalPlayerProperty("Team", TEAMS.TEAM_A);
-            player_show_name.text += " -- TEAM A";
-        }
+        if (PlayersTeamA <= PlayersTeamB)
+            SetPlayerTeam(TEAMS.TEAM_A);
         else
-        {
-            ConnectionManager.SetLocalPlayerProperty("Team", TEAMS.TEAM_B);
-            player_show_name.text += " -- TEAM B";
-        }
+            SetPlayerTeam(TEAMS.TEAM_B);
 
         // Set room name and username
         UsernameText.text = "You: " + ConnectionManager.GetUsername();
@@ -75,26 +73,21 @@ public class RoomScript : MonoBehaviour
         m_PlayerList.Clear();
     }
 
-    private void Update()
+    private void SetPlayerTeam(TEAMS team)
     {
-        if (update_teams)
-        {
-            foreach(KeyValuePair<string, GameObject> player in m_PlayerList)
-            {
-                Text player_show_name = player.Value.GetComponentInChildren<Text>();
-                if(!player_show_name.text.Contains(" -- TEAM ") && ConnectionManager.GetPlayerProperty(player.Key, "Team") != null)
-                {
-                    TEAMS team = (TEAMS)ConnectionManager.GetPlayerProperty(player.Key, "Team");
+        // Set team property & send event
+        ConnectionManager.SetLocalPlayerProperty("Team", team);
+        ConnectionManager.SendEvent(ConnectionManager.PlayerTeamUpdated_Event, ConnectionManager.GetUsername());
+        
+        // Set Team Text
+        string team_str = "";
+        if (team == TEAMS.TEAM_A)
+            team_str = "TEAM A";
+        else if (team == TEAMS.TEAM_B)
+            team_str = "TEAM B";
 
-                    if (team == TEAMS.TEAM_A)
-                        player_show_name.text += " -- TEAM A";
-                    else if (team == TEAMS.TEAM_B)
-                        player_show_name.text += " -- TEAM B";
-                }
-            }
-
-            update_teams = false;
-        }
+        Text player_show_name = m_PlayerList[ConnectionManager.GetUsername()].GetComponentInChildren<Text>();
+        player_show_name.text += " -- " + team_str;
     }
 
     private void AddPlayerToList(string player_name, GameObject instance = null)
@@ -118,8 +111,8 @@ public class RoomScript : MonoBehaviour
         // Set object show name & Add it to players list
         instance.GetComponentInChildren<Text>().text = show_name;
         m_PlayerList.Add(player_name, instance);
-        update_teams = true;
     }
+
 
     // --- Connection Callbacks ---
     public void PlayerJoinedRoom(string player_name)
@@ -145,6 +138,26 @@ public class RoomScript : MonoBehaviour
         GameObject new_host_object = m_PlayerList[new_host_name];
         m_PlayerList.Remove(new_host_name);
         AddPlayerToList(new_host_name, new_host_object);
+
+        // Set host team again
+        object team = ConnectionManager.GetPlayerProperty(new_host_name, "Team");
+
+        if (team != null)
+            SetPlayerTeam((TEAMS)team);
+    }
+
+    public void PlayerJoinedTeam(string player_name)
+    {
+        if (!m_PlayerList.ContainsKey(player_name))
+            return;
+
+        TEAMS team = (TEAMS)ConnectionManager.GetPlayerProperty(player_name, "Team");
+        Text player_show_name = m_PlayerList[player_name].GetComponentInChildren<Text>();
+
+        if (team == TEAMS.TEAM_A)
+            player_show_name.text += " -- TEAM A";
+        else if (team == TEAMS.TEAM_B)
+            player_show_name.text += " -- TEAM B";
     }
 
 
