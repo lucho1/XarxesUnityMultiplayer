@@ -441,7 +441,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameobjectsToDisable:
   - {fileID: 518319996844495620}
-  - {fileID: 1033941936629563321}
 --- !u!1 &2459369802874536547
 GameObject:
   m_ObjectHideFlags: 0
@@ -722,12 +721,6 @@ PrefabInstance:
 --- !u!4 &6047982124557772576 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6115834385783884074, guid: 12e8f02f1bbcbb44ba6128bcf9d338f3,
-    type: 3}
-  m_PrefabInstance: {fileID: 518319996307844618}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1033941936629563321 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 677859899694518707, guid: 12e8f02f1bbcbb44ba6128bcf9d338f3,
     type: 3}
   m_PrefabInstance: {fileID: 518319996307844618}
   m_PrefabAsset: {fileID: 0}
