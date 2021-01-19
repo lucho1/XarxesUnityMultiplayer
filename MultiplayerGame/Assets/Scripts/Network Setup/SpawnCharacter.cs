@@ -24,6 +24,10 @@ public class SpawnCharacter : MonoBehaviour
         TEAMS team = TEAMS.TEAM_A;
         if (myProperties.ContainsKey("Team"))
             team = (TEAMS)myProperties["Team"];
+
+        myProperties["Kills"] = 0;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(myProperties);
+
         GameObject myPlayer = null;
         
         object[] myData = new object[1];
