@@ -27,13 +27,18 @@ public class LayerSelectorPropertyDrawer : PropertyDrawer
                 //generate the layerList
                 List<string> layerList = new List<string>();
                 layerList.AddRange(UnityEditorInternal.InternalEditorUtility.layers);
-                int index = property.intValue;
+                string layerString = LayerMask.LayerToName(property.intValue);
+                int index = 0;
+                for (int i = 0; i < layerList.Count; i++) {
+                    if (layerList[i] == layerString)
+                        index = i;
+                }
                 
                 //Draw the popup box with the current selected index
                 index = EditorGUI.Popup(position, label.text, index, layerList.ToArray());
  
                 //Adjust the actual value of the property based on the selection
-                property.intValue = index;
+                property.intValue = LayerMask.NameToLayer(layerList[index]);
             }
  
             EditorGUI.EndProperty();

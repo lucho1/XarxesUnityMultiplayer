@@ -6,7 +6,8 @@ using PHashtable = ExitGames.Client.Photon.Hashtable;
 [System.Serializable]
 public class GOEvent : UnityEvent<GameObject> {};
 
-public class SpawnCharacter : MonoBehaviour {
+public class SpawnCharacter : MonoBehaviour 
+{
     public GameObject TeamAPrefab;
     public GameObject TeamBPrefab;
     [LayerSelector]
@@ -25,19 +26,19 @@ public class SpawnCharacter : MonoBehaviour {
             team = (TEAMS)myProperties["Team"];
         GameObject myPlayer = null;
         
+        object[] myData = new object[1];
         switch (team) {
             default:
             case TEAMS.TEAM_A:
-                myPlayer = MasterManager.NetworkInstantiate(TeamAPrefab, TeamAPosition.position, Quaternion.identity);
-                myPlayer.layer = TeamALayer;
+                myData[0] = TeamALayer;
+                myPlayer = MasterManager.NetworkInstantiate(TeamAPrefab, TeamAPosition.position, Quaternion.identity, myData);
                 break;
             case TEAMS.TEAM_B:
-                myPlayer = MasterManager.NetworkInstantiate(TeamBPrefab, TeamBPosition.position, Quaternion.identity);
-                myPlayer.layer = TeamBLayer;
+                myData[0] = TeamBLayer;
+                myPlayer = MasterManager.NetworkInstantiate(TeamBPrefab, TeamBPosition.position, Quaternion.identity, myData);
                 break;
         }
 
-        //myPlayer.tag = "My Player";
         PlayerSpawned.Invoke(myPlayer);
     }
 }

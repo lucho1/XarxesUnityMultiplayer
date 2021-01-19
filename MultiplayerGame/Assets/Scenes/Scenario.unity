@@ -60990,7 +60990,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1330992769
 Transform:
@@ -62457,7 +62457,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1411607771
 Transform:
@@ -64727,8 +64727,8 @@ MonoBehaviour:
     type: 3}
   TeamBPrefab: {fileID: 1952445568343118794, guid: 8f0d2afc36eb6a64a94916efb84c5f0f,
     type: 3}
-  TeamALayer: 5
-  TeamBLayer: 6
+  TeamALayer: 8
+  TeamBLayer: 9
   TeamAPosition: {fileID: 1411607771}
   TeamBPosition: {fileID: 1330992769}
   PlayerSpawned:

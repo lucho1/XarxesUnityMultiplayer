@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 
-public class BulletController : MonoBehaviour
+public class BulletController : MonoBehaviour, IPunInstantiateMagicCallback 
 {
     public float Speed = 40.0f;
+    public float LifeTime = 2.0f;
     [TagSelector]
     public string[] PlayerTags;
     private bool m_UseNetworking = false;
@@ -11,7 +12,7 @@ public class BulletController : MonoBehaviour
     private Timer m_BulletLife;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         m_PhotonView = gameObject.GetPhotonView();
         if (m_UseNetworking && m_PhotonView && !m_PhotonView.IsMine)
@@ -24,7 +25,7 @@ public class BulletController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_BulletLife.ReadTime() > 4.0f) {
+        if (m_BulletLife.ReadTime() >= LifeTime) {
             if (m_UseNetworking)
                 PhotonNetwork.Destroy(m_PhotonView);
             else
@@ -73,8 +74,9 @@ public class BulletController : MonoBehaviour
         }
     }
 
-    public void OnPhotonInstantiate(PhotonMessageInfo info) 
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
         m_UseNetworking = true;
+        this.gameObject.layer = ((GameObject)info.Sender.TagObject).layer;
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
 {
     public float PlayerSpeed = 2.0f;
     [Range(0.0f, 1.0f)] public float PlayerAcceleration = 0.10f;
@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 m_LastMousePos;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         m_PhotonView = GetComponent<PhotonView>();
         if (NetworkMode && m_PhotonView && !m_PhotonView.IsMine)
@@ -85,5 +85,13 @@ public class PlayerController : MonoBehaviour
         }
         else
             Debug.LogError("Player Has Not RigidBody!!!!!");
+    }
+
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        object[] instantiatonData = info.photonView.InstantiationData;
+        this.gameObject.layer = (int) instantiatonData[0];
+        if (m_PhotonView.IsMine)
+            info.Sender.TagObject = this.gameObject;
     }
 }

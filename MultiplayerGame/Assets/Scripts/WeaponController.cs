@@ -47,7 +47,7 @@ public class WeaponController : MonoBehaviour
             m_AudioSource.Play();
             if (NetworkMode) {
                 m_PhotonView.RPC("NetworkPlayShootingSound", RpcTarget.Others);
-                PhotonNetwork.Instantiate("Objects/Bullet", FirePosition.transform.position, transform.rotation);
+                MasterManager.NetworkInstantiate(BulletPrefab, FirePosition.transform.position, transform.rotation);
             }
             else
                 Instantiate(BulletPrefab, FirePosition.transform.position, transform.rotation);
