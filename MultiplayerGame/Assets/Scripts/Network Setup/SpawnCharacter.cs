@@ -9,6 +9,10 @@ public class GOEvent : UnityEvent<GameObject> {};
 public class SpawnCharacter : MonoBehaviour {
     public GameObject TeamAPrefab;
     public GameObject TeamBPrefab;
+    [LayerSelector]
+    public int TeamALayer;
+    [LayerSelector]
+    public int TeamBLayer; 
     public Transform TeamAPosition;
     public Transform TeamBPosition;
     public GOEvent PlayerSpawned;
@@ -25,9 +29,11 @@ public class SpawnCharacter : MonoBehaviour {
             default:
             case TEAMS.TEAM_A:
                 myPlayer = MasterManager.NetworkInstantiate(TeamAPrefab, TeamAPosition.position, Quaternion.identity);
+                myPlayer.layer = TeamALayer;
                 break;
             case TEAMS.TEAM_B:
                 myPlayer = MasterManager.NetworkInstantiate(TeamBPrefab, TeamBPosition.position, Quaternion.identity);
+                myPlayer.layer = TeamBLayer;
                 break;
         }
 

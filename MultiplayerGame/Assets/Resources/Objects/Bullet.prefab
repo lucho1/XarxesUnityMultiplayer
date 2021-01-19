@@ -51,7 +51,8 @@ MonoBehaviour:
   observableSearch: 2
   Synchronization: 1
   OwnershipTransfer: 0
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 3302045081156191948}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
