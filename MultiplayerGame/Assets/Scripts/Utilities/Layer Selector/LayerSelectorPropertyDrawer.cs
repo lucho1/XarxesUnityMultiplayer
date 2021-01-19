@@ -30,8 +30,10 @@ public class LayerSelectorPropertyDrawer : PropertyDrawer
                 string layerString = LayerMask.LayerToName(property.intValue);
                 int index = 0;
                 for (int i = 0; i < layerList.Count; i++) {
-                    if (layerList[i] == layerString)
+                    if (layerList[i] == layerString) {
                         index = i;
+                        break;
+                    }
                 }
                 
                 //Draw the popup box with the current selected index
