@@ -1,15 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
+using PHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
 {
     public float PlayerSpeed = 2.0f;
     [Range(0.0f, 1.0f)] public float PlayerAcceleration = 0.10f;
     public bool NetworkMode = true;
+    [TagSelector]
+    public string BulletTag;
+    public float RespawnTime = 5.0f;
+    public int DeathScore = 100;
 
 
+    private Timer m_RespawnTimer;
     private PhotonView m_PhotonView;
     private CharacterController m_CharacterController;
     private Animator m_Animator;
@@ -20,9 +24,16 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
 
     private Vector3 m_LastMousePos;
 
+    private bool m_IsDead = false;
+    private Renderer m_Renderer;
+    private Renderer[] m_ChildRenderers;
+
     // Start is called before the first frame update
     void Awake()
     {
+        m_Renderer = gameObject.GetComponent<Renderer>();
+        m_ChildRenderers = gameObject.GetComponentsInChildren<Renderer>();
+
         m_PhotonView = GetComponent<PhotonView>();
         if (NetworkMode && m_PhotonView && !m_PhotonView.IsMine)
             this.enabled = false;
@@ -31,12 +42,19 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
         m_Animator = gameObject.GetComponentInChildren<Animator>();
         m_RigidBody = gameObject.GetComponent<Rigidbody>();
 
+
         m_LastMousePos = Input.mousePosition;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (m_IsDead)
+        {
+            if (m_PhotonView.IsMine)
+                RespawnUpdate();
+            return;
+        }
         if(!m_RigidBody)
             m_RigidBody = gameObject.GetComponent<Rigidbody>();
 
@@ -85,6 +103,52 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
         }
         else
             Debug.LogError("Player Has Not RigidBody!!!!!");
+    }
+
+
+    private void OnTriggerEnter(Collider other) {
+        // This should really not enter here on remote, but just in case
+        if (!m_PhotonView.IsMine || !other.gameObject.CompareTag(BulletTag))
+            return;
+        
+        PhotonView o_pv = other.gameObject.GetPhotonView();
+        
+        // Sergi: This maybe should be done by Master?
+        PHashtable k_properties = o_pv.Owner.CustomProperties;
+        int score = (int)k_properties["Score"] + DeathScore;
+        k_properties["Score"] = score;
+        o_pv.Owner.SetCustomProperties(k_properties);
+        
+        m_PhotonView.RPC("Death", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void Death() {
+        m_IsDead = false;
+        m_Renderer.enabled = true;
+        foreach (Renderer childRenderer in m_ChildRenderers)
+            childRenderer.enabled = true;
+        
+        if (m_PhotonView.IsMine)
+            m_RespawnTimer.RestartFromZero();
+
+    }
+
+    [PunRPC]
+    private void Respawn() {
+        m_IsDead = true;
+        m_Renderer.enabled = false;
+        foreach (Renderer childRenderer in m_ChildRenderers)
+            childRenderer.enabled = false;
+
+        if (m_PhotonView.IsMine)
+            m_RespawnTimer.Stop();
+    }
+
+    private void RespawnUpdate() {
+        if (m_RespawnTimer.ReadTime() >= RespawnTime)
+            m_PhotonView.RPC("Respawn", RpcTarget.All);
+
     }
 
     public void OnPhotonInstantiate(PhotonMessageInfo info)
