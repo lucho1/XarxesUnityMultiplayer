@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
     {
         m_Renderer = gameObject.GetComponent<Renderer>();
         m_ChildRenderers = gameObject.GetComponentsInChildren<Renderer>();
+        m_RespawnTimer = gameObject.GetComponent<Timer>();
 
         m_PhotonView = GetComponent<PhotonView>();
         if (NetworkMode && m_PhotonView && !m_PhotonView.IsMine)
@@ -107,7 +108,23 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
 
 
     private void OnTriggerEnter(Collider other) {
-        // This should really not enter here on remote, but just in case
+        //This should really not enter here on remote, but just in case
+        if (!m_PhotonView.IsMine || !other.gameObject.CompareTag(BulletTag))
+            return;
+        
+        PhotonView o_pv = other.gameObject.GetPhotonView();
+        
+        // Sergi: This maybe should be done by Master?
+        PHashtable k_properties = o_pv.Owner.CustomProperties;
+        int score = (int)k_properties["Score"] + DeathScore;
+        k_properties["Score"] = score;
+        o_pv.Owner.SetCustomProperties(k_properties);
+        
+        m_PhotonView.RPC("Death", RpcTarget.All);
+    }
+
+    private void OnCollisionEnter(Collision other) {
+        //This should really not enter here on remote, but just in case
         if (!m_PhotonView.IsMine || !other.gameObject.CompareTag(BulletTag))
             return;
         
