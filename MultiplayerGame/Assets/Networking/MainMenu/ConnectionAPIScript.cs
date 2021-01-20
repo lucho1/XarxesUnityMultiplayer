@@ -33,6 +33,9 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField]
     private NetworkUIScript NetUIManager;
 
+    // --- For Room Info ---
+    private List<RoomInfo> m_RoomInfoList = new List<RoomInfo>();
+
     // --- Team Events ---
     public byte PlayerTeamUpdated_Event = 1;
 
@@ -125,6 +128,9 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void SetPlayerProperty<T>(string player_name, string property_name, T property)
     {
+        if (!PhotonNetwork.InRoom)
+            return;
+
         foreach (Player pl in PhotonNetwork.PlayerList)
         {
             if (pl.NickName == player_name)
@@ -140,11 +146,14 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public object GetPlayerProperty(string player_name, string property_name)
     {
+        if (!PhotonNetwork.InRoom)
+            return null;
+
         foreach (Player pl in PhotonNetwork.PlayerList)
         {
             if (pl.NickName == player_name)
             {
-                if(pl.CustomProperties.ContainsKey(property_name))
+                if (pl.CustomProperties.ContainsKey(property_name))
                     return pl.CustomProperties[property_name];
 
                 return null;
@@ -190,6 +199,17 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback
         }
 
         return ret;
+    }
+
+    public int GetRoomPlayerCount(string room_name)
+    {
+        foreach(RoomInfo room in m_RoomInfoList)
+        {
+            if (room.Name == room_name)
+                return room.PlayerCount;
+        }
+
+        return -1;
     }
 
 
@@ -333,8 +353,14 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        foreach(RoomInfo room in roomList)
+        foreach (RoomInfo room in roomList)
+        {
             NetUIManager.RoomListUpdated(room.RemovedFromList, room.Name);
+            if (room.RemovedFromList)
+                m_RoomInfoList.Remove(room);
+            else
+                m_RoomInfoList.Add(room);
+        }
     }
 
     // --- Players ---

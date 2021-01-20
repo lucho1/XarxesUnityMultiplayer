@@ -98,6 +98,11 @@ public class LobbyScript : MonoBehaviour
             AddRoomToList(room_name);
     }
 
+    public int GetPlayersInRoom(string room_name)
+    {
+        return ConnectionManager.GetRoomPlayerCount(room_name);
+    }
+
 
     // --- UI Callbacks ---
     public void SetUsername(Text name)
