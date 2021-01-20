@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3746148721830159924}
   - component: {fileID: 3746148721830159925}
   m_Layer: 5
-  m_Name: ListElementPrefab
+  m_Name: RoomListElement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2159681467319015406}
-  - {fileID: 3746148721933752229}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -135,15 +134,15 @@ RectTransform:
   m_GameObject: {fileID: 3746148721933752234}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.39525694, y: 0.46296293, z: 1}
   m_Children: []
-  m_Father: {fileID: 3746148721830159930}
-  m_RootOrder: 1
+  m_Father: {fileID: 2159681467319015406}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -116.820015, y: 17.100006}
-  m_SizeDelta: {x: -456.8273, y: -37.835724}
+  m_AnchoredPosition: {x: -46.260864, y: 7.6250057}
+  m_SizeDelta: {x: -43.618225, y: -6.2025375}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3746148721933752231
 CanvasRenderer:
@@ -215,7 +214,8 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.53, y: 2.16, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 3746148721933752229}
   m_Father: {fileID: 3746148721830159930}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
