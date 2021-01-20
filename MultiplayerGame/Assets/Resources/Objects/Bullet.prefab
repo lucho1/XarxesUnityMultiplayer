@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6359132018832499890}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
   Synchronization: 1
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: 6359132018832499890}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

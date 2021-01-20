@@ -137,6 +137,8 @@ MonoBehaviour:
   PlayerSpeed: 8
   PlayerAcceleration: 0.1
   NetworkMode: 1
+  BulletTag: Bullet
+  RespawnTime: 5
 --- !u!114 &8318682844961629273
 MonoBehaviour:
   m_ObjectHideFlags: 0
