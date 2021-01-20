@@ -4,7 +4,7 @@ using Photon.Pun;
 using PHashtable = ExitGames.Client.Photon.Hashtable;
 
 [System.Serializable]
-public class GOEvent : UnityEvent<GameObject> {};
+public class PCEvent : UnityEvent<PlayerController> {};
 
 public class SpawnCharacter : MonoBehaviour 
 {
@@ -16,7 +16,7 @@ public class SpawnCharacter : MonoBehaviour
     public int TeamBLayer; 
     public Transform TeamAPosition;
     public Transform TeamBPosition;
-    public GOEvent PlayerSpawned;
+    public PCEvent PlayerSpawned;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +43,6 @@ public class SpawnCharacter : MonoBehaviour
                 break;
         }
 
-        PlayerSpawned.Invoke(myPlayer);
+        PlayerSpawned.Invoke(myPlayer.GetComponent<PlayerController>());
     }
 }

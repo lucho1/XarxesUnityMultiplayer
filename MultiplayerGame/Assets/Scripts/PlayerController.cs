@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
+using System.Collections.Generic;
 using Photon.Pun;
 using PHashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -25,14 +27,22 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
     private Vector3 m_LastMousePos;
 
     private bool m_IsDead = false;
-    private Renderer m_Renderer;
-    private Renderer[] m_ChildRenderers;
+    private List<Renderer> m_ChildRenderers;
+
+    public UnityEvent PlayerDead;
+    public UnityEvent PlayerRespawn;
 
     // Start is called before the first frame update
     void Awake()
     {
-        m_Renderer = gameObject.GetComponent<Renderer>();
-        m_ChildRenderers = gameObject.GetComponentsInChildren<Renderer>();
+        m_ChildRenderers = new List<Renderer>(gameObject.GetComponentsInChildren<Renderer>());
+        for (int i = 0; i < m_ChildRenderers.Count;)
+        {
+            if (!m_ChildRenderers[i].enabled)
+                m_ChildRenderers.RemoveAt(i);
+            else
+                ++i;
+        }
         m_RespawnTimer = gameObject.GetComponent<Timer>();
 
         m_PhotonView = GetComponent<PhotonView>();
@@ -107,7 +117,8 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
     }
 
 
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other) 
+    {
         //This should really not enter here on remote, but just in case
         if (!m_PhotonView.IsMine || !other.gameObject.CompareTag(BulletTag))
             return;
@@ -123,7 +134,8 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
         m_PhotonView.RPC("Death", RpcTarget.All);
     }
 
-    private void OnCollisionEnter(Collision other) {
+    private void OnCollisionEnter(Collision other) 
+    {
         //This should really not enter here on remote, but just in case
         if (!m_PhotonView.IsMine || !other.gameObject.CompareTag(BulletTag))
             return;
@@ -140,32 +152,44 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
     }
 
     [PunRPC]
-    private void Death() {
-        m_IsDead = false;
-        m_Renderer.enabled = true;
-        foreach (Renderer childRenderer in m_ChildRenderers)
-            childRenderer.enabled = true;
-        
-        if (m_PhotonView.IsMine)
-            m_RespawnTimer.RestartFromZero();
-
-    }
-
-    [PunRPC]
-    private void Respawn() {
+    private void Death() 
+    {
         m_IsDead = true;
-        m_Renderer.enabled = false;
         foreach (Renderer childRenderer in m_ChildRenderers)
             childRenderer.enabled = false;
 
-        if (m_PhotonView.IsMine)
-            m_RespawnTimer.Stop();
+        m_RigidBody.isKinematic = false;
+        m_RigidBody.detectCollisions = false;
+        
+        if (m_PhotonView.IsMine) 
+        {
+            m_RespawnTimer.RestartFromZero();
+            PlayerDead.Invoke();
+        }
+
     }
 
-    private void RespawnUpdate() {
+    [PunRPC]
+    private void Respawn() 
+    {
+        m_IsDead = false;
+        foreach (Renderer childRenderer in m_ChildRenderers)
+            childRenderer.enabled = true;
+
+        m_RigidBody.isKinematic = true;
+        m_RigidBody.detectCollisions = true;
+
+        if (m_PhotonView.IsMine) 
+        {
+            m_RespawnTimer.Stop();
+            PlayerRespawn.Invoke();
+        }
+    }
+
+    private void RespawnUpdate()
+    {
         if (m_RespawnTimer.ReadTime() >= RespawnTime)
             m_PhotonView.RPC("Respawn", RpcTarget.All);
-
     }
 
     public void OnPhotonInstantiate(PhotonMessageInfo info)

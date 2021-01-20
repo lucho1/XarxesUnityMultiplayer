@@ -12,9 +12,11 @@ public class SingleTargetCamera : MonoBehaviour
 
     private Vector3 m_velocity;
     private Camera m_camera;
+    private Vector3 m_originalPosition;
 
     void Start ()
     {
+        m_originalPosition = transform.position;
         m_camera = GetComponent<Camera>();
         if (m_camera)
             m_camera.fieldOfView = Zoom;
@@ -22,8 +24,10 @@ public class SingleTargetCamera : MonoBehaviour
 
     void LateUpdate()
     {
+        #if UNITY_EDITOR // this code is for adjusting the camera zoom while editing
         if (Zoom != m_camera.fieldOfView)
             m_camera.fieldOfView = Zoom;
+        #endif
             
         if (!FollowTarget)
             return;
@@ -34,6 +38,16 @@ public class SingleTargetCamera : MonoBehaviour
     {
         Vector3 NewPosition = Target.position + Offset;
         transform.position = Vector3.SmoothDamp(transform.position, NewPosition, ref m_velocity, SmoothTime);
+    }
+
+    public void SetPlayerTarget (PlayerController target)
+    {
+        if (target == null)
+            return;
+        Target = target.gameObject.transform;
+        FollowTarget = true;
+        target.PlayerDead.AddListener(StopFollowing);
+        target.PlayerRespawn.AddListener(StartFollowing);
     }
 
     public void SetTarget (GameObject target) {
@@ -54,6 +68,16 @@ public class SingleTargetCamera : MonoBehaviour
     public void RemoveTarget () {
         Target = null;
         FollowTarget = false;
+        transform.position = m_originalPosition;
+    }
+
+    public void StopFollowing() {
+        FollowTarget = false;
+        transform.position = m_originalPosition;
+    }
+
+    public void StartFollowing() {
+        FollowTarget = true;
     }
 
 

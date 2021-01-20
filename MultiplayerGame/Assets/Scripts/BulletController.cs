@@ -38,6 +38,9 @@ public class BulletController : MonoBehaviour, IPunInstantiateMagicCallback
 
     private void OnTriggerEnter(Collider other)
     {
+        if (m_UseNetworking && !m_PhotonView.IsMine)
+            return;
+
         bool isPlayer = false;
         foreach(string tag in PlayerTags) 
         {
@@ -56,6 +59,9 @@ public class BulletController : MonoBehaviour, IPunInstantiateMagicCallback
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (m_UseNetworking && !m_PhotonView.IsMine)
+            return;
+
         bool isPlayer = false;
         foreach(string tag in PlayerTags) 
         {
