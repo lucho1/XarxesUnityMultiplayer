@@ -76,7 +76,7 @@ public class LobbyScript : MonoBehaviour
         new_element.GetComponentInChildren<Text>().text = room_name;
         
         // Set its LobbyObject (this)
-        new_element.GetComponent<ListButtonOnClick>().LobbyObject = gameObject;
+        new_element.GetComponent<ListElementScript>().LobbyObject = gameObject;
 
         // Add ListElement to RoomList
         m_RoomList.Add(room_name, new_element);

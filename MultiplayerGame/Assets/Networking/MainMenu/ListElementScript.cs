@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ListButtonOnClick : MonoBehaviour
+public class ListElementScript : MonoBehaviour
 {
     public GameObject LobbyObject = null;
     public void SetSelectedRoom(Text text)
