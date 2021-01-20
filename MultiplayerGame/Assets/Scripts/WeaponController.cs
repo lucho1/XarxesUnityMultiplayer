@@ -46,8 +46,10 @@ public class WeaponController : MonoBehaviour
             m_AudioSource.clip = ShootSound;
             m_AudioSource.Play();
             if (NetworkMode) {
+                object[] instantiationData = new object[1];
+                instantiationData[0] = this.gameObject.layer;
                 m_PhotonView.RPC("NetworkPlayShootingSound", RpcTarget.Others);
-                MasterManager.NetworkInstantiate(BulletPrefab, FirePosition.transform.position, transform.rotation);
+                MasterManager.NetworkInstantiate(BulletPrefab, FirePosition.transform.position, transform.rotation, instantiationData);
             }
             else
                 Instantiate(BulletPrefab, FirePosition.transform.position, transform.rotation);

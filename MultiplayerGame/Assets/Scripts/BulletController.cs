@@ -15,8 +15,6 @@ public class BulletController : MonoBehaviour, IPunInstantiateMagicCallback
     void Awake()
     {
         m_PhotonView = gameObject.GetPhotonView();
-        if (m_UseNetworking && m_PhotonView && !m_PhotonView.IsMine)
-            this.enabled = false;
 
         m_BulletLife = GetComponent<Timer>();
         m_BulletLife.Start();
@@ -77,6 +75,8 @@ public class BulletController : MonoBehaviour, IPunInstantiateMagicCallback
     public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
         m_UseNetworking = true;
-        this.gameObject.layer = ((GameObject)info.Sender.TagObject).layer;
+        this.gameObject.layer = (int)info.photonView.InstantiationData[0];
+        if (!m_PhotonView.IsMine)
+            this.enabled = false;
     }
 }

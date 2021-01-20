@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 1421946023223361099}
   - component: {fileID: 1421946023223361096}
   - component: {fileID: 1421946023223361088}
+  - component: {fileID: -290892908239374690}
   m_Layer: 8
   m_Name: Player_A
   m_TagString: Player
@@ -139,6 +140,7 @@ MonoBehaviour:
   NetworkMode: 1
   BulletTag: Bullet
   RespawnTime: 5
+  DeathScore: 100
 --- !u!114 &8318682844961629273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,6 +226,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameobjectsToDisable:
   - {fileID: 1421946023426266982}
+--- !u!114 &-290892908239374690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1122187902249500682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1272d50ff8f92240ab0bd8521b5857d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingTime: 0
 --- !u!1 &1122187903953596140
 GameObject:
   m_ObjectHideFlags: 0
