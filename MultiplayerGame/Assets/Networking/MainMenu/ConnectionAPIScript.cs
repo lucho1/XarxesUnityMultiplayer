@@ -7,7 +7,7 @@ using Photon.Realtime;
 using PhHashtable = ExitGames.Client.Photon.Hashtable;
 
 
-public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback
+public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback, ILobbyCallbacks
 {
     // --- Singleton ---
     private static ConnectionAPIScript m_Instance;
