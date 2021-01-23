@@ -45,11 +45,12 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
   - {fileID: -2704302366960171809, guid: 427c083ba27ec5549ac4f0f53d620005, type: 3}
-  - {fileID: -72302463727252354, guid: 427c083ba27ec5549ac4f0f53d620005, type: 3}
+  - {fileID: 824015559753126921, guid: 427c083ba27ec5549ac4f0f53d620005, type: 3}
   - {fileID: 239378781582670930, guid: 427c083ba27ec5549ac4f0f53d620005, type: 3}
   - {fileID: -4610143280253574502, guid: 427c083ba27ec5549ac4f0f53d620005, type: 3}
   - {fileID: 2100000, guid: e9f9a5c5addf8534a86f9e20c840a746, type: 2}
@@ -66,6 +67,7 @@ SkinnedMeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1454,11 +1456,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2752657376826152430}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: bb67935e4c275ad4dac32ebd68658f90,
-        type: 3}
-      propertyPath: m_Name
-      value: Gun
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: bb67935e4c275ad4dac32ebd68658f90,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1513,6 +1510,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -75
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: bb67935e4c275ad4dac32ebd68658f90,
+        type: 3}
+      propertyPath: m_Name
+      value: Gun
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb67935e4c275ad4dac32ebd68658f90, type: 3}
