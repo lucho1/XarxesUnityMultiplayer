@@ -15,8 +15,10 @@ public class RoomScript : MonoBehaviour
     // --- Players List ---
     [SerializeField]
     private Transform ListContainer;
+
     [SerializeField]
     private GameObject ListElement;
+
     private List<GameObject> m_TeamAList = new List<GameObject>();
     private List<GameObject> m_TeamBList = new List<GameObject>();
 
@@ -37,6 +39,19 @@ public class RoomScript : MonoBehaviour
 
     private void OnEnable()
     {
+        // Check if there is a user with that name already
+        /*uint player_name_repetitions = 0;
+        foreach(string player in ConnectionManager.GetPlayerNamesInRoom())
+            if (player == ConnectionManager.GetUsername())
+                ++player_name_repetitions;
+
+        if(player_name_repetitions > 1)
+        {
+            ConnectionManager.LeaveRoom();
+            ConnectionManager.ShowError("A user with that name already exists in the room!");
+            return;
+        }*/
+
         // Set players list
         uint playersA = 0, playersB = 0;
         foreach (string player in ConnectionManager.GetPlayerNamesInRoom())
@@ -48,13 +63,12 @@ public class RoomScript : MonoBehaviour
             if (property != null)
             {
                 AddPlayer(player, (TEAMS)property, false);
-
                 if ((TEAMS)property == TEAMS.TEAM_A)
                     ++playersA;
                 else
                     ++playersB;
             }
-        }
+        }        
 
         // Set player team
         TEAMS user_team = TEAMS.NONE;
@@ -133,11 +147,10 @@ public class RoomScript : MonoBehaviour
         return null;
     }
 
+
     // --- Connection Callbacks ---
     public void PlayerJoinedRoom(string player_name)
     {
-        //if (!m_PlayerList.ContainsKey(player_name))
-        //    AddPlayerToList(player_name);
     }
 
     public void PlayerLeftRoom(string player_name)

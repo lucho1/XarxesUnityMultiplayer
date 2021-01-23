@@ -112,7 +112,8 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
     // --- Status ---
     public bool     IsConnectedAndReady()       { return PhotonNetwork.IsConnectedAndReady; }
     public int      GetPing()                   { return PhotonNetwork.GetPing(); }
-    
+    public void     ShowError(string error)     { NetUIManager.ShowError(error); }
+
     // --- Player ---
     public void     SetUsername(string name)    { PhotonNetwork.NickName = name; }
     public string   GetUsername()               { return PhotonNetwork.NickName; }
