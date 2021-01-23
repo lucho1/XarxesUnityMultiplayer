@@ -24,40 +24,58 @@ public class RoomScript : MonoBehaviour
 
     [SerializeField]
     private GameObject ListElement;
-    private Dictionary<string, GameObject> m_PlayerList = new Dictionary<string, GameObject>();
-    
+    //private Dictionary<string, GameObject> m_PlayerList = new Dictionary<string, GameObject>();
+
+    private List<GameObject> m_TeamAList = new List<GameObject>();
+    private List<GameObject> m_TeamBList = new List<GameObject>();
+
 
     // --- Class Methods ---
+    private void Awake()
+    {
+        for(uint i = 0; i < 5; ++i)
+            m_TeamAList.Add(Instantiate(ListElement, ListContainer));
+
+        for(uint i = 0; i < 5; ++i)
+        {
+            GameObject obj = Instantiate(ListElement, ListContainer);
+            obj.GetComponent<PlayerListElementScript>().SetOrangeImage();
+            m_TeamBList.Add(obj);
+        }
+    }
+
     private void OnEnable()
     {
-        // Set players list & teams
-        uint PlayersTeamA = 0, PlayersTeamB = 0;
+        // Set players list
+        uint playersA = 0, playersB = 0;
         foreach (string player in ConnectionManager.GetPlayerNamesInRoom())
         {
-            AddPlayerToList(player);
-            if (player != ConnectionManager.GetUsername())
-            {
-                TEAMS team = (TEAMS)ConnectionManager.GetPlayerProperty(player, "Team");
-                Text show_name = m_PlayerList[player].GetComponentInChildren<Text>();
+            if (player == ConnectionManager.GetUsername())
+                continue;
 
-                if (team == TEAMS.TEAM_A)
-                {
-                    ++PlayersTeamA;
-                    show_name.text += " -- TEAM A";
-                }
-                else if (team == TEAMS.TEAM_B)
-                {
-                    ++PlayersTeamB;
-                    show_name.text += " -- TEAM B";
-                }
+            object property = ConnectionManager.GetPlayerProperty(player, "Team");
+            if (property != null)
+            {
+                AddPlayer(player, (TEAMS)property, false);
+
+                if ((TEAMS)property == TEAMS.TEAM_A)
+                    ++playersA;
+                else
+                    ++playersB;
             }
         }
 
         // Set player team
-        if (PlayersTeamA <= PlayersTeamB)
-            SetPlayerTeam(TEAMS.TEAM_A);
+        TEAMS user_team = TEAMS.NONE;
+        if (playersA <= playersB)
+            user_team = TEAMS.TEAM_A;
         else
-            SetPlayerTeam(TEAMS.TEAM_B);
+            user_team = TEAMS.TEAM_B;
+
+        // Set user's team
+        ConnectionManager.SetLocalPlayerProperty("Team", user_team);
+        ConnectionManager.SendEvent(ConnectionManager.TeamJoinedEvent, ConnectionManager.GetUsername());        
+        AddPlayer(ConnectionManager.GetUsername(), user_team, true);
 
         // Set room name and username
         UsernameText.text = "You: " + ConnectionManager.GetUsername();
@@ -66,98 +84,146 @@ public class RoomScript : MonoBehaviour
 
     private void OnDisable()
     {
-        // Destroy & Clear the list of players
-        foreach (KeyValuePair<string, GameObject> player in m_PlayerList)
-            Destroy(player.Value);
+        // Reset the list of players in teams
+        foreach (GameObject playerA in m_TeamAList)
+            playerA.GetComponent<PlayerListElementScript>().Deactivate();
 
-        m_PlayerList.Clear();
+        foreach (GameObject playerB in m_TeamBList)
+            playerB.GetComponent<PlayerListElementScript>().Deactivate();
     }
 
-    private void SetPlayerTeam(TEAMS team)
-    {
-        // Set team property & send event
-        ConnectionManager.SetLocalPlayerProperty("Team", team);
-        ConnectionManager.SendEvent(ConnectionManager.PlayerTeamUpdated_Event, ConnectionManager.GetUsername());
-        
-        // Set Team Text
-        string team_str = "";
-        if (team == TEAMS.TEAM_A)
-            team_str = "TEAM A";
-        else if (team == TEAMS.TEAM_B)
-            team_str = "TEAM B";
-
-        Text player_show_name = m_PlayerList[ConnectionManager.GetUsername()].GetComponentInChildren<Text>();
-        player_show_name.text += " -- " + team_str;
-    }
-
-    private void AddPlayerToList(string player_name, GameObject instance = null)
+    private void AddPlayer(string player_name, TEAMS team, bool user)
     {
         // Update the text for the quantity of players in room
         PlayersText.text = "Players: " + ConnectionManager.GetPlayersCount();
-        
-        // Set the name to show (which is not always the same as the username)
-        string show_name = player_name;
 
-        if (player_name == ConnectionManager.GetUsername())
-            show_name += " (You)";
-
-        if(player_name == ConnectionManager.GetRoomHost())
-            show_name += " (Host)";
-
-        // Set GameObject instance if null
-        if (instance == null)
-            instance = Instantiate(ListElement, ListContainer);
-
-        // Set object show name & Add it to players list
-        instance.GetComponentInChildren<Text>().text = show_name;
-        m_PlayerList.Add(player_name, instance);
+        // --------------
+        bool host = player_name == ConnectionManager.GetRoomHost();
+        if (team == TEAMS.TEAM_A)
+        {
+            foreach (GameObject playerA in m_TeamAList)
+            {
+                PlayerListElementScript list_element = playerA.GetComponent<PlayerListElementScript>();
+                if (!list_element.Occupied)
+                {
+                    list_element.Activate(player_name, user, host);
+                    return;
+                }
+            }
+        }
+        else if (team == TEAMS.TEAM_B)
+        {
+            foreach (GameObject playerB in m_TeamBList)
+            {
+                PlayerListElementScript list_element = playerB.GetComponent<PlayerListElementScript>();
+                if (!list_element.Occupied)
+                {
+                    list_element.Activate(player_name, user, host);
+                    return;
+                }
+            }
+        }
     }
 
+
+    private PlayerListElementScript GetPlayer(string player_name)
+    {
+        foreach (GameObject playerA in m_TeamAList)
+        {
+            PlayerListElementScript list_element = playerA.GetComponent<PlayerListElementScript>();
+            if (player_name == list_element.GetPlayerName())
+                return list_element;
+        }
+
+
+        foreach (GameObject playerB in m_TeamBList)
+        {
+            PlayerListElementScript list_element = playerB.GetComponent<PlayerListElementScript>();
+            if (player_name == list_element.GetPlayerName())
+                return list_element;
+        }
+
+        return null;
+    }
 
     // --- Connection Callbacks ---
     public void PlayerJoinedRoom(string player_name)
     {
-        if (!m_PlayerList.ContainsKey(player_name))
-            AddPlayerToList(player_name);
+        //if (!m_PlayerList.ContainsKey(player_name))
+        //    AddPlayerToList(player_name);
     }
 
     public void PlayerLeftRoom(string player_name)
     {
-        if (m_PlayerList.ContainsKey(player_name))
-        {
-            Destroy(m_PlayerList[player_name]);
-            m_PlayerList.Remove(player_name);
+        PlayerListElementScript list_element = GetPlayer(player_name);
+        if(list_element)
+            list_element.Deactivate();
 
-            // Update the text for the quantity of players in room
-            PlayersText.text = "Players: " + ConnectionManager.GetPlayersCount();
-        }
+        //bool found = false;
+        //
+        //foreach (GameObject playerA in m_TeamAList)
+        //{
+        //    PlayerListElementScript list_element = playerA.GetComponent<PlayerListElementScript>();
+        //    if(player_name == list_element.GetPlayerName())
+        //    {
+        //        list_element.Deactivate();
+        //        found = true;
+        //        break;
+        //    }
+        //}
+        //
+        //if (!found)
+        //{
+        //    foreach (GameObject playerB in m_TeamBList)
+        //    {
+        //        PlayerListElementScript list_element = playerB.GetComponent<PlayerListElementScript>();
+        //        if (player_name == list_element.GetPlayerName())
+        //        {
+        //            list_element.Deactivate();
+        //            break;
+        //        }
+        //    }
+        //}
     }
 
     public void ChangeHost(string new_host_name)
     {
-        GameObject new_host_object = m_PlayerList[new_host_name];
-        m_PlayerList.Remove(new_host_name);
-        AddPlayerToList(new_host_name, new_host_object);
+        PlayerListElementScript list_element = GetPlayer(new_host_name);
+        if (list_element)
+            list_element.SetHost();
 
-        // Set host team again
-        object team = ConnectionManager.GetPlayerProperty(new_host_name, "Team");
 
-        if (team != null)
-            SetPlayerTeam((TEAMS)team);
+        //bool found = false;
+        //
+        //foreach (GameObject playerA in m_TeamAList)
+        //{
+        //    PlayerListElementScript list_element = playerA.GetComponent<PlayerListElementScript>();
+        //    if (new_host_name == list_element.GetPlayerName())
+        //    {
+        //        list_element.SetHost();
+        //        found = true;
+        //        break;
+        //    }
+        //}
+        //
+        //if (!found)
+        //{
+        //    foreach (GameObject playerB in m_TeamBList)
+        //    {
+        //        PlayerListElementScript list_element = playerB.GetComponent<PlayerListElementScript>();
+        //        if (new_host_name == list_element.GetPlayerName())
+        //        {
+        //            list_element.SetHost();
+        //            break;
+        //        }
+        //    }
+        //}
     }
 
     public void PlayerJoinedTeam(string player_name)
     {
-        if (!m_PlayerList.ContainsKey(player_name))
-            return;
-
         TEAMS team = (TEAMS)ConnectionManager.GetPlayerProperty(player_name, "Team");
-        Text player_show_name = m_PlayerList[player_name].GetComponentInChildren<Text>();
-
-        if (team == TEAMS.TEAM_A)
-            player_show_name.text += " -- TEAM A";
-        else if (team == TEAMS.TEAM_B)
-            player_show_name.text += " -- TEAM B";
+        AddPlayer(player_name, team, false);
     }
 
 

@@ -7,7 +7,7 @@ using Photon.Realtime;
 using PhHashtable = ExitGames.Client.Photon.Hashtable;
 
 
-public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback, ILobbyCallbacks
+public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//, ILobbyCallbacks
 {
     // --- Singleton ---
     private static ConnectionAPIScript m_Instance;
@@ -37,8 +37,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback, 
     private List<RoomInfo> m_RoomInfoList = new List<RoomInfo>();
 
     // --- Team Events ---
-    public byte PlayerTeamUpdated_Event = 1;
-
+    public byte TeamJoinedEvent = 28;
 
     // --- Class Methods ---
     // Start is called before the first frame update
@@ -76,7 +75,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback, 
     public void OnEvent(EventData photonEvent)
     {
         byte ev_code = photonEvent.Code;
-        if(ev_code == PlayerTeamUpdated_Event)
+        if(ev_code == TeamJoinedEvent)
         {
             string player_name = (string)photonEvent.CustomData;
             NetUIManager.PlayerJoinedTeam(player_name);

@@ -122,6 +122,9 @@ public class NetworkUIScript : MonoBehaviour
 
     public void ShowWarn(string message_log)
     {
+        if (WarnText == null)
+            return;
+
         // Set, Show & Log warn message
         m_WarnTimer.Start();
         WarnText.text = message_log;
