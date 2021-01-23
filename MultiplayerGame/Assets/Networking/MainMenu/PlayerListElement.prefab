@@ -1363,6 +1363,17 @@ MonoBehaviour:
   Player1Image: {fileID: 7513800347203213790}
   Player2Image: {fileID: 7673635720826969436}
   UserHighlight: {fileID: 2665511806567274854}
+  AnimationsList:
+  - {fileID: 4065993178261125019}
+  - {fileID: 7511360645271083154}
+  - {fileID: 3243267361693592605}
+  - {fileID: 1245224404992038407}
+  - {fileID: 3420868653528380769}
+  - {fileID: 140521313210906397}
+  - {fileID: 96930050463611633}
+  - {fileID: 265381691385865114}
+  - {fileID: 6544872394782813026}
+  - {fileID: 3362989288974362611}
   Occupied: 0
 --- !u!1 &6545585824370415743
 GameObject:
@@ -1605,7 +1616,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &912856729460319211
 RectTransform:
   m_ObjectHideFlags: 0

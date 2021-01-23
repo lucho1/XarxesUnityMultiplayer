@@ -15,13 +15,11 @@ public class PlayerListElementScript : MonoBehaviour
     private GameObject OrangeImageObject;
 
     [SerializeField]
-    private GameObject Player1Image;
-
-    [SerializeField]
-    private GameObject Player2Image;
-
-    [SerializeField]
     private GameObject UserHighlight;
+
+    [SerializeField]
+    private List<GameObject> AnimationsList = new List<GameObject>();
+    private int m_AnimationIndex = -1;
 
     public bool Occupied = false;
     private bool m_Blue = true;
@@ -44,13 +42,17 @@ public class PlayerListElementScript : MonoBehaviour
         m_PlayerName = "";
         UsernameObject.GetComponentInChildren<Text>().text = "";
 
-        Player1Image.SetActive(false);
-        Player2Image.SetActive(false);
         UsernameObject.SetActive(false);
         UserHighlight.SetActive(false);
+
+        if(m_AnimationIndex != -1)
+        {
+            AnimationsList[m_AnimationIndex].SetActive(false);
+            m_AnimationIndex = -1;
+        }        
     }
 
-    public void Activate(string player_name, bool user, bool host)
+    public void Activate(string player_name, int animation_index, bool user, bool host)
     {
         Occupied = true;
         m_PlayerName = player_name;
@@ -64,16 +66,8 @@ public class PlayerListElementScript : MonoBehaviour
 
         UsernameObject.GetComponentInChildren<Text>().text = player_name;
 
-        if (m_Blue)
-        {
-            Player1Image.SetActive(true);
-            Player2Image.SetActive(false);
-        }
-        else
-        {
-            Player1Image.SetActive(false);
-            Player2Image.SetActive(true);
-        }
+        m_AnimationIndex = animation_index;
+        AnimationsList[m_AnimationIndex].SetActive(true);
     }
 
     public void SetBlueImage()

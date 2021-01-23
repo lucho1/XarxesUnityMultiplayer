@@ -22,11 +22,16 @@ public class RoomScript : MonoBehaviour
     private List<GameObject> m_TeamAList = new List<GameObject>();
     private List<GameObject> m_TeamBList = new List<GameObject>();
 
+    // --- Player List Animation ---
+    private bool[] m_AnimationSelected = new bool[10];
 
     // --- Class Methods ---
     private void Awake()
     {
-        for(uint i = 0; i < 5; ++i)
+        for (int i = 0; i < 10; ++i)
+            m_AnimationSelected[i] = false;
+
+        for (uint i = 0; i < 5; ++i)
             m_TeamAList.Add(Instantiate(ListElement, ListContainer));
 
         for(uint i = 0; i < 5; ++i)
@@ -88,6 +93,9 @@ public class RoomScript : MonoBehaviour
 
     private void OnDisable()
     {
+        for (int i = 0; i < 10; ++i)
+            m_AnimationSelected[i] = false;
+
         // Reset the list of players in teams
         foreach (GameObject playerA in m_TeamAList)
             playerA.GetComponent<PlayerListElementScript>().Deactivate();
@@ -107,7 +115,12 @@ public class RoomScript : MonoBehaviour
                 PlayerListElementScript list_element = playerA.GetComponent<PlayerListElementScript>();
                 if (!list_element.Occupied)
                 {
-                    list_element.Activate(player_name, user, host);
+                    int anim_index = Random.Range(0, 4);
+                    while(m_AnimationSelected[anim_index])
+                        anim_index = Random.Range(0, 4);
+
+                    m_AnimationSelected[anim_index] = true;
+                    list_element.Activate(player_name, anim_index, user, host);
                     return;
                 }
             }
@@ -119,7 +132,12 @@ public class RoomScript : MonoBehaviour
                 PlayerListElementScript list_element = playerB.GetComponent<PlayerListElementScript>();
                 if (!list_element.Occupied)
                 {
-                    list_element.Activate(player_name, user, host);
+                    int anim_index = Random.Range(5, 9);
+                    while (m_AnimationSelected[anim_index])
+                        anim_index = Random.Range(5, 9);
+
+                    m_AnimationSelected[anim_index] = true;
+                    list_element.Activate(player_name, anim_index, user, host);
                     return;
                 }
             }
