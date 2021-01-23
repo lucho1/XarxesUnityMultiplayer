@@ -44,6 +44,9 @@ public class NetworkUIScript : MonoBehaviour
         Timer[] timers = GetComponents<Timer>();
         m_WarnTimer = timers[0];
         m_ErrorTimer = timers[1];
+
+        m_WarnTimer.RestartAndStop();
+        m_ErrorTimer.RestartAndStop();
     }
 
     private void OnApplicationQuit()

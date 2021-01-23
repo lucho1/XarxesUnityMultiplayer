@@ -10,22 +10,13 @@ public class RoomScript : MonoBehaviour
 
     // --- UI Objects ---
     [SerializeField]
-    private Text UsernameText;
-
-    [SerializeField]
     private Text RoomText;
-
-    [SerializeField]
-    private Text PlayersText;
 
     // --- Players List ---
     [SerializeField]
     private Transform ListContainer;
-
     [SerializeField]
     private GameObject ListElement;
-    //private Dictionary<string, GameObject> m_PlayerList = new Dictionary<string, GameObject>();
-
     private List<GameObject> m_TeamAList = new List<GameObject>();
     private List<GameObject> m_TeamBList = new List<GameObject>();
 
@@ -77,8 +68,7 @@ public class RoomScript : MonoBehaviour
         ConnectionManager.SendEvent(ConnectionManager.TeamJoinedEvent, ConnectionManager.GetUsername());        
         AddPlayer(ConnectionManager.GetUsername(), user_team, true);
 
-        // Set room name and username
-        UsernameText.text = "You: " + ConnectionManager.GetUsername();
+        // Set room name
         RoomText.text = ConnectionManager.GetRoomName();
     }
 
@@ -94,10 +84,7 @@ public class RoomScript : MonoBehaviour
 
     private void AddPlayer(string player_name, TEAMS team, bool user)
     {
-        // Update the text for the quantity of players in room
-        PlayersText.text = "Players: " + ConnectionManager.GetPlayersCount();
-
-        // --------------
+        // Activate a team's list element
         bool host = player_name == ConnectionManager.GetRoomHost();
         if (team == TEAMS.TEAM_A)
         {
@@ -158,32 +145,6 @@ public class RoomScript : MonoBehaviour
         PlayerListElementScript list_element = GetPlayer(player_name);
         if(list_element)
             list_element.Deactivate();
-
-        //bool found = false;
-        //
-        //foreach (GameObject playerA in m_TeamAList)
-        //{
-        //    PlayerListElementScript list_element = playerA.GetComponent<PlayerListElementScript>();
-        //    if(player_name == list_element.GetPlayerName())
-        //    {
-        //        list_element.Deactivate();
-        //        found = true;
-        //        break;
-        //    }
-        //}
-        //
-        //if (!found)
-        //{
-        //    foreach (GameObject playerB in m_TeamBList)
-        //    {
-        //        PlayerListElementScript list_element = playerB.GetComponent<PlayerListElementScript>();
-        //        if (player_name == list_element.GetPlayerName())
-        //        {
-        //            list_element.Deactivate();
-        //            break;
-        //        }
-        //    }
-        //}
     }
 
     public void ChangeHost(string new_host_name)
@@ -191,33 +152,6 @@ public class RoomScript : MonoBehaviour
         PlayerListElementScript list_element = GetPlayer(new_host_name);
         if (list_element)
             list_element.SetHost();
-
-
-        //bool found = false;
-        //
-        //foreach (GameObject playerA in m_TeamAList)
-        //{
-        //    PlayerListElementScript list_element = playerA.GetComponent<PlayerListElementScript>();
-        //    if (new_host_name == list_element.GetPlayerName())
-        //    {
-        //        list_element.SetHost();
-        //        found = true;
-        //        break;
-        //    }
-        //}
-        //
-        //if (!found)
-        //{
-        //    foreach (GameObject playerB in m_TeamBList)
-        //    {
-        //        PlayerListElementScript list_element = playerB.GetComponent<PlayerListElementScript>();
-        //        if (new_host_name == list_element.GetPlayerName())
-        //        {
-        //            list_element.SetHost();
-        //            break;
-        //        }
-        //    }
-        //}
     }
 
     public void PlayerJoinedTeam(string player_name)
