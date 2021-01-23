@@ -77,7 +77,6 @@ MonoBehaviour:
   LobbyObject: {fileID: 0}
   PlayersInRoom: {fileID: 8709771661745286542}
   RoomName: {fileID: 3746148721933752228}
-  m_Timer: {fileID: 0}
 --- !u!114 &4206460961266244248
 MonoBehaviour:
   m_ObjectHideFlags: 0

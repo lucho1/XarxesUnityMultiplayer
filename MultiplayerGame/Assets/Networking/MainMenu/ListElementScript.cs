@@ -30,7 +30,9 @@ public class ListElementScript : MonoBehaviour
 
     public void SetSelectedRoom(Text text)
     {
-        if(LobbyObject)
+        GetComponentInParent<AudioSource>().Play();
+
+        if (LobbyObject)
             LobbyObject.GetComponent<LobbyScript>().SetCurrentSelectedRoom(text.text);
     }
 
