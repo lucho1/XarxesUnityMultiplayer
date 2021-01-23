@@ -20,6 +20,9 @@ public class PlayerListElementScript : MonoBehaviour
     [SerializeField]
     private GameObject Player2Image;
 
+    [SerializeField]
+    private GameObject UserHighlight;
+
     public bool Occupied = false;
     private bool m_Blue = true;
     private string m_PlayerName = "";
@@ -43,6 +46,7 @@ public class PlayerListElementScript : MonoBehaviour
         Player1Image.SetActive(false);
         Player2Image.SetActive(false);
         UsernameObject.SetActive(false);
+        UserHighlight.SetActive(false);
     }
 
     public void Activate(string player_name, bool user, bool host)
@@ -52,7 +56,7 @@ public class PlayerListElementScript : MonoBehaviour
         UsernameObject.SetActive(true);
 
         if (user)
-            player_name += " (YOU)";
+            UserHighlight.SetActive(true);
 
         if(host)
             player_name += "\n(HOST)";
