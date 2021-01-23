@@ -27,6 +27,7 @@ public class PlayerListElementScript : MonoBehaviour
     private bool m_Blue = true;
     private string m_PlayerName = "";
 
+
     public void SetHost()
     {
         UsernameObject.GetComponentInChildren<Text>().text += "\n(HOST)";
