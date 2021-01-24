@@ -11,13 +11,15 @@ public class BackTimer : MonoBehaviour
     // To see if it's running just get this Running bool
     public float StartTime = 10.0f;
     public bool Running = false;
+    public bool Finished = false;
 
     private float m_TimeRemaining;
 
     // Start is called before the first frame update
     private void Start()
     {
-        m_TimeRemaining = StartTime;
+        if (Running)
+            Begin();
     }
 
     // Update is called once per frame
@@ -31,6 +33,7 @@ public class BackTimer : MonoBehaviour
             {
                 m_TimeRemaining = 0.0f;
                 Running = false;
+                Finished = true;
             }
         }
     }
@@ -38,6 +41,7 @@ public class BackTimer : MonoBehaviour
     public void Begin()
     {
         Running = true;
+        Finished = false;
         m_TimeRemaining = StartTime;
     }
 

@@ -1,0 +1,77 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
+using PhHashtable = ExitGames.Client.Photon.Hashtable;
+
+public class NetworkManager : MonoBehaviourPunCallbacks
+{
+    // --- Singleton ---
+    private static NetworkManager m_Instance;
+    private void Awake()
+    {
+        if (m_Instance == null)
+        {
+            m_Instance = this;
+            //DontDestroyOnLoad(this.gameObject);
+        }
+        else
+            Destroy(this);
+    }
+    // ------------------
+
+    [SerializeField]
+    private GameObject GameOverTexts;
+
+    [SerializeField]
+    private Text TimerText;
+
+    private BackTimer MatchTimer;
+    private bool m_ActivateGameEnd = true;
+    private bool m_Ending = false;
+    private GameObject m_Camera;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        PhotonNetwork.AddCallbackTarget(this);
+        MatchTimer = GetComponent<BackTimer>();
+        m_Camera = GameObject.Find("Main Camera");
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        PhotonNetwork.RemoveCallbackTarget(this);
+        m_ActivateGameEnd = true;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if(MatchTimer.Running)
+            TimerText.text = "Time: " + MatchTimer.GetTimeString();
+
+        if (MatchTimer.Finished && m_ActivateGameEnd)
+        {
+            m_ActivateGameEnd = false;
+            m_Ending = true;
+            m_Camera.GetComponent<SingleTargetCamera>().FollowTarget = false;
+            m_Camera.GetComponent<GameOverMovement>().MoveToTarget = true;
+        }
+
+        if(m_Ending)
+        {
+            if (m_Camera.GetComponent<GameOverMovement>().Arrived)
+                GameOverTexts.SetActive(true);
+        }
+    }
+
+    public void LoadGameOverScreen()
+    {
+        PhotonNetwork.LoadLevel(2);
+    }
+}

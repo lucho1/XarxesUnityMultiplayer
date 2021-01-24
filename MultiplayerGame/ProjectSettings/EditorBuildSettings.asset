@@ -12,8 +12,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Scenario.unity
     guid: 9cf82bfb39d92ed44bd9bada31c24cb3
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Scenes/GameOver.unity
+    guid: a62245483f2b30b4c9b9f8ef3ebe4e70
+  - enabled: 1
+    path: Assets/Scenes/Video_Intro.unity
+    guid: d5533cf95dfce7e45aa4fbf32b06158c
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 0aea7b62797dc0d4d853d23e2f11c3ee,
       type: 2}

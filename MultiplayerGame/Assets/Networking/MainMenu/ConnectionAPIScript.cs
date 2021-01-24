@@ -47,6 +47,11 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
         ConnectToNetwork();
     }
 
+    private void OnLevelWasLoaded(int level)
+    {
+        PhotonNetwork.RemoveCallbackTarget(this);
+    }
+
     public void Quitting()
     {
         PhotonHandler.AppQuits = true;

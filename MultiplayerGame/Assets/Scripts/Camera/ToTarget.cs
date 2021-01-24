@@ -14,6 +14,7 @@ public class ToTarget : MonoBehaviour
     private Vector3 m_Velocity;
     private Animation m_Animation;
 
+
     private bool m_MoveBackwards = false;
     
     // Start is called before the first frame update
@@ -33,12 +34,14 @@ public class ToTarget : MonoBehaviour
     {
         if (MoveToTarget && !m_MoveBackwards)
         {
-            m_Animation.Stop();
+            if(m_Animation)
+                m_Animation.Stop();
+
             transform.position = Vector3.SmoothDamp(transform.position, Target.position, ref m_Velocity, SmoothTime / 2);
             transform.rotation = Quaternion.Lerp(transform.rotation, Target.rotation, SmoothTime * 2);
         }
 
-        if (Mathf.Approximately(Target.position.magnitude - transform.position.magnitude, 0) && !m_MoveBackwards)
+        if (ButtonController && Mathf.Approximately(Target.position.magnitude - transform.position.magnitude, 0) && !m_MoveBackwards)
             ButtonController.OnButton = true;
 
         if(m_MoveBackwards)
@@ -49,7 +52,9 @@ public class ToTarget : MonoBehaviour
             if (Mathf.Approximately(m_IntialPosition.magnitude - transform.position.magnitude, 0))
             {
                 m_MoveBackwards = false;
-                m_Animation.Play();
+
+                if(m_Animation)
+                    m_Animation.Play();
             }
         }
     }
@@ -69,6 +74,8 @@ public class ToTarget : MonoBehaviour
     {
         MoveToTarget = false;
         m_MoveBackwards = true;
-        ButtonController.OnButton = false;
+
+        if(ButtonController)
+            ButtonController.OnButton = false;
     }
 }
