@@ -38,6 +38,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
 
     // --- Team Events ---
     public byte TeamJoinedEvent = 28;
+    public byte TeamSwitchedEvent = 29;
 
     // --- Class Methods ---
     // Start is called before the first frame update
@@ -88,9 +89,10 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
 
     public void OnEvent(EventData photonEvent)
     {
-        byte ev_code = photonEvent.Code;
-        if(ev_code == TeamJoinedEvent)
+        if(photonEvent.Code == TeamJoinedEvent)
             NetUIManager.PlayerJoinedTeam((string)photonEvent.CustomData);
+        else if(photonEvent.Code == TeamSwitchedEvent)
+            NetUIManager.PlayerSwitchedTeam((string)photonEvent.CustomData);
     }
 
     public override void OnConnectedToMaster()

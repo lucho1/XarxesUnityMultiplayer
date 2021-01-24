@@ -185,6 +185,14 @@ public class RoomScript : MonoBehaviour
         AddPlayer(player_name, player_id, team, false);
     }
 
+    public void PlayerSwitchedTeam(string player_name, string player_id)
+    {
+        TEAMS team = (TEAMS)ConnectionManager.GetPlayerProperty(player_id, "Team");
+
+        GetPlayer(player_id).Deactivate();
+        AddPlayer(player_name, player_id, team, false);
+    }
+
 
     // --- UI Callbacks ---
     public void StartButton()
@@ -195,5 +203,31 @@ public class RoomScript : MonoBehaviour
     public void LeaveButton()
     {
         ConnectionManager.LeaveRoom();
+    }
+
+    public void SwitchTeamButton()
+    {
+        object property = ConnectionManager.GetPlayerProperty(ConnectionManager.GetUserID(), "Team");
+        if (property != null)
+        {
+            TEAMS team = TEAMS.NONE;
+            if ((TEAMS)property == TEAMS.TEAM_A)
+                team = TEAMS.TEAM_B;
+            else if ((TEAMS)property == TEAMS.TEAM_B)
+                team = TEAMS.TEAM_A;
+
+
+            // First, make sure Team is not full, otherwise, log error
+
+            // Set the "Team" property and cast SwitchedEvent
+            ConnectionManager.SetLocalPlayerProperty("Team", team);
+            ConnectionManager.SendEvent(ConnectionManager.TeamSwitchedEvent, ConnectionManager.GetUserID());
+
+            // Finally, set the player team
+            GetPlayer(ConnectionManager.GetUserID()).Deactivate();
+            AddPlayer(ConnectionManager.GetUsername(), ConnectionManager.GetUserID(), team, true);
+        }
+        else
+            ConnectionManager.ShowError("You are not in a Team yet");
     }
 }

@@ -197,4 +197,12 @@ public class NetworkUIScript : MonoBehaviour
         ShowWarn("Player " + player_name + " joined a team!");
         RoomUI.GetComponent<RoomScript>().PlayerJoinedTeam(player_name, player_id);
     }
+
+    public void PlayerSwitchedTeam(string player_id)
+    {
+        string player_name = ConnectionManager.GetPlayerByID(player_id);
+
+        ShowWarn("Player " + player_name + " switched team!");
+        RoomUI.GetComponent<RoomScript>().PlayerSwitchedTeam(player_name, player_id);
+    }
 }
