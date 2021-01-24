@@ -121,9 +121,9 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
     // ----------------------------------------------------------------------
     // ------------------------- SETTERS && GETTERS -------------------------
     // --- Status ---
+    public void     ShowError(string error)     { NetUIManager.ShowError(error); }
     public bool     IsConnectedAndReady()       { return PhotonNetwork.IsConnectedAndReady; }
     public int      GetPing()                   { return PhotonNetwork.GetPing(); }
-    public void     ShowError(string error)     { NetUIManager.ShowError(error); }
 
     // --- Player ---
     public void     SetUsername(string name)    { PhotonNetwork.NickName = name; }
@@ -388,7 +388,13 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
             if (room.RemovedFromList)
                 m_RoomInfoList.Remove(room);
             else
-                m_RoomInfoList.Add(room);
+            {
+                int room_index = m_RoomInfoList.FindIndex(x => x.Name == room.Name);
+                if (room_index != -1)
+                    m_RoomInfoList[room_index] = room;
+                else
+                    m_RoomInfoList.Add(room);
+            }
         }
     }
 

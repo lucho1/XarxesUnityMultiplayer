@@ -17773,7 +17773,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxPlayersPerMatch: 10
   GameVersion: 1.0
-  RoomIsJoinableAfterStart: 0
+  RoomIsJoinableAfterStart: 1
   NetUIManager: {fileID: 1341194959}
   TeamJoinedEvent: 28
   TeamSwitchedEvent: 29
