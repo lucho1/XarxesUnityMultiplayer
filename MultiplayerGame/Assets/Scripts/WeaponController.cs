@@ -7,6 +7,7 @@ public class WeaponController : MonoBehaviour
 {
     public GameObject FirePosition;
     public GameObject BulletPrefab;
+    public GameObject FireEffect;
     public float FireRate = 1.0f;
     public AudioClip ShootSound;
     public bool NetworkMode = true;
@@ -45,11 +46,13 @@ public class WeaponController : MonoBehaviour
         {
             m_AudioSource.clip = ShootSound;
             m_AudioSource.Play();
+            FireEffect.SetActive(true);
+
             if (NetworkMode) {
                 object[] instantiationData = new object[1];
                 instantiationData[0] = this.gameObject.layer;
                 m_PhotonView.RPC("NetworkPlayShootingSound", RpcTarget.Others);
-                MasterManager.NetworkInstantiate(BulletPrefab, FirePosition.transform.position, transform.rotation, instantiationData);
+                MasterManager.NetworkInstantiate(BulletPrefab, FirePosition.transform.position + gameObject.transform.forward * 0.5f, transform.rotation, instantiationData);
             }
             else
                 Instantiate(BulletPrefab, FirePosition.transform.position, transform.rotation);
