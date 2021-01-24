@@ -67,6 +67,15 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
         PhotonNetwork.AddCallbackTarget(this);
     }
 
+    private void ConnectToLobby()
+    {
+        print("Connecting to Lobby...");
+        if (!PhotonNetwork.InLobby)
+            PhotonNetwork.JoinLobby(TypedLobby.Default);
+        else
+            print("Already in Lobby!");
+    }
+
     public void SendEvent(byte event_code, object content)
     {
         PhotonNetwork.RaiseEvent(event_code, content, new RaiseEventOptions { Receivers = ReceiverGroup.Others }, ExitGames.Client.Photon.SendOptions.SendReliable);
@@ -82,9 +91,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
     public override void OnConnectedToMaster()
     {
         print("Connected to Master Server - Ready to Operate");
-
-        if (!PhotonNetwork.InLobby)
-            PhotonNetwork.JoinLobby(TypedLobby.Default);
+        ConnectToLobby();
     }
 
     public override void OnJoinedLobby()
@@ -315,8 +322,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
         if (PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
         {
             PhotonNetwork.LeaveRoom(true);
-            if (!PhotonNetwork.InLobby)
-                PhotonNetwork.JoinLobby(TypedLobby.Default);
+            ConnectToLobby();
         }
     }
 
@@ -333,11 +339,13 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         NetUIManager.JoinedRoomFailed(message, (int)returnCode);
+        ConnectToLobby();
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         NetUIManager.JoinedRoomFailed(message, (int)returnCode);
+        ConnectToLobby();
     }
 
     public override void OnCreatedRoom()
@@ -356,11 +364,13 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
         }
 
         NetUIManager.RoomCreatedFailure(message, (int)returnCode);
+        ConnectToLobby();
     }
 
     public override void OnLeftRoom()
     {
         NetUIManager.RoomLeft();
+        ConnectToLobby();
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
