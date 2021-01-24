@@ -12217,7 +12217,7 @@ PrefabInstance:
     - target: {fileID: 4549464186247084063, guid: 14f9cb7c806630948b9171d92d2ace4d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4549464186247084063, guid: 14f9cb7c806630948b9171d92d2ace4d,
         type: 3}
@@ -12297,6 +12297,31 @@ PrefabInstance:
     - target: {fileID: 4549464186247084063, guid: 14f9cb7c806630948b9171d92d2ace4d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4549464186247084063, guid: 14f9cb7c806630948b9171d92d2ace4d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4549464186247084063, guid: 14f9cb7c806630948b9171d92d2ace4d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4549464186247084063, guid: 14f9cb7c806630948b9171d92d2ace4d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 329035229}
+    - target: {fileID: 4549464186247084063, guid: 14f9cb7c806630948b9171d92d2ace4d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: Quitting
+      objectReference: {fileID: 0}
+    - target: {fileID: 4549464186247084063, guid: 14f9cb7c806630948b9171d92d2ace4d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 4600416512509243315, guid: 14f9cb7c806630948b9171d92d2ace4d,

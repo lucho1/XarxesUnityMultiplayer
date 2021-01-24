@@ -46,6 +46,11 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
         ConnectToNetwork();
     }
 
+    public void Quitting()
+    {
+        PhotonHandler.AppQuits = true;
+    }
+
 
     
     // ----------------------------------------------------------------------
