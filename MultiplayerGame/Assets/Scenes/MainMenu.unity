@@ -21931,6 +21931,7 @@ GameObject:
   m_Component:
   - component: {fileID: 437893753}
   - component: {fileID: 437893754}
+  - component: {fileID: 437893755}
   m_Layer: 5
   m_Name: RoomUI
   m_TagString: Untagged
@@ -21979,6 +21980,20 @@ MonoBehaviour:
   ListContainer: {fileID: 1857993864}
   ListElement: {fileID: 6545585824220985453, guid: c9e8b56903f021d438085de08a1b75a5,
     type: 3}
+--- !u!114 &437893755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 437893752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1272d50ff8f92240ab0bd8521b5857d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingTime: 0
+  beginStarted: 0
 --- !u!1 &438781641
 GameObject:
   m_ObjectHideFlags: 0
@@ -65000,6 +65015,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingTime: 0
+  beginStarted: 1
 --- !u!114 &1341194961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65013,6 +65029,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingTime: 0
+  beginStarted: 1
 --- !u!4 &1344236209 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5074329001546000765, guid: e57e2907e2c0b6d46af53990d2144605,

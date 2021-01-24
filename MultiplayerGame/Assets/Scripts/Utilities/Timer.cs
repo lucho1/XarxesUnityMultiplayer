@@ -5,6 +5,7 @@ using UnityEngine;
 public class Timer : MonoBehaviour
 {
     public float startingTime = 0.0f;
+    public bool beginStarted = true;
 
     private float m_Time = 0.0f;
     private bool m_timerActive = true;
@@ -12,8 +13,11 @@ public class Timer : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
-        m_timerActive = true;
         m_Time = startingTime;
+        if (beginStarted)
+            m_timerActive = true;
+        else
+            m_timerActive = false;
     }
 
     // Update is called once per frame

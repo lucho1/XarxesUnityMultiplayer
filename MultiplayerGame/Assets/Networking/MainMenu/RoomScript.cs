@@ -22,12 +22,17 @@ public class RoomScript : MonoBehaviour
     private List<GameObject> m_TeamAList = new List<GameObject>();
     private List<GameObject> m_TeamBList = new List<GameObject>();
 
+    // --- Switch Team timer ---
+    private Timer m_SwitchTeamTimer;
+
     // --- Player List Animation ---
     private bool[] m_AnimationSelected = new bool[10];
 
     // --- Class Methods ---
     private void Awake()
     {
+        m_SwitchTeamTimer = GetComponent<Timer>();
+
         for (int i = 0; i < 10; ++i)
             m_AnimationSelected[i] = false;
 
@@ -210,6 +215,16 @@ public class RoomScript : MonoBehaviour
         object property = ConnectionManager.GetPlayerProperty(ConnectionManager.GetUserID(), "Team");
         if (property != null)
         {
+            // Check if button was clicked recently
+            if(m_SwitchTeamTimer.IsRunning() && m_SwitchTeamTimer.ReadTime() < 2.0f)
+            {
+                ConnectionManager.ShowError("Setting up your recent team switch");
+                return;
+            }
+
+            m_SwitchTeamTimer.RestartFromZero();
+
+            // Switch Team
             TEAMS team = TEAMS.NONE;
             if ((TEAMS)property == TEAMS.TEAM_A)
                 team = TEAMS.TEAM_B;
