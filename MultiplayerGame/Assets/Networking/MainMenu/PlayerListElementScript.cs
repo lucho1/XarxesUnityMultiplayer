@@ -41,6 +41,11 @@ public class PlayerListElementScript : MonoBehaviour
         return m_PlayerID;
     }
 
+    public int GetAnimationIndex()
+    {
+        return m_AnimationIndex;
+    }
+
     public void Deactivate()
     {
         Occupied = false;

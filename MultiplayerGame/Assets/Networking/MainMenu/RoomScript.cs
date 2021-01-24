@@ -115,9 +115,9 @@ public class RoomScript : MonoBehaviour
                 PlayerListElementScript list_element = playerA.GetComponent<PlayerListElementScript>();
                 if (!list_element.Occupied)
                 {
-                    int anim_index = Random.Range(0, 4);
+                    int anim_index = Random.Range(0, 5);
                     while(m_AnimationSelected[anim_index])
-                        anim_index = Random.Range(0, 4);
+                        anim_index = Random.Range(0, 5);
 
                     m_AnimationSelected[anim_index] = true;
                     list_element.Activate(player_name, player_id, anim_index, user, host);
@@ -132,9 +132,9 @@ public class RoomScript : MonoBehaviour
                 PlayerListElementScript list_element = playerB.GetComponent<PlayerListElementScript>();
                 if (!list_element.Occupied)
                 {
-                    int anim_index = Random.Range(5, 9);
+                    int anim_index = Random.Range(5, 10);
                     while (m_AnimationSelected[anim_index])
-                        anim_index = Random.Range(5, 9);
+                        anim_index = Random.Range(5, 10);
 
                     m_AnimationSelected[anim_index] = true;
                     list_element.Activate(player_name, player_id, anim_index, user, host);
@@ -162,6 +162,17 @@ public class RoomScript : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void SwitchPlayerTeamOnList(string player_id, string player_name, TEAMS team, bool user)
+    {
+        PlayerListElementScript list_element = GetPlayer(player_id);
+
+        if (list_element.GetAnimationIndex() != -1)
+            m_AnimationSelected[list_element.GetAnimationIndex()] = false;
+
+        list_element.Deactivate();
+        AddPlayer(player_name, player_id, team, user);
     }
 
 
@@ -193,10 +204,9 @@ public class RoomScript : MonoBehaviour
     public void PlayerSwitchedTeam(string player_name, string player_id)
     {
         TEAMS team = (TEAMS)ConnectionManager.GetPlayerProperty(player_id, "Team");
-
-        GetPlayer(player_id).Deactivate();
-        AddPlayer(player_name, player_id, team, false);
+        SwitchPlayerTeamOnList(player_id, player_name, team, false);
     }
+    
 
 
     // --- UI Callbacks ---
@@ -216,9 +226,9 @@ public class RoomScript : MonoBehaviour
         if (property != null)
         {
             // Check if button was clicked recently
-            if(m_SwitchTeamTimer.IsRunning() && m_SwitchTeamTimer.ReadTime() < 2.0f)
+            if(m_SwitchTeamTimer.IsRunning() && m_SwitchTeamTimer.ReadTime() < 1.0f)
             {
-                ConnectionManager.ShowError("Setting up your recent team switch");
+                ConnectionManager.ShowError("Still setting up your recent team switch");
                 return;
             }
 
@@ -226,21 +236,43 @@ public class RoomScript : MonoBehaviour
 
             // Switch Team
             TEAMS team = TEAMS.NONE;
+            List<GameObject> ListToRun = new List<GameObject>();
+
             if ((TEAMS)property == TEAMS.TEAM_A)
+            {
                 team = TEAMS.TEAM_B;
+                ListToRun = m_TeamBList;
+            }
             else if ((TEAMS)property == TEAMS.TEAM_B)
+            {
                 team = TEAMS.TEAM_A;
+                ListToRun = m_TeamAList;
+            }
 
 
             // First, make sure Team is not full, otherwise, log error
+            bool team_available = false;
+            foreach (GameObject obj in ListToRun)
+            {
+                if(!obj.GetComponent<PlayerListElementScript>().Occupied)
+                {
+                    team_available = true;
+                    break;
+                }
+            }
+
+            if(!team_available)
+            {
+                ConnectionManager.ShowError("Opposite Team is full :(");
+                return;
+            }
 
             // Set the "Team" property and cast SwitchedEvent
             ConnectionManager.SetLocalPlayerProperty("Team", team);
             ConnectionManager.SendEvent(ConnectionManager.TeamSwitchedEvent, ConnectionManager.GetUserID());
 
             // Finally, set the player team
-            GetPlayer(ConnectionManager.GetUserID()).Deactivate();
-            AddPlayer(ConnectionManager.GetUsername(), ConnectionManager.GetUserID(), team, true);
+            SwitchPlayerTeamOnList(ConnectionManager.GetUserID(), ConnectionManager.GetUsername(), team, true);
         }
         else
             ConnectionManager.ShowError("You are not in a Team yet");
