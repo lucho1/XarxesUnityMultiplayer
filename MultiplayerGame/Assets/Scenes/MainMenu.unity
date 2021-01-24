@@ -17668,7 +17668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350d4edda5ae4b14b826077305a3dd01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxPlayersPerMatch: 8
+  MaxPlayersPerMatch: 10
   GameVersion: 1.0
   RoomIsJoinableAfterStart: 0
   NetUIManager: {fileID: 1341194959}
