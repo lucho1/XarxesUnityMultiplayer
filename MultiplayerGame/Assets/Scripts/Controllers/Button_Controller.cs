@@ -5,10 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class Button_Controller : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public MainMenuManager MainMenu;
     public GameObject Button;
-    public GameObject PressStartText;
+    public GameObject MainMenuContainer;
+    public ConnectionAPIScript ConnectionManager;
 
     public bool OnButton = false;
     
@@ -21,8 +20,26 @@ public class Button_Controller : MonoBehaviour
     {
         m_AudioSrc = GetComponent<AudioSource>();
         m_BtnAnimation = Button.GetComponent<Animation>();
-        
-        PressStartText.SetActive(false);
+    }
+
+    public void ButtonPressed()
+    {
+        m_AudioSrc.Play();
+        m_BtnAnimation.Play();
+
+        start_game = true;
+    }
+
+    public void GoBack()
+    {
+        if (start_game)
+            return;
+
+        OnButton = false;
+        MainMenuContainer.SetActive(true);
+
+        GameObject.Find("Main Camera").transform.Find("DeathLoop").gameObject.SetActive(true);
+        GameObject.Find("Main Camera").GetComponent<ToTarget>().ResetCameraMovement();
     }
 
     // Update is called once per frame
@@ -30,32 +47,8 @@ public class Button_Controller : MonoBehaviour
     {
         if (OnButton)
         {
-            PressStartText.SetActive(true);            
-
-            if (Input.GetButtonDown("Start"))
-            {
-                m_AudioSrc.Play();
-                m_BtnAnimation.Play();
-
-                start_game = true;
-            }
-
-            if(Input.GetButtonDown("Cancel") && !start_game)
-            {
-                OnButton = false;
-                PressStartText.SetActive(false);
-
-                Transform main_menu = GameObject.Find("MainMenu").transform;
-                main_menu.Find("StartGameButton").gameObject.SetActive(true);
-                main_menu.Find("ExitGameButton").gameObject.SetActive(true);
-                main_menu.Find("InstructionsButton").gameObject.SetActive(true);
-
-                GameObject.Find("Main Camera").transform.Find("DeathLoop").gameObject.SetActive(true);
-                GameObject.Find("Main Camera").GetComponent<ToTarget>().ResetCameraMovement();
-            }
-
             if (start_game && !m_BtnAnimation.isPlaying)
-                MainMenu.StartGame();
+                ConnectionManager.LoadLevel(1);
         }
     }
 }

@@ -20,6 +20,8 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
         }
         else
             Destroy(this);
+
+        m_Name = "User" + Random.Range(0000, 9999).ToString("0000");
     }
     // ------------------
 
@@ -28,6 +30,8 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
     public int MaxPlayersPerMatch = 10;
     public string GameVersion = "1.0";
     public bool RoomIsJoinableAfterStart = false;
+
+    private string m_Name;
 
     // --- UI Object for Networking ---
     [SerializeField]
@@ -41,10 +45,22 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
     public byte TeamSwitchedEvent = 29;
 
     // --- Class Methods ---
-    // Start is called before the first frame update
-    private void Start()
+    
+    
+    public void TryConnection()
+    {
+        if (!PhotonNetwork.IsConnected)
+            ConnectToNetwork();
+    }
+
+    public void OnEnable()
     {
         ConnectToNetwork();
+    }
+
+    private void OnDisable()
+    {
+        PhotonNetwork.Disconnect();
     }
 
     private void OnLevelWasLoaded(int level)
@@ -68,9 +84,8 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
         // This allow us to use PhotonNetwork.LoadLevel() on the master and all clients in room will sync their level automatically
         PhotonNetwork.AutomaticallySyncScene = true;
 
-        // Set Settings
-        string name = "User" + Random.Range(0000, 9999).ToString("0000");
-        PhotonNetwork.NickName = name;
+        // Set Settings        
+        PhotonNetwork.NickName = m_Name;
         PhotonNetwork.GameVersion = GameVersion;
 
         // Connect and add callback
@@ -131,7 +146,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
     public int      GetPing()                   { return PhotonNetwork.GetPing(); }
 
     // --- Player ---
-    public void     SetUsername(string name)    { PhotonNetwork.NickName = name; }
+    public void     SetUsername(string name)    { PhotonNetwork.NickName = name; m_Name = name; }
     public string   GetUsername()               { return PhotonNetwork.NickName; }
     public string   GetUserID()                 { return PhotonNetwork.LocalPlayer.UserId; }
 
@@ -330,6 +345,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
 
                 // Load Scene
                 PhotonNetwork.LoadLevel(scene_index);
+                GameObject.Find("TheButton").GetComponent<Button_Controller>().ButtonPressed();
             }
             else
                 NetUIManager.ShowWarn("Still Connecting or Not in Room");

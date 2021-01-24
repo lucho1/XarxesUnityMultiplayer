@@ -5,6 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
+    public ConnectionAPIScript ConnectionManager;
+
+    public void Connect()
+    {
+        ConnectionManager.TryConnection();
+    }
+
     public void StartGame()
     {
         SceneManager.LoadScene("Scenario");
