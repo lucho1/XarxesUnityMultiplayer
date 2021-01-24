@@ -242,6 +242,17 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
         return -1;
     }
 
+    public void SetRoomVisibility()
+    {
+        if(PhotonNetwork.InRoom)
+        {
+            if (PhotonNetwork.CurrentRoom.PlayerCount >= PhotonNetwork.CurrentRoom.MaxPlayers)
+                PhotonNetwork.CurrentRoom.IsOpen = PhotonNetwork.CurrentRoom.IsVisible = false;
+            else
+                PhotonNetwork.CurrentRoom.IsOpen = PhotonNetwork.CurrentRoom.IsVisible = true;
+        }
+    }
+
 
 
     // ----------------------------------------------------------------------
@@ -315,8 +326,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
             if (PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
             {
                 // Set room visibility & openess once the game began
-                PhotonNetwork.CurrentRoom.IsOpen = RoomIsJoinableAfterStart;
-                PhotonNetwork.CurrentRoom.IsVisible = RoomIsJoinableAfterStart;
+                SetRoomVisibility();
 
                 // Load Scene
                 PhotonNetwork.LoadLevel(scene_index);

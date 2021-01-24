@@ -179,10 +179,12 @@ public class RoomScript : MonoBehaviour
     // --- Connection Callbacks ---
     public void PlayerJoinedRoom(string player_id)
     {
+        ConnectionManager.SetRoomVisibility();
     }
 
     public void PlayerLeftRoom(string player_id)
     {
+        ConnectionManager.SetRoomVisibility();
         PlayerListElementScript list_element = GetPlayer(player_id);
         if(list_element)
             list_element.Deactivate();

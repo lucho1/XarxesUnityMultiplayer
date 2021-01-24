@@ -21,7 +21,7 @@ public class ListElementScript : MonoBehaviour
 
     private void Update()
     {
-        if(m_Timer.ReadTime() > 2.0f)
+        if(m_Timer.ReadTime() > 1.0f)
         {
             SetRoomPlayers(LobbyObject.GetComponent<LobbyScript>().GetPlayersInRoom(RoomName.text));
             m_Timer.RestartFromZero();
