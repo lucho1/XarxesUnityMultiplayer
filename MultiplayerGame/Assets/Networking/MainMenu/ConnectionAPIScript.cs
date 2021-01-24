@@ -25,7 +25,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
 
 
     // --- Online General Settings ---
-    public int MaxPlayersPerMatch = 8;
+    public int MaxPlayersPerMatch = 10;
     public string GameVersion = "1.0";
     public bool RoomIsJoinableAfterStart = false;
 
@@ -76,10 +76,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
     {
         byte ev_code = photonEvent.Code;
         if(ev_code == TeamJoinedEvent)
-        {
-            string player_name = (string)photonEvent.CustomData;
-            NetUIManager.PlayerJoinedTeam(player_name);
-        }
+            NetUIManager.PlayerJoinedTeam((string)photonEvent.CustomData);
     }
 
     public override void OnConnectedToMaster()
@@ -117,7 +114,20 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
     // --- Player ---
     public void     SetUsername(string name)    { PhotonNetwork.NickName = name; }
     public string   GetUsername()               { return PhotonNetwork.NickName; }
-    
+    public string   GetUserID()                 { return PhotonNetwork.LocalPlayer.UserId; }
+
+    public string GetPlayerByID(string player_id)
+    {
+        if (!PhotonNetwork.InRoom)
+            return null;
+
+        foreach (Player pl in PhotonNetwork.PlayerList)
+            if (pl.UserId == player_id)
+                return pl.NickName;
+
+        return null;
+    }
+
     public void SetLocalPlayerProperty<T>(string name, T property)
     {
         PhHashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
@@ -126,14 +136,14 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
     }
 
-    public void SetPlayerProperty<T>(string player_name, string property_name, T property)
+    public void SetPlayerProperty<T>(string player_id, string property_name, T property)
     {
         if (!PhotonNetwork.InRoom)
             return;
 
         foreach (Player pl in PhotonNetwork.PlayerList)
         {
-            if (pl.NickName == player_name)
+            if (pl.UserId == player_id)
             {
                 PhHashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
                 hash[property_name] = property;
@@ -144,14 +154,14 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
         }
     }
 
-    public object GetPlayerProperty(string player_name, string property_name)
+    public object GetPlayerProperty(string player_id, string property_name)
     {
         if (!PhotonNetwork.InRoom)
             return null;
 
         foreach (Player pl in PhotonNetwork.PlayerList)
         {
-            if (pl.NickName == player_name)
+            if (pl.UserId == player_id)
             {
                 if (pl.CustomProperties.ContainsKey(property_name))
                     return pl.CustomProperties[property_name];
@@ -188,14 +198,15 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
         return null;
     }
 
-    public List<string> GetPlayerNamesInRoom()
+    ///<summary> First is ID, second is username </summary>
+    public List<KeyValuePair<string, string>> GetPlayersInRoom()
     {
-        List<string> ret = new List<string>();
+        List<KeyValuePair<string, string>> ret = new List<KeyValuePair<string, string>>();
 
         if (PhotonNetwork.InRoom)
         {
             foreach (Player player in PhotonNetwork.PlayerList)
-                ret.Add(player.NickName);
+                ret.Add(new KeyValuePair<string, string>(player.UserId, player.NickName));
         }
 
         return ret;
@@ -267,6 +278,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
             RoomOptions options = new RoomOptions();
             options.MaxPlayers = (byte)MaxPlayersPerMatch;
             options.BroadcastPropsChangeToAll = true;
+            options.PublishUserId = true;
 
             if (!PhotonNetwork.CreateRoom(room_name, ref error, options, TypedLobby.Default))
                 NetUIManager.ShowError(("Create Room Error: " + error));
@@ -366,16 +378,16 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
     // --- Players ---
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        NetUIManager.PlayerJoined(newPlayer.NickName);
+        NetUIManager.PlayerJoined(newPlayer.NickName, newPlayer.UserId);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        NetUIManager.PlayerLeft(otherPlayer.NickName);
+        NetUIManager.PlayerLeft(otherPlayer.NickName, otherPlayer.UserId);
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
-        NetUIManager.SwitchHost(newMasterClient.NickName);
+        NetUIManager.SwitchHost(newMasterClient.NickName, newMasterClient.UserId);
     }
 }

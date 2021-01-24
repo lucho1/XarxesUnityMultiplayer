@@ -44,30 +44,33 @@ public class RoomScript : MonoBehaviour
 
     private void OnEnable()
     {
+        // Set room name
+        RoomText.text = ConnectionManager.GetRoomName();
+
         // Check if there is a user with that name already
-        /*uint player_name_repetitions = 0;
-        foreach(string player in ConnectionManager.GetPlayerNamesInRoom())
-            if (player == ConnectionManager.GetUsername())
+        uint player_name_repetitions = 0;
+        foreach (KeyValuePair<string, string> player in ConnectionManager.GetPlayersInRoom())
+            if (player.Value == ConnectionManager.GetUsername())
                 ++player_name_repetitions;
 
-        if(player_name_repetitions > 1)
+        if (player_name_repetitions > 1)
         {
             ConnectionManager.LeaveRoom();
             ConnectionManager.ShowError("A user with that name already exists in the room!");
             return;
-        }*/
+        }
 
         // Set players list
         uint playersA = 0, playersB = 0;
-        foreach (string player in ConnectionManager.GetPlayerNamesInRoom())
+        foreach (KeyValuePair<string, string> player in ConnectionManager.GetPlayersInRoom())
         {
-            if (player == ConnectionManager.GetUsername())
+            if (player.Value == ConnectionManager.GetUsername())
                 continue;
 
-            object property = ConnectionManager.GetPlayerProperty(player, "Team");
+            object property = ConnectionManager.GetPlayerProperty(player.Key, "Team");
             if (property != null)
             {
-                AddPlayer(player, (TEAMS)property, false);
+                AddPlayer(player.Value, player.Key, (TEAMS)property, false);
                 if ((TEAMS)property == TEAMS.TEAM_A)
                     ++playersA;
                 else
@@ -76,19 +79,11 @@ public class RoomScript : MonoBehaviour
         }        
 
         // Set player team
-        TEAMS user_team = TEAMS.NONE;
-        if (playersA <= playersB)
-            user_team = TEAMS.TEAM_A;
-        else
-            user_team = TEAMS.TEAM_B;
+        TEAMS user_team = playersA <= playersB ? TEAMS.TEAM_A : TEAMS.TEAM_B;
 
-        // Set user's team
         ConnectionManager.SetLocalPlayerProperty("Team", user_team);
-        ConnectionManager.SendEvent(ConnectionManager.TeamJoinedEvent, ConnectionManager.GetUsername());        
-        AddPlayer(ConnectionManager.GetUsername(), user_team, true);
-
-        // Set room name
-        RoomText.text = ConnectionManager.GetRoomName();
+        ConnectionManager.SendEvent(ConnectionManager.TeamJoinedEvent, ConnectionManager.GetUserID());        
+        AddPlayer(ConnectionManager.GetUsername(), ConnectionManager.GetUserID(), user_team, true);
     }
 
     private void OnDisable()
@@ -104,7 +99,7 @@ public class RoomScript : MonoBehaviour
             playerB.GetComponent<PlayerListElementScript>().Deactivate();
     }
 
-    private void AddPlayer(string player_name, TEAMS team, bool user)
+    private void AddPlayer(string player_name, string player_id, TEAMS team, bool user)
     {
         // Activate a team's list element
         bool host = player_name == ConnectionManager.GetRoomHost();
@@ -120,7 +115,7 @@ public class RoomScript : MonoBehaviour
                         anim_index = Random.Range(0, 4);
 
                     m_AnimationSelected[anim_index] = true;
-                    list_element.Activate(player_name, anim_index, user, host);
+                    list_element.Activate(player_name, player_id, anim_index, user, host);
                     return;
                 }
             }
@@ -137,7 +132,7 @@ public class RoomScript : MonoBehaviour
                         anim_index = Random.Range(5, 9);
 
                     m_AnimationSelected[anim_index] = true;
-                    list_element.Activate(player_name, anim_index, user, host);
+                    list_element.Activate(player_name, player_id, anim_index, user, host);
                     return;
                 }
             }
@@ -145,20 +140,19 @@ public class RoomScript : MonoBehaviour
     }
 
 
-    private PlayerListElementScript GetPlayer(string player_name)
+    private PlayerListElementScript GetPlayer(string player_id)
     {
         foreach (GameObject playerA in m_TeamAList)
         {
             PlayerListElementScript list_element = playerA.GetComponent<PlayerListElementScript>();
-            if (player_name == list_element.GetPlayerName())
+            if (player_id == list_element.GetPlayerID())
                 return list_element;
         }
-
 
         foreach (GameObject playerB in m_TeamBList)
         {
             PlayerListElementScript list_element = playerB.GetComponent<PlayerListElementScript>();
-            if (player_name == list_element.GetPlayerName())
+            if (player_id == list_element.GetPlayerID())
                 return list_element;
         }
 
@@ -167,28 +161,28 @@ public class RoomScript : MonoBehaviour
 
 
     // --- Connection Callbacks ---
-    public void PlayerJoinedRoom(string player_name)
+    public void PlayerJoinedRoom(string player_id)
     {
     }
 
-    public void PlayerLeftRoom(string player_name)
+    public void PlayerLeftRoom(string player_id)
     {
-        PlayerListElementScript list_element = GetPlayer(player_name);
+        PlayerListElementScript list_element = GetPlayer(player_id);
         if(list_element)
             list_element.Deactivate();
     }
 
-    public void ChangeHost(string new_host_name)
+    public void ChangeHost(string new_host_id)
     {
-        PlayerListElementScript list_element = GetPlayer(new_host_name);
+        PlayerListElementScript list_element = GetPlayer(new_host_id);
         if (list_element)
             list_element.SetHost();
     }
 
-    public void PlayerJoinedTeam(string player_name)
+    public void PlayerJoinedTeam(string player_name, string player_id)
     {
-        TEAMS team = (TEAMS)ConnectionManager.GetPlayerProperty(player_name, "Team");
-        AddPlayer(player_name, team, false);
+        TEAMS team = (TEAMS)ConnectionManager.GetPlayerProperty(player_id, "Team");
+        AddPlayer(player_name, player_id, team, false);
     }
 
 

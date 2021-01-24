@@ -172,27 +172,29 @@ public class NetworkUIScript : MonoBehaviour
     }
 
     // --- Player Callbacks ---
-    public void PlayerJoined(string player_name)
+    public void PlayerJoined(string player_name, string player_id)
     {
         ShowWarn(player_name + " Joined the Room!");
-        RoomUI.GetComponent<RoomScript>().PlayerJoinedRoom(player_name);
+        RoomUI.GetComponent<RoomScript>().PlayerJoinedRoom(player_id);
     }
 
-    public void PlayerLeft(string player_name)
+    public void PlayerLeft(string player_name, string player_id)
     {
         ShowWarn(player_name + " Left the Room!");
-        RoomUI.GetComponent<RoomScript>().PlayerLeftRoom(player_name);
+        RoomUI.GetComponent<RoomScript>().PlayerLeftRoom(player_id);
     }
 
-    public void SwitchHost(string new_host_name)
+    public void SwitchHost(string new_host_name, string new_host_id)
     {
         ShowWarn("Host Changed, now " + new_host_name + " is the host");
-        RoomUI.GetComponent<RoomScript>().ChangeHost(new_host_name);
+        RoomUI.GetComponent<RoomScript>().ChangeHost(new_host_id);
     }
 
-    public void PlayerJoinedTeam(string player_name)
+    public void PlayerJoinedTeam(string player_id)
     {
+        string player_name = ConnectionManager.GetPlayerByID(player_id);
+
         ShowWarn("Player " + player_name + " joined a team!");
-        RoomUI.GetComponent<RoomScript>().PlayerJoinedTeam(player_name);
+        RoomUI.GetComponent<RoomScript>().PlayerJoinedTeam(player_name, player_id);
     }
 }

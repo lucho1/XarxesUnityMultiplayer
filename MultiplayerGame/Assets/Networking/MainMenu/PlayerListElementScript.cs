@@ -22,8 +22,8 @@ public class PlayerListElementScript : MonoBehaviour
     private int m_AnimationIndex = -1;
 
     public bool Occupied = false;
-    private bool m_Blue = true;
     private string m_PlayerName = "";
+    private string m_PlayerID = "";
 
 
     public void SetHost()
@@ -36,10 +36,15 @@ public class PlayerListElementScript : MonoBehaviour
         return m_PlayerName;
     }
 
+    public string GetPlayerID()
+    {
+        return m_PlayerID;
+    }
+
     public void Deactivate()
     {
         Occupied = false;
-        m_PlayerName = "";
+        m_PlayerName = m_PlayerID = "";
         UsernameObject.GetComponentInChildren<Text>().text = "";
 
         UsernameObject.SetActive(false);
@@ -52,9 +57,10 @@ public class PlayerListElementScript : MonoBehaviour
         }        
     }
 
-    public void Activate(string player_name, int animation_index, bool user, bool host)
+    public void Activate(string player_name, string playerID, int animation_index, bool user, bool host)
     {
         Occupied = true;
+        m_PlayerID = playerID;
         m_PlayerName = player_name;
         UsernameObject.SetActive(true);
 
@@ -72,14 +78,12 @@ public class PlayerListElementScript : MonoBehaviour
 
     public void SetBlueImage()
     {
-        m_Blue = true;
         BlueImageObject.SetActive(true);
         OrangeImageObject.SetActive(false);        
     }
 
     public void SetOrangeImage()
     {
-        m_Blue = false;
         OrangeImageObject.SetActive(true);
         BlueImageObject.SetActive(false);
     }
