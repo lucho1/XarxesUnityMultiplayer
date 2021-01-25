@@ -1,11 +1,11 @@
 fileFormatVersion: 2
 guid: be51e11af9f0d8141b20678311ad2da7
 ModelImporter:
-  serializedVersion: 25
+  serializedVersion: 19301
   internalIDToNameTable: []
   externalObjects: {}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -38,10 +38,12 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -72,19 +74,20 @@ ModelImporter:
   - e2ef409a59fc0b84da91ef4b2ed4f964
   - b8d0da45062f67b4888087318220a9a6
   - 977e3112a315acc41a8b74b0395bd3e7
-  - 6db11e887f758534d9ce59082bc580ad
+  - 7939cfbe97cd6f5409002e7bec4c6b85
+  - 9dd6c18ac271fca42ac06b5784842b48
+  - 65273527763104441bca4194b4b9923b
   - 427c083ba27ec5549ac4f0f53d620005
   - e9f9a5c5addf8534a86f9e20c840a746
-  - 7939cfbe97cd6f5409002e7bec4c6b85
-  - cc34f416f3e73d44d8a196e6f4e8a7d2
+  - 6db11e887f758534d9ce59082bc580ad
   - f0b0710f312af5940a1f41008a664fea
+  - cc34f416f3e73d44d8a196e6f4e8a7d2
   - bf5366b22f74e364f843caf9e7838fa2
   - b85066e33c600e4458253b2765ba0b37
   - da0f67aef06ab9440b4e69866261758b
   - fdeecd00aee3b6143b80eff937cdd18e
   - 37f7e0db6e3b1034dab9b0e2fe9ed57f
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
     serializedVersion: 3
     human: []
@@ -102,8 +105,10 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 0
   humanoidOversampling: 1
+  avatarSetup: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

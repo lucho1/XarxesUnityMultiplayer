@@ -52063,6 +52063,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1089658575}
+  - component: {fileID: 1089658576}
   m_Layer: 5
   m_Name: RespawnObject
   m_TagString: Untagged
@@ -52091,6 +52092,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 105.5}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1089658576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089658574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e5375d79ac7aec4eb4bf20e28919294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SecondsText: {fileID: 725045474}
 --- !u!1001 &1090489537
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66293,6 +66307,17 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1539319460}
         m_MethodName: SetToUpdate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1089658576}
+        m_MethodName: SetPlayer
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
     public Transform ScorePopupPosition;
 
     private Vector3 m_OriginalPosition;
-    private Timer m_RespawnTimer;
+    private BackTimer m_RespawnTimer;
     private PhotonView m_PhotonView;
     private CharacterController m_CharacterController;
     private Animator m_Animator;
@@ -50,7 +50,8 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
             else
                 ++i;
         }
-        m_RespawnTimer = gameObject.GetComponent<Timer>();
+        m_RespawnTimer = gameObject.GetComponent<BackTimer>();
+        m_RespawnTimer.StartTime = RespawnTime;
 
         m_PhotonView = GetComponent<PhotonView>();
         if (NetworkMode && m_PhotonView && !m_PhotonView.IsMine)
@@ -164,7 +165,7 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
         
         if (m_PhotonView.IsMine) 
         {
-            m_RespawnTimer.RestartFromZero();
+            m_RespawnTimer.Begin();
             PlayerDead.Invoke();
         }
 
@@ -183,7 +184,6 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
         if (m_PhotonView.IsMine) 
         {
             transform.position = m_OriginalPosition;
-            m_RespawnTimer.Stop();
             PlayerRespawn.Invoke();
         }
     }
@@ -210,7 +210,7 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
 
     private void RespawnUpdate()
     {
-        if (m_RespawnTimer.ReadTime() >= RespawnTime)
+        if (m_RespawnTimer.GetTimeLeftInSeconds() <= 0)
             m_PhotonView.RPC("Respawn", RpcTarget.All);
     }
 

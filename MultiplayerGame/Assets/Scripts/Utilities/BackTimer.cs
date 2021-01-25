@@ -56,6 +56,11 @@ public class BackTimer : MonoBehaviour
         return Mathf.FloorToInt((m_TimeRemaining + 1) % 60.0f);
     }
 
+    public int GetTimeLeftInSeconds()
+    {
+        return Mathf.FloorToInt(m_TimeRemaining);
+    }
+
     public string GetTimeString()
     {
         return string.Format("{0:00}:{1:00}", GetMinutes(), GetSeconds());
