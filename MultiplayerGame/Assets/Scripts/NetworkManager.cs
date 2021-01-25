@@ -102,7 +102,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         // --- Central Stuff ---
-        if (CentralSphere && m_CentralCheckTimer.ReadTime() > 1.0f && PhotonNetwork.IsMasterClient)
+        if (CentralSphere && m_CentralCheckTimer.ReadTime() > 1.0f)
         {
             m_CentralCheckTimer.RestartFromZero();
             bool playersA_inside = false, playersB_inside = false;
@@ -128,16 +128,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 BluePlane.SetActive(true);
                 OrangePlane.SetActive(false);
 
-                foreach(Collider coll in colliders)
-                    coll.gameObject.GetComponent<PlayerController>().AddScore(5);
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    foreach (Collider coll in colliders)
+                        coll.gameObject.GetComponent<PlayerController>().AddScore(5);
+                }
             }
             else if (!playersA_inside && playersB_inside)
             {
                 BluePlane.SetActive(false);
                 OrangePlane.SetActive(true);
 
-                foreach (Collider coll in colliders)
-                    coll.gameObject.GetComponent<PlayerController>().AddScore(5);
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    foreach (Collider coll in colliders)
+                        coll.gameObject.GetComponent<PlayerController>().AddScore(5);
+                }
             }
             else
             {
