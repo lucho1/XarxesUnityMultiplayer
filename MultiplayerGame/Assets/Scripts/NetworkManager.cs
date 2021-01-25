@@ -35,7 +35,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // Match Timer & Game Over
     [SerializeField]
     private GameObject GameOverTexts;
-    
+
     [SerializeField]
     private Text TimerText;
 
@@ -51,10 +51,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
+        m_Camera = GameObject.Find("Main Camera");
         PhotonNetwork.AddCallbackTarget(this);
+
         MatchTimer = GetComponent<BackTimer>();
         m_CentralCheckTimer = GetComponent<Timer>();
         m_Camera = GameObject.Find("Main Camera");
+        MatchTimer.StartTime = (int)PhotonNetwork.CurrentRoom.CustomProperties["MatchTime"] * 60.0f;
+        MatchTimer.Begin();
     }
 
     private void OnLevelWasLoaded(int level)
@@ -160,7 +164,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         PhHashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-        TEAMS team = teamA <= teamB ? team = TEAMS.TEAM_A : team = TEAMS.TEAM_B;        
+        TEAMS team = teamA <= teamB ? team = TEAMS.TEAM_A : team = TEAMS.TEAM_B;
         hash["Team"] = team;
     }
 
@@ -168,7 +172,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // --- UI CALLBACKS ---
     public void LoadGameOverScreen()
     {
-        PhotonNetwork.LoadLevel(3);
+        if(PhotonNetwork.IsMasterClient)
+            PhotonNetwork.LoadLevel(3);
     }
 
     public void LeaveMatch()

@@ -177,6 +177,16 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
     }
 
+    public void SetRoomProperty(string name, object value)
+    {
+        if(PhotonNetwork.InRoom)
+        {
+            PhHashtable hash = PhotonNetwork.CurrentRoom.CustomProperties;
+            hash[name] = value;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+        }
+    }
+
     public void SetPlayerProperty<T>(string player_id, string property_name, T property)
     {
         if (!PhotonNetwork.InRoom)
