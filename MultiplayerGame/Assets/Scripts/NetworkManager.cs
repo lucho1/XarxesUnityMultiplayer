@@ -36,11 +36,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     private bool m_Ending = false;
     private GameObject m_Camera;
 
+    public CentralSphereScript CentralSphere;
+    public GameObject BluePlane, OrangePlane;
+    private Timer m_CentralCheckTimer;
+
     // Start is called before the first frame update
     void Start()
     {
         PhotonNetwork.AddCallbackTarget(this);
         MatchTimer = GetComponent<BackTimer>();
+        m_CentralCheckTimer = GetComponent<Timer>();
         m_Camera = GameObject.Find("Main Camera");
     }
 
@@ -77,6 +82,49 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             if (m_Camera.GetComponent<GameOverMovement>().Arrived)
                 GameOverTexts.SetActive(true);
         }
+
+        // --- Central Stuff ---
+        if(CentralSphere && m_CentralCheckTimer.ReadTime() > 1.0f)
+        {
+            m_CentralCheckTimer.RestartFromZero();
+            bool playersA_inside = false, playersB_inside = false;
+
+            Collider[] colliders = CentralSphere.GetCollidersInCenter();
+            foreach (Collider coll in colliders)
+            {
+                // Check here if there is TeamA players only, TeamB players only or both/none
+                if (coll.gameObject.layer == 8)
+                    playersA_inside = true;
+                if (coll.gameObject.layer == 9)
+                    playersB_inside = true;
+            }
+
+            if(playersA_inside && !playersB_inside)
+            {
+                BluePlane.SetActive(true);
+                OrangePlane.SetActive(false);
+            }
+            else if (!playersA_inside && playersB_inside)
+            {
+                BluePlane.SetActive(false);
+                OrangePlane.SetActive(true);
+            }
+            else
+            {
+                BluePlane.SetActive(false);
+                OrangePlane.SetActive(false);
+            }
+
+            if(BluePlane.activeInHierarchy)
+            {
+                // Points to the Blue Team (A)
+            }
+
+            if (OrangePlane.activeInHierarchy)
+            {
+                // Points to the Orange Team (B)
+            }
+        }
     }
 
 
@@ -100,10 +148,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         hash["Team"] = team;
     }
 
-    public override void OnLeftRoom()
-    {
-        //SceneManager.LoadScene("MainMenu");
-    }
 
     // --- UI CALLBACKS ---
     public void LoadGameOverScreen()
