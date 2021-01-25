@@ -164,7 +164,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         PhHashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-        TEAMS team = teamA <= teamB ? team = TEAMS.TEAM_A : team = TEAMS.TEAM_B;
+        TEAMS team = teamA <= teamB ? TEAMS.TEAM_A : TEAMS.TEAM_B;
         hash["Team"] = team;
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         m_PlayerSpawn.SpawnNewPlayer(team);
