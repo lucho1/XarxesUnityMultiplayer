@@ -43,6 +43,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
     // --- Team Events ---
     public byte TeamJoinedEvent = 28;
     public byte TeamSwitchedEvent = 29;
+    public byte PlayerKickedEvent = 30;
 
     // --- Class Methods ---
     
@@ -109,10 +110,15 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
 
     public void OnEvent(EventData photonEvent)
     {
-        if(photonEvent.Code == TeamJoinedEvent)
+        if (photonEvent.Code == TeamJoinedEvent)
             NetUIManager.PlayerJoinedTeam((string)photonEvent.CustomData);
-        else if(photonEvent.Code == TeamSwitchedEvent)
+        else if (photonEvent.Code == TeamSwitchedEvent)
             NetUIManager.PlayerSwitchedTeam((string)photonEvent.CustomData);
+        else if (photonEvent.Code == PlayerKickedEvent && GetUserID() == (string)photonEvent.CustomData)
+        {
+            ShowError("You've been kicked from Room!");
+            LeaveRoom();
+        }
     }
 
     public override void OnConnectedToMaster()
@@ -149,6 +155,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
     public void     SetUsername(string name)    { PhotonNetwork.NickName = name; m_Name = name; }
     public string   GetUsername()               { return PhotonNetwork.NickName; }
     public string   GetUserID()                 { return PhotonNetwork.LocalPlayer.UserId; }
+    public bool     IsHost()                  { return PhotonNetwork.IsMasterClient; }
 
     public string GetPlayerByID(string player_id)
     {

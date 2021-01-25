@@ -78,6 +78,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        int teamA = 0, teamB = 0;
+        foreach(KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
+        {
+            if(player.Value.CustomProperties.ContainsKey("Team"))
+            {
+                if ((TEAMS)player.Value.CustomProperties["Team"] == TEAMS.TEAM_A)
+                    ++teamA;
+                else if ((TEAMS)player.Value.CustomProperties["Team"] == TEAMS.TEAM_B)
+                    ++teamB;
+            }
+        }
+
+        PhHashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+        TEAMS team = teamA <= teamB ? team = TEAMS.TEAM_A : team = TEAMS.TEAM_B;        
+        hash["Team"] = team;
+    }
+
     public void LoadGameOverScreen()
     {
         PhotonNetwork.LoadLevel(2);

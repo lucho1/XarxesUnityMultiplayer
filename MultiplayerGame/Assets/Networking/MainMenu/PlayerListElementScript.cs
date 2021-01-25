@@ -92,4 +92,30 @@ public class PlayerListElementScript : MonoBehaviour
         OrangeImageObject.SetActive(true);
         BlueImageObject.SetActive(false);
     }
+
+    // --- Kick User ---
+    [SerializeField]
+    private GameObject m_KickButton;
+
+    public void KickMenu()
+    {
+        ConnectionAPIScript conn = GameObject.Find("ConnectionManager").GetComponent<ConnectionAPIScript>();
+        if (!conn.IsHost())
+            return;
+
+        if (m_PlayerName != conn.GetRoomHost())
+        {
+            if(m_KickButton.activeInHierarchy)
+                m_KickButton.SetActive(false);
+            else
+                m_KickButton.SetActive(true);
+        }
+    }
+
+    public void Kick()
+    {
+        ConnectionAPIScript conn = GameObject.Find("ConnectionManager").GetComponent<ConnectionAPIScript>();
+        conn.SendEvent(conn.PlayerKickedEvent, m_PlayerID);
+        m_KickButton.SetActive(false);
+    }
 }

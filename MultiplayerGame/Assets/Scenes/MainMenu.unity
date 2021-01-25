@@ -17882,6 +17882,7 @@ MonoBehaviour:
   NetUIManager: {fileID: 1341194959}
   TeamJoinedEvent: 28
   TeamSwitchedEvent: 29
+  PlayerKickedEvent: 30
 --- !u!4 &329035230
 Transform:
   m_ObjectHideFlags: 0
@@ -18238,8 +18239,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 68.8, y: 0}
-  m_SizeDelta: {x: -115.37158, y: -0.00018310547}
+  m_AnchoredPosition: {x: 57.686, y: 23.236}
+  m_SizeDelta: {x: -115.37158, y: 46.470947}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &349959972
 MonoBehaviour:
