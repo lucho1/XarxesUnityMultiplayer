@@ -54,7 +54,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
             ConnectToNetwork();
     }
 
-    public void OnEnable()
+    public void Start()
     {
         ConnectToNetwork();
     }
@@ -351,7 +351,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
                 SetRoomVisibility();
 
                 // Load Scene
-                PhotonNetwork.LoadLevel(scene_index);
+                //PhotonNetwork.LoadLevel(scene_index);
                 GameObject.Find("TheButton").GetComponent<Button_Controller>().ButtonPressed();
             }
             else
@@ -359,6 +359,11 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
         }
         else
             NetUIManager.ShowWarn("Only the Room Host can Start the Game!");
+    }
+
+    public void ActuallyLoadLevel(int scene_index)
+    {
+        PhotonNetwork.LoadLevel(scene_index);
     }
 
     public void LeaveRoom()

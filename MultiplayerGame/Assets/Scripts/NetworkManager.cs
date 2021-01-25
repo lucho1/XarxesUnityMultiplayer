@@ -25,9 +25,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     // ------------------
 
+    // Score
+    [SerializeField]
+    private Text A_Score_Text;
+
+    [SerializeField]
+    private Text B_Score_Text;
+
+    // Match Timer & Game Over
     [SerializeField]
     private GameObject GameOverTexts;
-
+    
     [SerializeField]
     private Text TimerText;
 
@@ -157,7 +165,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // --- UI CALLBACKS ---
     public void LoadGameOverScreen()
     {
-        PhotonNetwork.LoadLevel(2);
+        PhotonNetwork.LoadLevel(3);
     }
 
     public void LeaveMatch()

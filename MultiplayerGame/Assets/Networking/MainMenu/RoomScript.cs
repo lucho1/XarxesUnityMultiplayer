@@ -12,6 +12,10 @@ public class RoomScript : MonoBehaviour
     [SerializeField]
     private Text RoomText;
 
+    [SerializeField]
+    private Text MatchTimeText;
+    public int MatchTime = 5;
+
     // --- Players List ---
     [SerializeField]
     private Transform ListContainer;
@@ -214,12 +218,31 @@ public class RoomScript : MonoBehaviour
     // --- UI Callbacks ---
     public void StartButton()
     {
-        ConnectionManager.LoadLevel(1);
+        ConnectionManager.LoadLevel(2);
+        // TODO: Pass here the MatchTime value to the game
     }
 
     public void LeaveButton()
     {
         ConnectionManager.LeaveRoom();
+    }
+
+    public void IncreaseTime()
+    {
+        if (MatchTime < 10)
+        {
+            ++MatchTime;
+            MatchTimeText.text = MatchTime.ToString();
+        }
+    }
+
+    public void DecreaseTime()
+    {
+        if (MatchTime > 1)
+        {
+            --MatchTime;
+            MatchTimeText.text = MatchTime.ToString();
+        }
     }
 
     public void SwitchTeamButton()
