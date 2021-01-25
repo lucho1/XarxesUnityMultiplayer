@@ -52,11 +52,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     void Start()
     {
         m_Camera = GameObject.Find("Main Camera");
+        m_CentralCheckTimer = GetComponent<Timer>();
         PhotonNetwork.AddCallbackTarget(this);
 
         MatchTimer = GetComponent<BackTimer>();
-        m_CentralCheckTimer = GetComponent<Timer>();
-        m_Camera = GameObject.Find("Main Camera");
         MatchTimer.StartTime = (int)PhotonNetwork.CurrentRoom.CustomProperties["MatchTime"] * 60.0f;
         MatchTimer.Begin();
     }
@@ -136,12 +135,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
             if (BluePlane.activeInHierarchy)
             {
-                // Points to the Blue Team (A)
+                // TODO: Points to the Blue Team (A)
             }
 
             if (OrangePlane.activeInHierarchy)
             {
-                // Points to the Orange Team (B)
+                // TODO: Points to the Orange Team (B)
             }
 
         }
