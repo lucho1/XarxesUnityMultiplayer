@@ -48993,7 +48993,7 @@ MonoBehaviour:
   Target: {fileID: 0}
   Offset: {x: 11, y: 29.12, z: 0}
   SmoothTime: 0.05
-  Zoom: 60
+  Zoom: 30
   FollowTarget: 0
 --- !u!114 &963194230
 MonoBehaviour:
