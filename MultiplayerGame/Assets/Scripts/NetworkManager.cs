@@ -107,6 +107,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                         playersA_inside = true;
                     if (coll.gameObject.layer == 9)
                         playersB_inside = true;
+
+                    if (playersA_inside && playersB_inside)
+                        break;
                 }
             }
 
