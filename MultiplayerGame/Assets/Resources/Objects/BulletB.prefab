@@ -100,7 +100,7 @@ PrefabInstance:
     - target: {fileID: 4590254887813802036, guid: da757cdbddacd2d45b935a075785eb5e,
         type: 3}
       propertyPath: m_Name
-      value: Bullet Variant
+      value: BulletB
       objectReference: {fileID: 0}
     - target: {fileID: 6284844987871704974, guid: da757cdbddacd2d45b935a075785eb5e,
         type: 3}
