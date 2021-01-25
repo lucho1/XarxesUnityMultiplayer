@@ -47,9 +47,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        PhotonNetwork.AddCallbackTarget(this);
-        MatchTimer = GetComponent<BackTimer>();
         m_Camera = GameObject.Find("Main Camera");
+        PhotonNetwork.AddCallbackTarget(this);
+        
+        MatchTimer = GetComponent<BackTimer>();
+        MatchTimer.StartTime = (int)PhotonNetwork.CurrentRoom.CustomProperties["MatchTime"] * 60.0f;
+        MatchTimer.Begin();
     }
 
     private void OnLevelWasLoaded(int level)
@@ -116,7 +119,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // --- UI CALLBACKS ---
     public void LoadGameOverScreen()
     {
-        PhotonNetwork.LoadLevel(3);
+        if(PhotonNetwork.IsMasterClient)
+            PhotonNetwork.LoadLevel(3);
     }
 
     public void LeaveMatch()

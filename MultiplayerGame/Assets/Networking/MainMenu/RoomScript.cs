@@ -218,8 +218,8 @@ public class RoomScript : MonoBehaviour
     // --- UI Callbacks ---
     public void StartButton()
     {
+        ConnectionManager.SetRoomProperty("MatchTime", MatchTime);
         ConnectionManager.LoadLevel(2);
-        // TODO: Pass here the MatchTime value to the game
     }
 
     public void LeaveButton()
