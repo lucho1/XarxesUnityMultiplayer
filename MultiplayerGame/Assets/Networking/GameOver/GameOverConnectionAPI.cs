@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 using ExitGames.Client.Photon;
 using Photon.Pun;
@@ -32,6 +33,13 @@ public class GameOverConnectionAPI : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField]
     private GameOverNetworkUIScript NetUIManager;
 
+    // --- Match Info ---
+    [SerializeField]
+    private GameObject[] BlueUsersInfo;
+
+    [SerializeField]
+    private GameObject[] OrangeUsersInfo;
+
     // --- Team Events ---
     public byte TeamJoinedEvent = 28;
     public byte TeamSwitchedEvent = 29;
@@ -42,8 +50,28 @@ public class GameOverConnectionAPI : MonoBehaviourPunCallbacks, IOnEventCallback
         PhotonHandler.AppQuits = true;
     }
 
+    public void Start()
+    {
+        for (int i = 0; i < 5; ++i)
+        {
+            int score = 100;
 
-    
+            BlueUsersInfo[i].SetActive(true);
+            BlueUsersInfo[i].transform.Find("BluePlayer_Txt").GetComponent<Text>().text = "ASDAS";
+            BlueUsersInfo[i].transform.Find("BlueScore_Txt").GetComponent<Text>().text = score.ToString("0000");
+        }
+
+        for (int i = 0; i < 5; ++i)
+        {
+            int score = 100;
+
+            OrangeUsersInfo[i].SetActive(true);
+            OrangeUsersInfo[i].transform.Find("BluePlayer_Txt").GetComponent<Text>().text = "ASDAS";
+            OrangeUsersInfo[i].transform.Find("BlueScore_Txt").GetComponent<Text>().text = score.ToString("0000");
+        }
+    }
+
+
     // ----------------------------------------------------------------------
     // ------------------------- NETWORK FUNCTIONS --------------------------
     public void SendEvent(byte event_code, object content)
