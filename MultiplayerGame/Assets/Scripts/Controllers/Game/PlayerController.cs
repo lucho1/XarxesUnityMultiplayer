@@ -189,8 +189,8 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
     }
 
     public void AddScore(int scoreAmount) {
-        m_PhotonView.RPC("SpawnPopup", RpcTarget.All, scoreAmount);
         m_PhotonView.RPC("PunAddScore", RpcTarget.MasterClient, scoreAmount);
+        m_PhotonView.RPC("SpawnPopup", RpcTarget.All, scoreAmount);
     }
 
     [PunRPC]

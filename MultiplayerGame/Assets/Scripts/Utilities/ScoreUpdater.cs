@@ -10,6 +10,9 @@ public class ScoreUpdater : MonoBehaviour
 
     public Text TeamAScore;
     public Text TeamBScore;
+    void Start() {
+
+    }
     // Update is called once per frame
     public void UpdateScores()
     {
@@ -33,6 +36,7 @@ public class ScoreUpdater : MonoBehaviour
 
         TeamAScore.text = scoreA.ToString("0000");
         TeamBScore.text = scoreB.ToString("0000");
+        InvokeRepeating("UpdateScores", 1, 0.5f); 
     }
 
     public void SetToUpdate(PlayerController player)
