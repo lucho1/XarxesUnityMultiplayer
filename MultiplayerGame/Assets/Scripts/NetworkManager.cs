@@ -47,10 +47,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public CentralSphereScript CentralSphere;
     public GameObject BluePlane, OrangePlane;
     private Timer m_CentralCheckTimer;
+    private SpawnCharacter m_PlayerSpawn;
 
     // Start is called before the first frame update
     void Start()
     {
+        m_PlayerSpawn = GetComponent<SpawnCharacter>();
         m_Camera = GameObject.Find("Main Camera");
         m_CentralCheckTimer = GetComponent<Timer>();
         PhotonNetwork.AddCallbackTarget(this);
@@ -144,23 +146,28 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 
     // --- CALLBACKS ---
-    public override void OnPlayerEnteredRoom(Player newPlayer)
+    public override void OnJoinedRoom()
     {
         int teamA = 0, teamB = 0;
-        foreach(KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
-        {
-            if(player.Value.CustomProperties.ContainsKey("Team"))
+        foreach (Player player in PhotonNetwork.PlayerList) {
+            if(player.CustomProperties.ContainsKey("Team"))
             {
-                if ((TEAMS)player.Value.CustomProperties["Team"] == TEAMS.TEAM_A)
-                    ++teamA;
-                else if ((TEAMS)player.Value.CustomProperties["Team"] == TEAMS.TEAM_B)
-                    ++teamB;
+                switch (player.CustomProperties["Team"]) {
+                    case TEAMS.TEAM_A:
+                        ++teamA;
+                        break;
+                    case TEAMS.TEAM_B:
+                        ++teamB;
+                        break;
+                }
             }
         }
 
         PhHashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
         TEAMS team = teamA <= teamB ? team = TEAMS.TEAM_A : team = TEAMS.TEAM_B;
         hash["Team"] = team;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        m_PlayerSpawn.SpawnNewPlayer(team);
     }
 
 
