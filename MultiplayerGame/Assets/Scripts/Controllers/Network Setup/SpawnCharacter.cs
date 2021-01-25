@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using PHashtable = ExitGames.Client.Photon.Hashtable;
 
 [System.Serializable]
@@ -25,8 +26,7 @@ public class SpawnCharacter : MonoBehaviour
         if (myProperties.ContainsKey("Team"))
             team = (TEAMS)myProperties["Team"];
 
-        myProperties["Score"] = 0;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(myProperties);
+        PhotonNetwork.LocalPlayer.SetScore(0);
 
         GameObject myPlayer = null;
         
