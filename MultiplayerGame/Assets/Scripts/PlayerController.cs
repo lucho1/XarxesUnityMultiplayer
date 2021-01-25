@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
     public int DeathScore = 100;
 
 
+    private Vector3 m_OriginalPosition;
     private Timer m_RespawnTimer;
     private PhotonView m_PhotonView;
     private CharacterController m_CharacterController;
@@ -52,6 +53,7 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
         m_CharacterController = GetComponent<CharacterController>();
         m_Animator = gameObject.GetComponentInChildren<Animator>();
         m_RigidBody = gameObject.GetComponent<Rigidbody>();
+        m_OriginalPosition = transform.position;
 
 
         m_LastMousePos = Input.mousePosition;
@@ -181,6 +183,7 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
 
         if (m_PhotonView.IsMine) 
         {
+            transform.position = m_OriginalPosition;
             m_RespawnTimer.Stop();
             PlayerRespawn.Invoke();
         }
