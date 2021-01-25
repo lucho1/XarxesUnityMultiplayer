@@ -86,6 +86,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             m_Ending = true;
             m_Camera.GetComponent<SingleTargetCamera>().FollowTarget = false;
             m_Camera.GetComponent<GameOverMovement>().MoveToTarget = true;
+            BluePlane.SetActive(false);
+            OrangePlane.SetActive(false);
         }
 
         if(m_Ending)

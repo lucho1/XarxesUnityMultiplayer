@@ -29,6 +29,7 @@ public class GameOverMovement : MonoBehaviour
     {
         if (MoveToTarget)
         {
+            GetComponent<Camera>().fieldOfView = 60;
             transform.position = Vector3.SmoothDamp(transform.position, Target.position, ref m_Velocity, SmoothTime * Time.deltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, Target.rotation, (SmoothTime/1000.0f) * Time.deltaTime);
         }

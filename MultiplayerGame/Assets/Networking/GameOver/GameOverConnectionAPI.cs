@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using PhHashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -40,6 +41,15 @@ public class GameOverConnectionAPI : MonoBehaviourPunCallbacks, IOnEventCallback
     [SerializeField]
     private GameObject[] OrangeUsersInfo;
 
+    [SerializeField]
+    private Text WinnerText;
+
+    [SerializeField]
+    private Text BlueScoreText;
+
+    [SerializeField]
+    private Text OrangeScoreText;
+
     // --- Team Events ---
     public byte TeamJoinedEvent = 28;
     public byte TeamSwitchedEvent = 29;
@@ -52,23 +62,40 @@ public class GameOverConnectionAPI : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void Start()
     {
-        for (int i = 0; i < 5; ++i)
+        int blue_score = 0, orange_score = 0;
+        int blue_index = 0, orange_index = 0;
+        foreach(Player player in PhotonNetwork.PlayerList)
         {
-            int score = 100;
+            TEAMS team = (TEAMS)player.CustomProperties["Team"];
+            int score = player.GetScore();
 
-            BlueUsersInfo[i].SetActive(true);
-            BlueUsersInfo[i].transform.Find("BluePlayer_Txt").GetComponent<Text>().text = "ASDAS";
-            BlueUsersInfo[i].transform.Find("BlueScore_Txt").GetComponent<Text>().text = score.ToString("0000");
+            if(team == TEAMS.TEAM_A)
+            {
+                OrangeUsersInfo[orange_index].SetActive(true);
+                OrangeUsersInfo[orange_index].transform.Find("BluePlayer_Txt").GetComponent<Text>().text = player.NickName;
+                OrangeUsersInfo[orange_index].transform.Find("BlueScore_Txt").GetComponent<Text>().text = score.ToString("0000");
+                ++orange_index;
+                orange_score += score;
+            }
+            else if (team == TEAMS.TEAM_B)
+            {
+                BlueUsersInfo[blue_index].SetActive(true);
+                BlueUsersInfo[blue_index].transform.Find("BluePlayer_Txt").GetComponent<Text>().text = player.NickName;
+                BlueUsersInfo[blue_index].transform.Find("BlueScore_Txt").GetComponent<Text>().text = score.ToString("0000");
+                ++blue_index;
+                blue_score += score;
+            }
         }
 
-        for (int i = 0; i < 5; ++i)
-        {
-            int score = 100;
+        OrangeScoreText.text = orange_score.ToString("0000");
+        BlueScoreText.text = blue_score.ToString("0000");
 
-            OrangeUsersInfo[i].SetActive(true);
-            OrangeUsersInfo[i].transform.Find("BluePlayer_Txt").GetComponent<Text>().text = "ASDAS";
-            OrangeUsersInfo[i].transform.Find("BlueScore_Txt").GetComponent<Text>().text = score.ToString("0000");
-        }
+        if (blue_score > orange_score)
+            WinnerText.text = "Team B Wins!";
+        else if(orange_score > blue_score)
+            WinnerText.text = "Team A Wins!";
+        else
+            WinnerText.text = "There is a Tie!";
     }
 
 
