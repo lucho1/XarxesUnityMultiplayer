@@ -12,4 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9e721ead30a32e419543076cab7df04, type: 3}
   m_Name: Master Manager
   m_EditorClassIdentifier: 
-  m_networkedPrefabs: []
+  m_networkedPrefabs:
+  - Prefab: {fileID: 1523618474713820, guid: b2bbf8bc52990264a8f7df3a0bac1d19, type: 3}
+    Path: 2dPlayer
+  - Prefab: {fileID: 1035996322806998, guid: 732023bac257c304f9bd51dac5ca02b8, type: 3}
+    Path: Adv_Robot Kyle
+  - Prefab: {fileID: 140850, guid: 15f43343ba0a60e47a63d28496373c3f, type: 3}
+    Path: BigAsteroid
+  - Prefab: {fileID: 1122187902249500682, guid: 933338587774bf644b2b62f96c012a2f,
+      type: 3}
+    Path: Character/Player_A
+  - Prefab: {fileID: 1952445568343118794, guid: 8f0d2afc36eb6a64a94916efb84c5f0f,
+      type: 3}
+    Path: Character/Player_B
+  - Prefab: {fileID: 100030, guid: fe764102aa5aa431795da15fa2dec0e2, type: 3}
+    Path: My Robot Kyle -done-
+  - Prefab: {fileID: 4590254887813802036, guid: da757cdbddacd2d45b935a075785eb5e,
+      type: 3}
+    Path: Objects/Bullet
+  - Prefab: {fileID: 174002, guid: c9248d8e58293473bb27cf2f5505f88b, type: 3}
+    Path: Player Controller
+  - Prefab: {fileID: 151774, guid: 18a79aea49b60d342b7a672b7a34edbe, type: 3}
+    Path: SmallAsteroid
+  - Prefab: {fileID: 178952, guid: 775dd0a15ad25a544b33ad40ef0da1f0, type: 3}
+    Path: Spaceship
+  - Prefab: {fileID: 4973926362730368681, guid: 0bbf6e16adb85ab49852cbbab8cd1183,
+      type: 3}
+    Path: Text/TeamAScorePopup
+  - Prefab: {fileID: 7498480186836453178, guid: d750d7d3ed770e542a2a7d72a9a9e771,
+      type: 3}
+    Path: Text/TeamBScorePopup
