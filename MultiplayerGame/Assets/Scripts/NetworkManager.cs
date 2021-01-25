@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 using ExitGames.Client.Photon;
 using Photon.Pun;
@@ -78,6 +79,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+
+    // --- CALLBACKS ---
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         int teamA = 0, teamB = 0;
@@ -97,8 +100,28 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         hash["Team"] = team;
     }
 
+    public override void OnLeftRoom()
+    {
+        //SceneManager.LoadScene("MainMenu");
+    }
+
+    // --- UI CALLBACKS ---
     public void LoadGameOverScreen()
     {
         PhotonNetwork.LoadLevel(2);
+    }
+
+    public void LeaveMatch()
+    {
+        // Check if we are ready to make operations
+        if (PhotonNetwork.IsConnectedAndReady && PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom(true);
+            print("Connecting to Lobby...");
+            if (!PhotonNetwork.InLobby)
+                PhotonNetwork.JoinLobby(TypedLobby.Default);
+
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 }

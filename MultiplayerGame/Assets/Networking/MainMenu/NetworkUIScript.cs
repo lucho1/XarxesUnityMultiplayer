@@ -90,20 +90,26 @@ public class NetworkUIScript : MonoBehaviour
         if(enter_room)
         {
             //m_HideLogTexts = true;
-            RoomName_UIText.text = ConnectionManager.GetRoomName();            
-            LobbyUI.GetComponent<LobbyScript>().DeselectRoom();
+            if (RoomUI && LobbyUI && RoomName_UIText)
+            {
+                RoomName_UIText.text = ConnectionManager.GetRoomName();
+                LobbyUI.GetComponent<LobbyScript>().DeselectRoom();
 
-            // Switch Screens
-            LobbyUI.SetActive(false);
-            RoomUI.SetActive(true);
+                // Switch Screens
+                LobbyUI.SetActive(false);
+                RoomUI.SetActive(true);
+            }
         }
         else
         {
             //m_HideLogTexts = true;
 
             // Switch Screens
-            RoomUI.SetActive(false);
-            LobbyUI.SetActive(true);
+            if (RoomUI && LobbyUI)
+            {
+                RoomUI.SetActive(false);
+                LobbyUI.SetActive(true);
+            }
         }
     }
     
