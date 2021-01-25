@@ -11,8 +11,9 @@ public class ScoreUpdater : MonoBehaviour
     public Text TeamAScore;
     public Text TeamBScore;
     void Start() {
-
+        InvokeRepeating("UpdateScores", 10.0f, 3.0f);
     }
+
     // Update is called once per frame
     public void UpdateScores()
     {
