@@ -48093,7 +48093,7 @@ MonoBehaviour:
   Target: {fileID: 0}
   Offset: {x: 11, y: 29.12, z: 0}
   SmoothTime: 0.05
-  Zoom: 40
+  Zoom: 30
   FollowTarget: 0
 --- !u!4 &963494549 stripped
 Transform:

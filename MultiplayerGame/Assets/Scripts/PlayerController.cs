@@ -12,8 +12,9 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
     [TagSelector]
     public string BulletTag;
     public float RespawnTime = 5.0f;
-    public int DeathScore = 100;
-
+    public int DeathScore = 100;  
+    public GameObject ScorePopupPrefab;
+    public Transform ScorePopupPosition;
 
     private Vector3 m_OriginalPosition;
     private Timer m_RespawnTimer;
@@ -126,12 +127,7 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
             return;
         
         PhotonView o_pv = other.gameObject.GetPhotonView();
-        
-        // Sergi: This maybe should be done by Master?
-        PHashtable k_properties = o_pv.Owner.CustomProperties;
-        int score = (int)k_properties["Score"] + DeathScore;
-        k_properties["Score"] = score;
-        o_pv.Owner.SetCustomProperties(k_properties);
+        ((PlayerController)o_pv.Owner.TagObject).AddScore(DeathScore);
         
         m_PhotonView.RPC("Death", RpcTarget.All);
     }
@@ -143,12 +139,7 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
             return;
         
         PhotonView o_pv = other.gameObject.GetPhotonView();
-        
-        // Sergi: This maybe should be done by Master?
-        PHashtable k_properties = o_pv.Owner.CustomProperties;
-        int score = (int)k_properties["Score"] + DeathScore;
-        k_properties["Score"] = score;
-        o_pv.Owner.SetCustomProperties(k_properties);
+        ((PlayerController)o_pv.Owner.TagObject).AddScore(DeathScore);
         
         m_PhotonView.RPC("Death", RpcTarget.All);
     }
@@ -189,6 +180,20 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
         }
     }
 
+    public void AddScore(int scoreAmount) {
+        m_PhotonView.RPC("PunAddScore", RpcTarget.MasterClient, scoreAmount);
+    }
+
+    [PunRPC]
+    private void PunAddScore(int scoreAmount) 
+    {
+        PopupScore.CreatePopup(ScorePopupPrefab, ScorePopupPosition.position, scoreAmount);
+        PHashtable k_properties = m_PhotonView.Owner.CustomProperties;
+        int score = (int)k_properties["Score"] + DeathScore;
+        k_properties["Score"] = score;
+        m_PhotonView.Owner.SetCustomProperties(k_properties);
+    }
+
     private void RespawnUpdate()
     {
         if (m_RespawnTimer.ReadTime() >= RespawnTime)
@@ -199,7 +204,6 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
     {
         object[] instantiatonData = info.photonView.InstantiationData;
         this.gameObject.layer = (int) instantiatonData[0];
-        if (m_PhotonView.IsMine)
-            info.Sender.TagObject = this.gameObject;
+        m_PhotonView.Owner.TagObject = this;
     }
 }
