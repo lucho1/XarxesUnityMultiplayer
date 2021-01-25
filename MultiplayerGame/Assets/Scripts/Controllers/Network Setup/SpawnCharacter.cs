@@ -22,12 +22,16 @@ public class SpawnCharacter : MonoBehaviour
     void Start()
     {
         PHashtable myProperties = PhotonNetwork.LocalPlayer.CustomProperties;
-        TEAMS team = TEAMS.TEAM_A;
+        TEAMS team = TEAMS.NONE;
         if (myProperties.ContainsKey("Team"))
             team = (TEAMS)myProperties["Team"];
 
         PhotonNetwork.LocalPlayer.SetScore(0);
+        if (team != TEAMS.NONE)
+            SpawnNewPlayer(team);
+    }
 
+    public void SpawnNewPlayer(TEAMS team) {
         GameObject myPlayer = null;
         
         object[] myData = new object[1];
