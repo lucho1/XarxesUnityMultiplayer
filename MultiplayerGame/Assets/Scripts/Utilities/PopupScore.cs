@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Photon.Pun;
 using TMPro;
 
 public class PopupScore : MonoBehaviour
@@ -9,9 +10,11 @@ public class PopupScore : MonoBehaviour
 
     private TextMeshPro m_TextMeshPro;
     private Color m_Color;
+    private PhotonView m_PhotonView;
 
     void Awake()
     {
+        m_PhotonView = GetComponent<PhotonView>();
         m_TextMeshPro = gameObject.GetComponent<TextMeshPro>();
         FaceTextMeshToCamera();
     }
@@ -32,8 +35,9 @@ public class PopupScore : MonoBehaviour
         {
             m_Color.a -= DisappearSpeed * Time.deltaTime;
             m_TextMeshPro.color = m_Color;
-            if (m_Color.a <= 0)
-                Destroy(gameObject);
+            if (m_Color.a <= 0 && m_PhotonView.IsMine) {
+                PhotonNetwork.Destroy(m_PhotonView);
+            }
         }
     }
 
