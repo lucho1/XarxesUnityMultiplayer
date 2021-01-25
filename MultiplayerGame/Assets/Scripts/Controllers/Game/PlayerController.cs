@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
 
     public UnityEvent PlayerDead;
     public UnityEvent PlayerRespawn;
+    public UnityEvent ScoreUpdated;
 
     // Start is called before the first frame update
     void Awake()
