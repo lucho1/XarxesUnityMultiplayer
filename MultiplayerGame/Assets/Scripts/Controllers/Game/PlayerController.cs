@@ -36,6 +36,9 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
     public UnityEvent PlayerRespawn;
     public UnityEvent ScoreUpdated;
 
+    private bool m_isKinematic;
+    private bool m_detectCollisions;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -57,6 +60,9 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
         m_Animator = gameObject.GetComponentInChildren<Animator>();
         m_RigidBody = gameObject.GetComponent<Rigidbody>();
         m_OriginalPosition = transform.position;
+
+        m_isKinematic = m_RigidBody.isKinematic;
+        m_detectCollisions = m_RigidBody.detectCollisions;
 
 
         m_LastMousePos = Input.mousePosition;
@@ -171,8 +177,8 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
         foreach (Renderer childRenderer in m_ChildRenderers)
             childRenderer.enabled = true;
 
-        m_RigidBody.isKinematic = true;
-        m_RigidBody.detectCollisions = true;
+        m_RigidBody.isKinematic = m_isKinematic;
+        m_RigidBody.detectCollisions = m_detectCollisions;
 
         if (m_PhotonView.IsMine) 
         {
