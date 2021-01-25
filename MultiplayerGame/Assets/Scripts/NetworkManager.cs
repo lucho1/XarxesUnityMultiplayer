@@ -120,29 +120,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             {
                 BluePlane.SetActive(true);
                 OrangePlane.SetActive(false);
+
+                foreach(Collider coll in colliders)
+                    coll.gameObject.GetComponent<PlayerController>().AddScore(5);
             }
             else if (!playersA_inside && playersB_inside)
             {
                 BluePlane.SetActive(false);
                 OrangePlane.SetActive(true);
+
+                foreach (Collider coll in colliders)
+                    coll.gameObject.GetComponent<PlayerController>().AddScore(5);
             }
             else
             {
                 BluePlane.SetActive(false);
                 OrangePlane.SetActive(false);
             }
-
-
-            if (BluePlane.activeInHierarchy)
-            {
-                // TODO: Points to the Blue Team (A)
-            }
-
-            if (OrangePlane.activeInHierarchy)
-            {
-                // TODO: Points to the Orange Team (B)
-            }
-
         }
     }
 
