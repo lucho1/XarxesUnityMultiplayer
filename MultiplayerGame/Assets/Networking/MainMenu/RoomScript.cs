@@ -229,7 +229,7 @@ public class RoomScript : MonoBehaviour
 
     public void IncreaseTime()
     {
-        if (MatchTime < 10)
+        if (MatchTime < 10 && ConnectionManager.IsHost())
         {
             ++MatchTime;
             MatchTimeText.text = MatchTime.ToString();
@@ -238,7 +238,7 @@ public class RoomScript : MonoBehaviour
 
     public void DecreaseTime()
     {
-        if (MatchTime > 1)
+        if (MatchTime > 1 && ConnectionManager.IsHost())
         {
             --MatchTime;
             MatchTimeText.text = MatchTime.ToString();
