@@ -152,7 +152,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         foreach (Player player in PhotonNetwork.PlayerList) {
             if(player.CustomProperties.ContainsKey("Team"))
             {
-                switch (player.CustomProperties["Team"]) {
+                switch ((TEAMS)player.CustomProperties["Team"]) {
                     case TEAMS.TEAM_A:
                         ++teamA;
                         break;
