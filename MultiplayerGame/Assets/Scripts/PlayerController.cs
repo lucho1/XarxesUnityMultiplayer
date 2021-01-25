@@ -182,12 +182,12 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
 
     public void AddScore(int scoreAmount) {
         m_PhotonView.RPC("PunAddScore", RpcTarget.MasterClient, scoreAmount);
+        PopupScore.CreatePopup(ScorePopupPrefab, ScorePopupPosition.position, scoreAmount);
     }
 
     [PunRPC]
     private void PunAddScore(int scoreAmount) 
     {
-        PopupScore.CreatePopup(ScorePopupPrefab, ScorePopupPosition.position, scoreAmount);
         PHashtable k_properties = m_PhotonView.Owner.CustomProperties;
         int score = (int)k_properties["Score"] + DeathScore;
         k_properties["Score"] = score;
