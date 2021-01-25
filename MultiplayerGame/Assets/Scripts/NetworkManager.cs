@@ -25,9 +25,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     // ------------------
 
+    // Score
+    [SerializeField]
+    private Text A_Score_Text;
+
+    [SerializeField]
+    private Text B_Score_Text;
+
+    // Match Timer & Game Over
     [SerializeField]
     private GameObject GameOverTexts;
-
+    
     [SerializeField]
     private Text TimerText;
 
