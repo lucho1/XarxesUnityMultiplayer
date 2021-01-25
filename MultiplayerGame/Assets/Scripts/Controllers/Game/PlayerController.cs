@@ -2,6 +2,7 @@
 using UnityEngine.Events;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using PHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
@@ -198,10 +199,7 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
     [PunRPC]
     private void PunAddScore(int scoreAmount) 
     {
-        PHashtable k_properties = m_PhotonView.Owner.CustomProperties;
-        int score = (int)k_properties["Score"] + DeathScore;
-        k_properties["Score"] = score;
-        m_PhotonView.Owner.SetCustomProperties(k_properties);
+        m_PhotonView.Owner.AddScore(scoreAmount);
     }
 
     private void RespawnUpdate()

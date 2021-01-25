@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using Photon.Pun.UtilityScripts;
 
 public class ScoreUpdater : MonoBehaviour
 {
@@ -21,11 +22,11 @@ public class ScoreUpdater : MonoBehaviour
 
             switch (team) {
                 case TEAMS.TEAM_A:
-                    scoreA += (int)player.CustomProperties["Score"];
+                    scoreA += player.GetScore();
                     break;
 
                 case TEAMS.TEAM_B:
-                    scoreB += (int)player.CustomProperties["Score"];
+                    scoreB += player.GetScore();
                     break;
             }
         } 
