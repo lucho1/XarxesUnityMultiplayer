@@ -188,6 +188,7 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
 
     [PunRPC]
     private void SpawnPopup(int scoreAmount) {
+        ScoreUpdated.Invoke();
         if (!m_PhotonView.IsMine)
             return;
 
