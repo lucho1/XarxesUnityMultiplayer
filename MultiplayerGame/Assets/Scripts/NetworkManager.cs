@@ -25,6 +25,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     // ------------------
 
+    [SerializeField]
+    private GameObject ErrorText;
+
     // Score
     [SerializeField]
     private Text A_Score_Text;
@@ -170,6 +173,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         m_PlayerSpawn.SpawnNewPlayer(team);
     }
 
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        ErrorText.SetActive(true);
+        LeaveMatch();
+    }
 
     // --- UI CALLBACKS ---
     public void LoadGameOverScreen()
