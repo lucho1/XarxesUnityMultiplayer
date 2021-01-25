@@ -112,6 +112,9 @@ MonoBehaviour:
   PlayerRespawn:
     m_PersistentCalls:
       m_Calls: []
+  ScoreUpdated:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &8318682844961629273
 MonoBehaviour:
   m_ObjectHideFlags: 0
