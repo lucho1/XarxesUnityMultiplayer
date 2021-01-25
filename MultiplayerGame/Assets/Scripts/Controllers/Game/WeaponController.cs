@@ -48,7 +48,8 @@ public class WeaponController : MonoBehaviour
             m_AudioSource.Play();
             FireEffect.SetActive(true);
 
-            if (NetworkMode) {
+            if (NetworkMode)
+            {
                 object[] instantiationData = new object[1];
                 instantiationData[0] = this.gameObject.layer;
                 m_PhotonView.RPC("NetworkPlayShootingSound", RpcTarget.Others);

@@ -319,7 +319,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FirePosition: {fileID: 4542225191525691619}
-  BulletPrefab: {fileID: 4590254887813802036, guid: da757cdbddacd2d45b935a075785eb5e,
+  BulletPrefab: {fileID: 9116284250805676628, guid: 9cd243b345ee4d44594bdc944940e5c0,
     type: 3}
   FireEffect: {fileID: 5252551865554137487}
   FireRate: 0.3
