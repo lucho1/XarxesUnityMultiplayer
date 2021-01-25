@@ -41,14 +41,14 @@ public class RoomScript : MonoBehaviour
             m_AnimationSelected[i] = false;
 
         for (uint i = 0; i < 5; ++i)
-            m_TeamAList.Add(Instantiate(ListElement, ListContainer));
-
-        for(uint i = 0; i < 5; ++i)
         {
             GameObject obj = Instantiate(ListElement, ListContainer);
             obj.GetComponent<PlayerListElementScript>().SetOrangeImage();
-            m_TeamBList.Add(obj);
+            m_TeamAList.Add(obj);
         }
+
+        for(uint i = 0; i < 5; ++i)
+            m_TeamBList.Add(Instantiate(ListElement, ListContainer));
     }
 
     private void OnEnable()
