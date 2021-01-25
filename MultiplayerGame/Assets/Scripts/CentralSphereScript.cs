@@ -5,11 +5,14 @@ using UnityEngine;
 public class CentralSphereScript : MonoBehaviour
 {
     private Timer m_CheckTimer;
-    private Collider[] CollidersInside;
+    private List<Collider> CollidersInside = new List<Collider>();
 
-    public Collider[] GetCollidersInCenter()
+    public List<Collider> GetCollidersInCenter()
     {
-        return CollidersInside;
+        if (CollidersInside.Count > 0)
+            return CollidersInside;
+        else
+            return null;
     }
 
     // Start is called before the first frame update
@@ -25,15 +28,12 @@ public class CentralSphereScript : MonoBehaviour
         {
             // Include here a prameter for the colliders layer that shall be checking
             Collider[] colliders = Physics.OverlapSphere(transform.position, GetComponent<SphereCollider>().radius);
+            CollidersInside = new List<Collider>();
 
-            int inner_colliders_index = 0;
             for(int i = 0; i < colliders.Length; ++i)
             {
                 if(colliders[i].gameObject.tag == "Player")
-                {
-                    CollidersInside[inner_colliders_index] = colliders[i];
-                    ++inner_colliders_index;
-                }                    
+                    CollidersInside.Add(colliders[i]);
             }
 
             m_CheckTimer.RestartFromZero();

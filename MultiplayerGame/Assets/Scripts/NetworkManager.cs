@@ -84,22 +84,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         // --- Central Stuff ---
-        if(CentralSphere && m_CentralCheckTimer.ReadTime() > 1.0f)
+        if (CentralSphere && m_CentralCheckTimer.ReadTime() > 1.0f)
         {
             m_CentralCheckTimer.RestartFromZero();
             bool playersA_inside = false, playersB_inside = false;
 
-            Collider[] colliders = CentralSphere.GetCollidersInCenter();
-            foreach (Collider coll in colliders)
+            List<Collider> colliders = CentralSphere.GetCollidersInCenter();
+            if (colliders != null)
             {
-                // Check here if there is TeamA players only, TeamB players only or both/none
-                if (coll.gameObject.layer == 8)
-                    playersA_inside = true;
-                if (coll.gameObject.layer == 9)
-                    playersB_inside = true;
+                foreach (Collider coll in colliders)
+                {
+                    // Check here if there is TeamA players only, TeamB players only or both/none
+                    if (coll.gameObject.layer == 8)
+                        playersA_inside = true;
+                    if (coll.gameObject.layer == 9)
+                        playersB_inside = true;
+                }
             }
 
-            if(playersA_inside && !playersB_inside)
+            if (playersA_inside && !playersB_inside)
             {
                 BluePlane.SetActive(true);
                 OrangePlane.SetActive(false);
@@ -115,7 +118,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 OrangePlane.SetActive(false);
             }
 
-            if(BluePlane.activeInHierarchy)
+
+            if (BluePlane.activeInHierarchy)
             {
                 // Points to the Blue Team (A)
             }
@@ -124,6 +128,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             {
                 // Points to the Orange Team (B)
             }
+
         }
     }
 

@@ -65933,8 +65933,8 @@ MonoBehaviour:
   GameOverTexts: {fileID: 1709866417}
   TimerText: {fileID: 274679213}
   CentralSphere: {fileID: 320062633}
-  BluePlane: {fileID: 0}
-  OrangePlane: {fileID: 0}
+  BluePlane: {fileID: 1625746848}
+  OrangePlane: {fileID: 1922299705}
 --- !u!114 &1551354879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88494,7 +88494,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &1922299706
 Animator:
   serializedVersion: 3
