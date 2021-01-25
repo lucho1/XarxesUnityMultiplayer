@@ -128,7 +128,7 @@ MonoBehaviour:
   BulletPrefab: {fileID: 4590254887813802036, guid: da757cdbddacd2d45b935a075785eb5e,
     type: 3}
   FireEffect: {fileID: 8924566471028925474}
-  FireRate: 0.2
+  FireRate: 0.3
   ShootSound: {fileID: 8300000, guid: 7c235843e958ab042aa3faca9ffa2e84, type: 3}
   NetworkMode: 1
 --- !u!114 &2647577244324452506
@@ -598,7 +598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b2c90e4f8e6b34b9ffd519c835d246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 0.2
+  lifeTime: 0.3
 --- !u!1001 &1421946022530676265
 PrefabInstance:
   m_ObjectHideFlags: 0
