@@ -102,7 +102,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         // --- Central Stuff ---
-        if (CentralSphere && m_CentralCheckTimer.ReadTime() > 1.0f)
+        if (CentralSphere && m_CentralCheckTimer.ReadTime() > 1.0f && PhotonNetwork.IsMasterClient)
         {
             m_CentralCheckTimer.RestartFromZero();
             bool playersA_inside = false, playersB_inside = false;

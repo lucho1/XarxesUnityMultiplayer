@@ -36,7 +36,6 @@ public class ScoreUpdater : MonoBehaviour
 
         TeamAScore.text = scoreA.ToString("0000");
         TeamBScore.text = scoreB.ToString("0000");
-        InvokeRepeating("UpdateScores", 1, 0.5f); 
     }
 
     public void SetToUpdate(PlayerController player)
