@@ -54,7 +54,7 @@ public class ConnectionAPIScript : MonoBehaviourPunCallbacks, IOnEventCallback//
             ConnectToNetwork();
     }
 
-    public void OnEnable()
+    public void Start()
     {
         ConnectToNetwork();
     }

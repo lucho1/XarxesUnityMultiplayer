@@ -116,7 +116,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // --- UI CALLBACKS ---
     public void LoadGameOverScreen()
     {
-        PhotonNetwork.LoadLevel(2);
+        PhotonNetwork.LoadLevel(3);
     }
 
     public void LeaveMatch()

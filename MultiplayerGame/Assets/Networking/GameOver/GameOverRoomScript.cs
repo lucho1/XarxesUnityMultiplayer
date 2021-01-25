@@ -171,7 +171,7 @@ public class GameOverRoomScript : MonoBehaviour
     // --- UI Callbacks ---
     public void StartButton()
     {
-        ConnectionManager.LoadLevel(1);
+        ConnectionManager.LoadLevel(2);
     }
 
     public void LeaveButton()
