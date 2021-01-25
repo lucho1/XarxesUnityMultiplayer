@@ -181,7 +181,15 @@ public class PlayerController : MonoBehaviour, IPunInstantiateMagicCallback
     }
 
     public void AddScore(int scoreAmount) {
+        m_PhotonView.RPC("SpawnPopup", RpcTarget.All, scoreAmount);
         m_PhotonView.RPC("PunAddScore", RpcTarget.MasterClient, scoreAmount);
+    }
+
+    [PunRPC]
+    private void SpawnPopup(int scoreAmount) {
+        if (!m_PhotonView.IsMine)
+            return;
+
         PopupScore.CreatePopup(ScorePopupPrefab, ScorePopupPosition.position, scoreAmount);
     }
 
