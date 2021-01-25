@@ -48,7 +48,10 @@ public class Button_Controller : MonoBehaviour
         if (OnButton)
         {
             if (start_game && !m_BtnAnimation.isPlaying)
-                ConnectionManager.LoadLevel(2);
+            {
+                ConnectionManager.ActuallyLoadLevel(2);
+                start_game = false;
+            }
         }
     }
 }
